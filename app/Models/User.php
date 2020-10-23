@@ -1,13 +1,14 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -162,9 +163,9 @@ class User extends Authenticatable
 
     public function getAvatar(){
         if($this->avatar)
-            return '/storage/avatars/' . $this->avatar;
+            return env('APP_URL') . '/storage/avatars/' . $this->avatar;
         else
-            return '/storage/avatars/default.gif';
+            return env('APP_URL') . '/storage/avatars/noAva.jpg';
     }
 
     //generate secret values
@@ -189,5 +190,10 @@ class User extends Authenticatable
 
         $this->code = encrypt($code);
         $this->save();
+    }
+
+    public function getToken(bool $long = false){
+        $token = $this->createToken(config('app.name'));
+	    return $token->accessToken;
     }
 }

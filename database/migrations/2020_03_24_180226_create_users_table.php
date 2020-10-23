@@ -40,9 +40,14 @@ class CreateUsersTable extends Migration
             $table->timestamps();
 
             //relations
-            $table->foreign('commission_id')->references('id')->on('commissions');
-            $table->foreign('department_id')->references('id')->on('departments');
-            $table->foreign('rank_id')->references('id')->on('ranks');
+            $table->foreign('commission_id')->references('id')
+                ->on('commissions')->onDelete('CASCADE')->onUpdate('CASCADE');
+            
+            $table->foreign('department_id')->references('id')
+                ->on('departments')->onDelete('CASCADE')->onUpdate('CASCADE');
+            
+            $table->foreign('rank_id')->references('id')
+                ->on('ranks')->onDelete('SET NULL');
         });
     }
 

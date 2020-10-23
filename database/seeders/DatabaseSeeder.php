@@ -2,6 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Commission;
+use App\Models\Department;
+use App\Models\Rank;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,6 +17,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        Commission::factory()->count(10)->create();
+        Department::factory()->count(10)->create();
+        Rank::factory()->count(5)->create();
+
+        User::factory()->count(10)->create();
     }
 }
