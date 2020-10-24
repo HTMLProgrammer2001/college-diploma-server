@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use Notifiable, HasApiTokens;
+    use Notifiable, HasApiTokens, HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -45,9 +46,9 @@ class User extends Authenticatable
         return $this->belongsTo(Commission::class);
     }
 
-//    public function publications(){
-//        return $this->belongsToMany(Publication::class, 'users_publications', 'user_id');
-//    }
+    public function publications(){
+        return $this->belongsToMany(Publication::class, 'users_publications', 'user_id');
+    }
 //
 //    public function internships(){
 //        return $this->hasMany(Internship::class);
@@ -153,12 +154,9 @@ class User extends Authenticatable
         ];
     }
 
-    public function getFullName(){
-        return $this->surname . ' ' . $this->name . ' ' . $this->patronymic;
-    }
-
-    public function getShortName(){
-        return $this->surname . ' ' . mb_substr($this->name, 0, 1);
+    public function getShortName(): string {
+        list($surname, $name) = explode(' ', $this->fullName);
+        return $surname . ' ' . mb_substr($name, 0, 1) . '.';
     }
 
     public function getAvatar(){

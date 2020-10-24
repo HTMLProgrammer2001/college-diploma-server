@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Commission;
 use App\Models\Department;
+use App\Models\Publication;
 use App\Models\Rank;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -22,5 +23,6 @@ class DatabaseSeeder extends Seeder
         Rank::factory()->count(5)->create();
 
         User::factory()->count(10)->create();
+        Publication::factory()->count(20)->create();
     }
 }
