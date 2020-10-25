@@ -26,7 +26,8 @@ class ProfilePublicationRequest extends FormRequest
         return [
             'filterTitle' => 'nullable|string',
             'filterFrom' => 'nullable|date',
-            'filterTo' => 'nullable|date'
+            'filterTo' => 'nullable|date',
+            'sort' => 'nullable|array'
         ];
     }
 }

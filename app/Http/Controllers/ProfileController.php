@@ -23,6 +23,12 @@ class ProfileController extends Controller
     }
 
     public function getPublications(ProfilePublicationRequest $request){
+        $sortFields = [
+            'ID' => 'id',
+            'title' => 'title',
+            'date' => 'date_of_publication'
+        ];
+
         $rules = [];
         $rules[] = new HasAssociateRule('authors', new EqualRule('users.id', $request->user()->id));
 
@@ -35,17 +41,21 @@ class ProfileController extends Controller
         if($request->query('filterTo'))
             $rules[] = new DateLessRule('date_of_publication', $request->query('filterTo'));
 
-        if($request->query('sortId'))
-            $rules[] = new SortRule('id', $request->query('sortId'));
+        if(is_array($request->query('sort'))){
+            foreach ($request->query('sort') as $sortRuleStr){
+                try {
+                    $sortRule = json_decode($sortRuleStr);
 
-        if($request->query('sortTitle'))
-            $rules[] = new SortRule('title', $request->query('sortTitle'));
+                    if(!in_array($sortRule->field, array_keys($sortFields)))
+                        continue;
 
-        if($request->query('sortDate'))
-            $rules[] = new SortRule('date_of_publication', $request->query('sortDate'));
+                    $rules[] = new SortRule($sortFields[$sortRule->field], $sortRule->direction);
+                }
+                catch (Exception $exception){}
+            }
+        }
 
         $publications = $this->publicationRep->filterPaginate($rules, $request->query('pageSize', 5));
-
         return new PublicationsGroupResource($publications);
     }
 }
