@@ -2,60 +2,46 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Profile\ProfileEducationsRequest;
 use App\Http\Requests\Profile\ProfilePublicationRequest;
-use App\Http\Resources\PublicationsGroupResource;
-use App\Repositories\Interfaces\PublicationRepositoryInterface;
 
-use App\Repositories\Rules\DateLessRule;
-use App\Repositories\Rules\DateMoreRule;
-use App\Repositories\Rules\EqualRule;
-use App\Repositories\Rules\HasAssociateRule;
-use App\Repositories\Rules\LikeRule;
-use App\Repositories\Rules\SortRule;
+use App\Http\Resources\EducationsGroupResource;
+use App\Http\Resources\PublicationsGroupResource;
+
+use App\Repositories\Interfaces\EducationRepositoryInterface;
+use App\Repositories\Interfaces\PublicationRepositoryInterface;
 
 class ProfileController extends Controller
 {
     private $publicationRep;
+    private $educationRep;
 
-    public function __construct(PublicationRepositoryInterface $publicationRep)
+    public function __construct(PublicationRepositoryInterface $publicationRep,
+        EducationRepositoryInterface $educationRep)
     {
         $this->publicationRep = $publicationRep;
+        $this->educationRep = $educationRep;
     }
 
     public function getPublications(ProfilePublicationRequest $request){
-        $sortFields = [
-            'ID' => 'id',
-            'title' => 'title',
-            'date' => 'date_of_publication'
-        ];
+        $inputData = $request->query();
+        $inputData['user_id'] = $request->user()->id;
 
-        $rules = [];
-        $rules[] = new HasAssociateRule('authors', new EqualRule('users.id', $request->user()->id));
+        $rules = $this->publicationRep->createRules($inputData);
+        $pageSize = $request->query('pageSize', 5);
+        $publications = $this->publicationRep->filterPaginate($rules, $pageSize);
 
-        if($request->query('filterTitle'))
-            $rules[] = new LikeRule('title', $request->query('filterTitle'));
-
-        if($request->query('filterFrom'))
-            $rules[] = new DateMoreRule('date_of_publication', $request->query('filterFrom'));
-
-        if($request->query('filterTo'))
-            $rules[] = new DateLessRule('date_of_publication', $request->query('filterTo'));
-
-        if(is_array($request->query('sort'))){
-            foreach ($request->query('sort') as $sortRuleStr){
-                try {
-                    $sortRule = json_decode($sortRuleStr);
-
-                    if(!in_array($sortRule->field, array_keys($sortFields)))
-                        continue;
-
-                    $rules[] = new SortRule($sortFields[$sortRule->field], $sortRule->direction);
-                }
-                catch (Exception $exception){}
-            }
-        }
-
-        $publications = $this->publicationRep->filterPaginate($rules, $request->query('pageSize', 5));
         return new PublicationsGroupResource($publications);
+    }
+
+    public function getEducations(ProfileEducationsRequest $request){
+        $inputData = $request->query();
+        $inputData['user_id'] = $request->user()->id;
+
+        $rules = $this->educationRep->createRules($inputData);
+        $pageSize = $request->query('pageSize', 5);
+        $educations = $this->educationRep->filterPaginate($rules, $pageSize);
+
+        return new EducationsGroupResource($educations);
     }
 }

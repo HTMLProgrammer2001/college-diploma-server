@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Collection;
 
 interface BaseRepositoryInterface
 {
+    public function createRules(array $inputData): array;
+
     public function create($data);
 
     public function update($id, $data);

@@ -28,4 +28,5 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'profile'], function(){
     //Profile info routes
 
     Route::get('/publications', [ProfileController::class, 'getPublications']);
+    Route::get('/educations', [ProfileController::class, 'getEducations']);
 });

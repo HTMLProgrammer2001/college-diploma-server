@@ -69,10 +69,10 @@ class User extends Authenticatable
     public function rank(){
         return $this->belongsTo(Rank::class);
     }
-//
-//    public function educations(){
-//        return $this->hasMany(Education::class);
-//    }
+
+    public function educations(){
+        return $this->hasMany(Education::class);
+    }
 
     //Helper methods
     public static function getPedagogicalTitles(){
