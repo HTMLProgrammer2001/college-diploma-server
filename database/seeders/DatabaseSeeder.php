@@ -7,6 +7,7 @@ use App\Models\Department;
 use App\Models\Education;
 use App\Models\Honor;
 use App\Models\Publication;
+use App\Models\Qualification;
 use App\Models\Rank;
 use App\Models\Rebuke;
 use App\Models\User;
@@ -31,5 +32,6 @@ class DatabaseSeeder extends Seeder
 
         Honor::factory()->count(50)->create();
         Rebuke::factory()->count(50)->create();
+        Qualification::factory()->count(50)->create();
     }
 }

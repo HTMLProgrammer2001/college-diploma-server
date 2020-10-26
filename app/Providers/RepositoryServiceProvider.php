@@ -7,8 +7,10 @@ use App\Repositories\HonorRepository;
 use App\Repositories\Interfaces\EducationRepositoryInterface;
 use App\Repositories\Interfaces\HonorRepositoryInterface;
 use App\Repositories\Interfaces\PublicationRepositoryInterface;
+use App\Repositories\Interfaces\QualificationRepositoryInterface;
 use App\Repositories\Interfaces\RebukeRepositoryInterface;
 use App\Repositories\PublicationRepository;
+use App\Repositories\QualificationRepository;
 use App\Repositories\RebukeRepository;
 use Illuminate\Support\ServiceProvider;
 
@@ -35,5 +37,6 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->singleton(EducationRepositoryInterface::class, EducationRepository::class);
         $this->app->singleton(HonorRepositoryInterface::class, HonorRepository::class);
         $this->app->singleton(RebukeRepositoryInterface::class, RebukeRepository::class);
+        $this->app->singleton(QualificationRepositoryInterface::class, QualificationRepository::class);
     }
 }

@@ -54,18 +54,18 @@ class User extends Authenticatable
 //        return $this->hasMany(Internship::class);
 //    }
 //
-//    public function qualifications(){
-//        return $this->hasMany(Qualification::class);
-//    }
-//
-//    public function honors(){
-//        return $this->hasMany(Honor::class);
-//    }
-//
-//    public function rebukes(){
-//        return $this->hasMany(Rebuke::class);
-//    }
-//
+    public function qualifications(){
+        return $this->hasMany(Qualification::class);
+    }
+
+    public function honors(){
+        return $this->hasMany(Honor::class);
+    }
+
+    public function rebukes(){
+        return $this->hasMany(Rebuke::class);
+    }
+
     public function rank(){
         return $this->belongsTo(Rank::class);
     }
