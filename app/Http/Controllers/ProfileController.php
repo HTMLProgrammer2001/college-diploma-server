@@ -6,26 +6,32 @@ use App\Http\Requests\Profile\ProfileEducationsRequest;
 use App\Http\Requests\Profile\ProfileHonorsRequest;
 use App\Http\Requests\Profile\ProfilePublicationRequest;
 
+use App\Http\Requests\Profile\ProfileRebukeRequest;
 use App\Http\Resources\EducationsGroupResource;
 use App\Http\Resources\HonorsGroupResource;
 use App\Http\Resources\PublicationsGroupResource;
 
+use App\Http\Resources\RebukesGroupResource;
 use App\Repositories\Interfaces\EducationRepositoryInterface;
 use App\Repositories\Interfaces\HonorRepositoryInterface;
 use App\Repositories\Interfaces\PublicationRepositoryInterface;
+use App\Repositories\Interfaces\RebukeRepositoryInterface;
 
 class ProfileController extends Controller
 {
     private $publicationRep;
     private $educationRep;
     private $honorRep;
+    private $rebukeRep;
 
     public function __construct(PublicationRepositoryInterface $publicationRep,
-        EducationRepositoryInterface $educationRep, HonorRepositoryInterface $honorRep)
+        EducationRepositoryInterface $educationRep, HonorRepositoryInterface $honorRep,
+        RebukeRepositoryInterface $rebukeRep)
     {
         $this->publicationRep = $publicationRep;
         $this->educationRep = $educationRep;
         $this->honorRep = $honorRep;
+        $this->rebukeRep = $rebukeRep;
     }
 
     public function getPublications(ProfilePublicationRequest $request){
@@ -59,5 +65,16 @@ class ProfileController extends Controller
         $honors = $this->honorRep->filterPaginate($rules, $pageSize);
 
         return new HonorsGroupResource($honors);
+    }
+
+    public function getRebukes(ProfileRebukeRequest $request){
+        $inputData = $request->query();
+        $inputData['user_id'] = $request->user()->id;
+
+        $rules = $this->rebukeRep->createRules($inputData);
+        $pageSize = $request->query('pageSize', 5);
+        $rebukes = $this->rebukeRep->filterPaginate($rules, $pageSize);
+
+        return new RebukesGroupResource($rebukes);
     }
 }

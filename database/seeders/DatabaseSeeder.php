@@ -8,6 +8,7 @@ use App\Models\Education;
 use App\Models\Honor;
 use App\Models\Publication;
 use App\Models\Rank;
+use App\Models\Rebuke;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -29,5 +30,6 @@ class DatabaseSeeder extends Seeder
         Education::factory()->count(50)->create();
 
         Honor::factory()->count(50)->create();
+        Rebuke::factory()->count(50)->create();
     }
 }
