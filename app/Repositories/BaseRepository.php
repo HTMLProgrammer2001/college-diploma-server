@@ -5,14 +5,35 @@ namespace App\Repositories;
 
 
 use App\Repositories\Interfaces\BaseRepositoryInterface;
+use App\Repositories\Rules\SortRule;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 abstract class BaseRepository implements BaseRepositoryInterface
 {
+    private $sortFields = [];
+
     //method that return class of repository model
     abstract public function getModel(): Model;
+
+    public function createSortRules(?array $sort, ?array $fields): array
+    {
+        $sortRules = [];
+
+        if(is_array($sort ?? null)){
+            foreach ($sort as $sortRuleStr){
+                $sortRule = json_decode($sortRuleStr);
+
+                if(!in_array($sortRule->field, array_keys($fields)))
+                    continue;
+
+                $sortRules[] = new SortRule($fields[$sortRule->field], $sortRule->direction);
+            }
+        }
+
+        return $sortRules;
+    }
 
     public function destroy($id)
     {

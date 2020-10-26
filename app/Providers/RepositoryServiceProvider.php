@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Repositories\EducationRepository;
+use App\Repositories\HonorRepository;
 use App\Repositories\Interfaces\EducationRepositoryInterface;
+use App\Repositories\Interfaces\HonorRepositoryInterface;
 use App\Repositories\Interfaces\PublicationRepositoryInterface;
 use App\Repositories\PublicationRepository;
 use Illuminate\Support\ServiceProvider;
@@ -29,5 +31,6 @@ class RepositoryServiceProvider extends ServiceProvider
     {
         $this->app->singleton(PublicationRepositoryInterface::class, PublicationRepository::class);
         $this->app->singleton(EducationRepositoryInterface::class, EducationRepository::class);
+        $this->app->singleton(HonorRepositoryInterface::class, HonorRepository::class);
     }
 }

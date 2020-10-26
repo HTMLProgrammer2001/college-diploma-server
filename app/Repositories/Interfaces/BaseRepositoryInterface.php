@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Collection;
 
 interface BaseRepositoryInterface
 {
+    public function createSortRules(?array $sort, ?array $fields): array;
+
     public function createRules(array $inputData): array;
 
     public function create($data);

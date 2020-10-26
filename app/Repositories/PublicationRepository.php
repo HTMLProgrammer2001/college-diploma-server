@@ -12,7 +12,6 @@ use App\Repositories\Rules\DateMoreRule;
 use App\Repositories\Rules\EqualRule;
 use App\Repositories\Rules\HasAssociateRule;
 use App\Repositories\Rules\LikeRule;
-use App\Repositories\Rules\SortRule;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -20,7 +19,7 @@ use Illuminate\Database\Eloquent\Model;
 class PublicationRepository extends BaseRepository implements PublicationRepositoryInterface
 {
     private $model = Publication::class;
-    private $sortFields = [
+    protected $sortFields = [
         'ID' => 'id',
         'title' => 'title',
         'date' => 'date_of_publication'
@@ -48,17 +47,7 @@ class PublicationRepository extends BaseRepository implements PublicationReposit
         if($inputData['filterTo'] ?? null)
             $rules[] = new DateLessRule('date_of_publication', $inputData['filterTo']);
 
-        if(is_array($inputData['sort'] ?? null)){
-            foreach ($inputData['sort'] as $sortRuleStr){
-                $sortRule = json_decode($sortRuleStr);
-
-                if(!in_array($sortRule->field, array_keys($this->sortFields)))
-                    continue;
-
-                $rules[] = new SortRule($this->sortFields[$sortRule->field], $sortRule->direction);
-            }
-        }
-
+        $rules = array_merge($rules, $this->createSortRules($inputData['sort'] ?? null, $this->sortFields));
         return $rules;
     }
 

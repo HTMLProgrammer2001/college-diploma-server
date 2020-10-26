@@ -8,12 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Education;
 use App\Repositories\Interfaces\EducationRepositoryInterface;
 use App\Repositories\Rules\EqualRule;
-use App\Repositories\Rules\SortRule;
 
 class EducationRepository extends BaseRepository implements EducationRepositoryInterface
 {
     private $model = Education::class;
-    private $sortFields = [
+    protected $sortFields = [
         'ID' => 'id',
         'institution' => 'institution',
         'graduateYear' => 'graduate_year',
@@ -45,17 +44,7 @@ class EducationRepository extends BaseRepository implements EducationRepositoryI
         if($inputData['filterInstitution'] ?? null)
             $rules[] = new EqualRule('institution', $inputData['filterInstitution']);
 
-        if(is_array($inputData['sort'] ?? null)){
-            foreach ($inputData['sort'] as $sortRuleStr){
-                $sortRule = json_decode($sortRuleStr);
-
-                if(!in_array($sortRule->field, array_keys($this->sortFields)))
-                    continue;
-
-                $rules[] = new SortRule($this->sortFields[$sortRule->field], $sortRule->direction);
-            }
-        }
-
+        $rules = array_merge($rules, $this->createSortRules($inputData['sort'] ?? null, $this->sortFields));
         return $rules;
     }
 
