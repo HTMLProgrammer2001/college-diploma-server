@@ -32,4 +32,5 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'profile'], function(){
     Route::get('/honors', [ProfileController::class, 'getHonors']);
     Route::get('/rebukes', [ProfileController::class, 'getRebukes']);
     Route::get('/qualifications', [ProfileController::class, 'getQualifications']);
+    Route::get('/internships', [ProfileController::class, 'getInternships']);
 });

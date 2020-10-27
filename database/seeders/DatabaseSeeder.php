@@ -6,6 +6,8 @@ use App\Models\Commission;
 use App\Models\Department;
 use App\Models\Education;
 use App\Models\Honor;
+use App\Models\InternCategory;
+use App\Models\Internship;
 use App\Models\Publication;
 use App\Models\Qualification;
 use App\Models\Rank;
@@ -33,5 +35,8 @@ class DatabaseSeeder extends Seeder
         Honor::factory()->count(50)->create();
         Rebuke::factory()->count(50)->create();
         Qualification::factory()->count(50)->create();
+
+        InternCategory::factory()->count(10)->create();
+        Internship::factory()->count(200)->create();
     }
 }

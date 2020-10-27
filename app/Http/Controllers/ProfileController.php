@@ -4,18 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Profile\ProfileEducationsRequest;
 use App\Http\Requests\Profile\ProfileHonorsRequest;
+use App\Http\Requests\Profile\ProfileInternshipRequest;
 use App\Http\Requests\Profile\ProfilePublicationRequest;
 use App\Http\Requests\Profile\ProfileQualificationRequest;
 use App\Http\Requests\Profile\ProfileRebukeRequest;
 
 use App\Http\Resources\EducationsGroupResource;
 use App\Http\Resources\HonorsGroupResource;
+use App\Http\Resources\InternshipsGroupResource;
 use App\Http\Resources\PublicationsGroupResource;
 use App\Http\Resources\QualificationsGroupResource;
 use App\Http\Resources\RebukesGroupResource;
 
 use App\Repositories\Interfaces\EducationRepositoryInterface;
 use App\Repositories\Interfaces\HonorRepositoryInterface;
+use App\Repositories\Interfaces\InternshipRepositoryInterface;
 use App\Repositories\Interfaces\PublicationRepositoryInterface;
 use App\Repositories\Interfaces\QualificationRepositoryInterface;
 use App\Repositories\Interfaces\RebukeRepositoryInterface;
@@ -27,16 +30,19 @@ class ProfileController extends Controller
     private $honorRep;
     private $rebukeRep;
     private $qualificationRep;
+    private $internshipRep;
 
     public function __construct(PublicationRepositoryInterface $publicationRep,
         EducationRepositoryInterface $educationRep, HonorRepositoryInterface $honorRep,
-        RebukeRepositoryInterface $rebukeRep, QualificationRepositoryInterface $qualificationRep)
+        RebukeRepositoryInterface $rebukeRep, QualificationRepositoryInterface $qualificationRep,
+        InternshipRepositoryInterface $internshipRep)
     {
         $this->publicationRep = $publicationRep;
         $this->educationRep = $educationRep;
         $this->honorRep = $honorRep;
         $this->rebukeRep = $rebukeRep;
         $this->qualificationRep = $qualificationRep;
+        $this->internshipRep = $internshipRep;
     }
 
     public function getPublications(ProfilePublicationRequest $request){
@@ -92,5 +98,16 @@ class ProfileController extends Controller
         $qualifications = $this->qualificationRep->filterPaginate($rules, $pageSize);
 
         return new QualificationsGroupResource($qualifications);
+    }
+
+    public function getInternships(ProfileInternshipRequest $request){
+        $inputData = $request->query();
+        $inputData['user_id'] = $request->user()->id;
+
+        $rules = $this->internshipRep->createRules($inputData);
+        $pageSize = $request->query('pageSize', 5);
+        $internships = $this->internshipRep->filterPaginate($rules, $pageSize);
+
+        return new InternshipsGroupResource($internships);
     }
 }
