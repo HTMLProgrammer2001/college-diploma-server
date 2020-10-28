@@ -1,8 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\UserActions;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DepartmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,4 +35,12 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'profile'], function(){
     Route::get('/rebukes', [ProfileController::class, 'getRebukes']);
     Route::get('/qualifications', [ProfileController::class, 'getQualifications']);
     Route::get('/internships', [ProfileController::class, 'getInternships']);
+});
+
+Route::group(['prefix' => 'departments', 'middleware' => 'auth:api', 'where' => ['id' => '[0-9]+']], function (){
+    Route::get('/', [DepartmentController::class, 'all']);
+    Route::get('/{id}', [DepartmentController::class, 'single']);
+    Route::post('/add', [DepartmentController::class, 'store']);
+    Route::put('/{id}', [DepartmentController::class, 'update']);
+    Route::delete('/{id}', [DepartmentController::class, 'destroy']);
 });

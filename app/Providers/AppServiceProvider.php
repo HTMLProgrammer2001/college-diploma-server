@@ -24,8 +24,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->singleton(PhotoUploader::class, function(){
-            return new PhotoUploader();
-        });
+        $this->app->singleton(PhotoUploader::class, PhotoUploader::class);
     }
 }
