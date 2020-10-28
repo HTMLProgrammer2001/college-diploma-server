@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserActions;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\CommissionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,4 +44,12 @@ Route::group(['prefix' => 'departments', 'middleware' => 'auth:api', 'where' => 
     Route::post('/add', [DepartmentController::class, 'store']);
     Route::put('/{id}', [DepartmentController::class, 'update']);
     Route::delete('/{id}', [DepartmentController::class, 'destroy']);
+});
+
+Route::group(['prefix' => 'commissions', 'middleware' => 'auth:api', 'where' => ['id' => '[0-9]+']], function (){
+    Route::get('/', [CommissionController::class, 'all']);
+    Route::get('/{id}', [CommissionController::class, 'single']);
+    Route::post('/add', [CommissionController::class, 'store']);
+    Route::put('/{id}', [CommissionController::class, 'update']);
+    Route::delete('/{id}', [CommissionController::class, 'destroy']);
 });
