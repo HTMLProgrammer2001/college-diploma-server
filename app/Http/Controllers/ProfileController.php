@@ -96,8 +96,13 @@ class ProfileController extends Controller
         $rules = $this->qualificationRep->createRules($inputData);
         $pageSize = $request->query('pageSize', 5);
         $qualifications = $this->qualificationRep->filterPaginate($rules, $pageSize);
-
-        return new QualificationsGroupResource($qualifications);
+        
+        $response = new QualificationsGroupResource($qualifications);
+        $response->additional([
+           'nextDate' => $this->qualificationRep->getNextQualificationDateOf($request->user()->id)
+        ]);
+        
+        return $response;
     }
 
     public function getInternships(ProfileInternshipRequest $request){
@@ -108,6 +113,13 @@ class ProfileController extends Controller
         $pageSize = $request->query('pageSize', 5);
         $internships = $this->internshipRep->filterPaginate($rules, $pageSize);
 
-        return new InternshipsGroupResource($internships);
+        $response = new InternshipsGroupResource($internships);
+        $lastInternships = $this->internshipRep->getInternshipsFor($request->user()->id);
+
+        $response->additional([
+            'hours' => $this->internshipRep->getInternshipHoursOf($lastInternships)
+        ]);
+
+        return $response;
     }
 }

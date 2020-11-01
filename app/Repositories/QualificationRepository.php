@@ -34,6 +34,9 @@ class QualificationRepository extends BaseRepository implements QualificationRep
         if($inputData['filterTo'] ?? null)
             $rules[] = new DateLessRule('date', $inputData['filterTo']);
 
+        if($inputData['filterCategory'] ?? null && $inputData['filterCategory'] != -1)
+            $rules[] = new EqualRule('name', $this->getQualificationNames()[$inputData['filterCategory']]);
+
         $rules = array_merge($rules, $this->createSortRules($inputData['sort'] ?? null, $this->sortField));
         return $rules;
     }

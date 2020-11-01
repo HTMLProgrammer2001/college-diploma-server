@@ -6,6 +6,7 @@ use App\Http\Controllers\UserActions;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\CommissionController;
+use App\Http\Controllers\RankController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,4 +53,12 @@ Route::group(['prefix' => 'commissions', 'middleware' => 'auth:api', 'where' => 
     Route::post('/add', [CommissionController::class, 'store']);
     Route::put('/{id}', [CommissionController::class, 'update']);
     Route::delete('/{id}', [CommissionController::class, 'destroy']);
+});
+
+Route::group(['prefix' => 'ranks', 'middleware' => 'auth:api', 'where' => ['id' => '[0-9]+']], function (){
+    Route::get('/', [RankController::class, 'all']);
+    Route::get('/{id}', [RankController::class, 'single']);
+    Route::post('/add', [RankController::class, 'store']);
+    Route::put('/{id}', [RankController::class, 'update']);
+    Route::delete('/{id}', [RankController::class, 'destroy']);
 });

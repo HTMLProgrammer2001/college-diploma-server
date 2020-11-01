@@ -144,6 +144,6 @@ class InternshipRepository extends BaseRepository implements InternshipRepositor
             $from = '1970-01-01';
 
         return $this->getModel()->query()->where('user_id', $user_id)
-            ->whereDate('to', '>', $from)->with('category', 'place')->get();
+            ->whereDate('to', '>', $from)->with('category')->get();
     }
 }
