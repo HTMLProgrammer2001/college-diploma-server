@@ -40,7 +40,7 @@ class InternshipRepository extends BaseRepository implements InternshipRepositor
         if($inputData['user_id'] ?? null)
             $rules[] = new EqualRule('user_id', $inputData['user_id']);
 
-        if($inputData['filterCategory'] ?? null)
+        if($inputData['filterCategory'] ?? null && $inputData['filterCategory'] != -1)
             $rules[] = new EqualRule('category_id', $inputData['filterCategory']);
 
         if($inputData['filterFrom'] ?? null)

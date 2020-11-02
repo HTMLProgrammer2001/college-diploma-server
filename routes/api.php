@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\RankController;
+use App\Http\Controllers\SearchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +40,13 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'profile'], function(){
     Route::get('/internships', [ProfileController::class, 'getInternships']);
 });
 
+Route::group(['middleware' => 'auth:api', 'prefix' => 'search'], function (){
+   //Search routes for dropdowns with live search
+
+    Route::get('/categories', [SearchController::class, 'searchCategories']);
+});
+
+//models CRUD routes
 Route::group(['prefix' => 'departments', 'middleware' => 'auth:api', 'where' => ['id' => '[0-9]+']], function (){
     Route::get('/', [DepartmentController::class, 'all']);
     Route::get('/{id}', [DepartmentController::class, 'single']);

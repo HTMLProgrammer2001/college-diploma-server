@@ -30,7 +30,7 @@ class ProfileInternshipRequest extends FormRequest
             'filterMoreHours' => 'nullable|numeric',
             'filterLessHours' => 'nullable|numeric',
             'filterTheme' => 'nullable|string',
-            'filterCategory' => 'nullable|digit'
+            'filterCategory' => 'nullable|numeric'
         ];
     }
 }
