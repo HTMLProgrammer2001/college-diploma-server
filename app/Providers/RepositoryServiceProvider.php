@@ -18,11 +18,13 @@ use App\Repositories\Interfaces\RebukeRepositoryInterface;
 use App\Repositories\CategoryRepository;
 use App\Repositories\EducationRepository;
 use App\Repositories\HonorRepository;
+use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Repositories\InternshipRepository;
 use App\Repositories\PublicationRepository;
 use App\Repositories\QualificationRepository;
 use App\Repositories\RankRepository;
 use App\Repositories\RebukeRepository;
+use App\Repositories\UserRepository;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -54,5 +56,6 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->singleton(DepartmentRepositoryInterface::class, DepartmentRepository::class);
         $this->app->singleton(CommissionRepositoryInterface::class, CommissionRepository::class);
         $this->app->singleton(RankRepositoryInterface::class, RankRepository::class);
+        $this->app->singleton(UserRepositoryInterface::class, UserRepository::class);
     }
 }

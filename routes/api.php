@@ -8,6 +8,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\RankController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\PublicationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +45,7 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'search'], function (){
    //Search routes for dropdowns with live search
 
     Route::get('/categories', [SearchController::class, 'searchCategories']);
+    Route::get('/users', [SearchController::class, 'searchUsers']);
 });
 
 //models CRUD routes
@@ -69,4 +71,13 @@ Route::group(['prefix' => 'ranks', 'middleware' => 'auth:api', 'where' => ['id' 
     Route::post('/add', [RankController::class, 'store']);
     Route::put('/{id}', [RankController::class, 'update']);
     Route::delete('/{id}', [RankController::class, 'destroy']);
+});
+
+Route::group(['prefix' => 'publications', 'middleware' => 'auth:api', 'where' => ['id' => '[0-9]+']], function (){
+    Route::get('/', [PublicationController::class, 'all']);
+    Route::get('/{id}', [PublicationController::class, 'single']);
+    Route::post('/add', [PublicationController::class, 'store']);
+    Route::put('/{id}', [PublicationController::class, 'update']);
+    Route::delete('/{id}', [PublicationController::class, 'destroy']);
+    Route::post('/import', [PublicationController::class, 'import']);
 });
