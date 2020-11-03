@@ -24,7 +24,7 @@ class CreateUsersTable extends Migration
             $table->bigInteger('commission_id')->unsigned();
             $table->bigInteger('department_id')->unsigned();
             $table->bigInteger('rank_id')->unsigned();
-            $table->integer('role')->default(\App\User::ROLE_USER);
+            $table->integer('role')->default(\App\Models\User::ROLE_USER);
             $table->string('avatar')->nullable();
             $table->smallInteger('hiring_year')->nullable();
             $table->string('pedagogical_title')->nullable();
