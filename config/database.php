@@ -67,6 +67,7 @@ return [
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),
+            'database' => env('DB_DATABASE', 'd82i0dkev271k'),
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
