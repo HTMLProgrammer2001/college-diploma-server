@@ -24,7 +24,12 @@ class EditPublicationRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title' => 'required|string',
+            'url' => 'nullable|url',
+            'publisher' => 'nullable|string',
+            'date' => 'nullable|date',
+            'authors' => 'required|array',
+            'another_authors' => 'nullable|string'
         ];
     }
 }

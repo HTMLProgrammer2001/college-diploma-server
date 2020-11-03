@@ -9,6 +9,7 @@ use App\Http\Controllers\CommissionController;
 use App\Http\Controllers\RankController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\PublicationController;
+use App\Http\Controllers\ExportExampleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +47,12 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'search'], function (){
 
     Route::get('/categories', [SearchController::class, 'searchCategories']);
     Route::get('/users', [SearchController::class, 'searchUsers']);
+});
+
+Route::group(['prefix' => 'examples'], function(){
+   //Model import files examples
+
+    Route::get('/publications', [ExportExampleController::class, 'getPublicationExample']);
 });
 
 //models CRUD routes

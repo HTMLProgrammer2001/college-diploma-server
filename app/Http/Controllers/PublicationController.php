@@ -42,11 +42,8 @@ class PublicationController extends Controller
 
     public function store(AddPublicationRequest $request)
     {
-        $data = $request->except('date', 'authors');
-        $data = array_merge($data, [
-            'date_of_publication' => $request->input('date'),
-            'authors' => [$request->input('authors')]
-        ]);
+        $data = $request->except('date');
+        $data = array_merge($data, ['date_of_publication' => $request->input('date')]);
 
         $this->publicationRep->create($data);
 

@@ -28,7 +28,7 @@ class AddPublicationRequest extends FormRequest
             'url' => 'nullable|url',
             'publisher' => 'nullable|string',
             'date' => 'nullable|date',
-            'authors' => 'required|numeric',
+            'authors' => 'required|array',
             'another_authors' => 'nullable|string'
         ];
     }

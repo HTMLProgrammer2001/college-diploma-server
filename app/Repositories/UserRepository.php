@@ -120,13 +120,13 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
     public function getForExportList(): array
     {
-        $users = $this->getModel()->all('id', 'surname', 'name', 'patronymic')->toArray();
+        function to_export_list(array $items){
+            return array_map(function($item) {
+                return implode(' - ', $item);
+            }, array_values($items));
+        }
 
-        $users = array_map(function($user){
-            $user = array_values($user);
-            return [$user[0], implode(' ', array_slice($user, 1))];
-        }, $users);
-
+        $users = $this->getModel()->all('id', 'fullName')->toArray();
         return to_export_list($users);
     }
 
