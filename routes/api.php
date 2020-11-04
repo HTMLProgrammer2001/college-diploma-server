@@ -10,6 +10,7 @@ use App\Http\Controllers\RankController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\ExportExampleController;
+use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -78,6 +79,14 @@ Route::group(['prefix' => 'ranks', 'middleware' => 'auth:api', 'where' => ['id' 
     Route::post('/add', [RankController::class, 'store']);
     Route::put('/{id}', [RankController::class, 'update']);
     Route::delete('/{id}', [RankController::class, 'destroy']);
+});
+
+Route::group(['prefix' => 'categories', 'middleware' => 'auth:api', 'where' => ['id' => '[0-9]+']], function (){
+    Route::get('/', [CategoryController::class, 'all']);
+    Route::get('/{id}', [CategoryController::class, 'single']);
+    Route::post('/add', [CategoryController::class, 'store']);
+    Route::put('/{id}', [CategoryController::class, 'update']);
+    Route::delete('/{id}', [CategoryController::class, 'destroy']);
 });
 
 Route::group(['prefix' => 'publications', 'middleware' => 'auth:api', 'where' => ['id' => '[0-9]+']], function (){

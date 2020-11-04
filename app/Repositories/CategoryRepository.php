@@ -24,6 +24,9 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
         if($inputData['name'] ?? null)
             $rules[] = new LikeRule('name', $inputData['name']);
 
+        if($inputData['filterName'] ?? null)
+            $rules[] = new LikeRule('name', $inputData['filterName']);
+
         $rules = array_merge($rules, $this->createSortRules($inputData['sort'] ?? null, $this->sortFields));
         return $rules;
     }
