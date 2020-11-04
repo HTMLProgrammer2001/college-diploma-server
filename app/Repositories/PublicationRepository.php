@@ -13,6 +13,7 @@ use App\Repositories\Rules\EqualRule;
 use App\Repositories\Rules\HasAssociateRule;
 use App\Repositories\Rules\LikeRule;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -54,7 +55,7 @@ class PublicationRepository extends BaseRepository implements PublicationReposit
     public function create($data)
     {
         if($data['date_of_publication'] ?? false)
-            $data['date_of_publication'] = from_locale_date($data['date_of_publication']);
+            $data['date_of_publication'] = Carbon::parse($data['date_of_publication'])->format("Y-m-d");
 
         $publication = $this->getModel()->query()->newModelInstance($data);
         $publication->fill($data);
@@ -69,7 +70,7 @@ class PublicationRepository extends BaseRepository implements PublicationReposit
     public function update($id, $data)
     {
         if($data['date_of_publication'] ?? false)
-            $data['date_of_publication'] = from_locale_date($data['date_of_publication']);
+            $data['date_of_publication'] = Carbon::parse($data['date_of_publication'])->format("Y-m-d");
 
         $publication = $this->getModel()->query()->findOrFail($id);
         $publication->fill($data);
