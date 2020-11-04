@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ImportRequest;
 use App\Http\Requests\Publication\AddPublicationRequest;
 use App\Http\Requests\Publication\AllPublicationRequest;
 use App\Http\Requests\Publication\EditPublicationRequest;
 use App\Http\Resources\PublicationResource;
 use App\Http\Resources\PublicationsGroupResource;
+use App\Imports\PublicationsImport;
 use App\Repositories\Interfaces\PublicationRepositoryInterface;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PublicationController extends Controller
 {
@@ -68,8 +71,19 @@ class PublicationController extends Controller
             return abort(422);
     }
 
-    public function import()
+    public function import(ImportRequest $request)
     {
+        Excel::import(new PublicationsImport(), $request->file('importFile'));
 
+//        try {
+//            Excel::import(new PublicationsImport(), $request->file('importFile'));
+//        }
+//        catch(\Exception $exception){
+//            return response()->json([
+//                'message' => 'Error in import'
+//            ], 422);
+//        }
+
+        return response()->json(['message' => 'Ok']);
     }
 }

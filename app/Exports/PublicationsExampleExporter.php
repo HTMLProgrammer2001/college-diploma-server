@@ -45,7 +45,7 @@ class PublicationsExampleExporter implements FromCollection, WithHeadings, WithE
 
         //create ranges
         $sheet->getParent()->addNamedRange( new NamedRange('users',
-            $sheet->getDelegate(), "Z1:Z" . sizeof($users)) );
+            $sheet->getDelegate(), "\$Z\$1:\$Z\$" . sizeof($users)) );
     }
 
     public function setRanges($sheet, $validation){
