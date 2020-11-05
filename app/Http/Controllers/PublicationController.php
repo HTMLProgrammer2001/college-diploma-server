@@ -73,16 +73,15 @@ class PublicationController extends Controller
 
     public function import(ImportRequest $request)
     {
-        Excel::import(new PublicationsImport(), $request->file('importFile'));
-
-//        try {
-//            Excel::import(new PublicationsImport(), $request->file('importFile'));
-//        }
-//        catch(\Exception $exception){
-//            return response()->json([
-//                'message' => 'Error in import'
-//            ], 422);
-//        }
+        try {
+            //Import models
+            Excel::import(new PublicationsImport(), $request->file('importFile'));
+        }
+        catch(\Exception $exception){
+            return response()->json([
+                'message' => 'Error in import'
+            ], 422);
+        }
 
         return response()->json(['message' => 'Ok']);
     }

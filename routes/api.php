@@ -11,6 +11,7 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\ExportExampleController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\HonorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -96,4 +97,13 @@ Route::group(['prefix' => 'publications', 'middleware' => 'auth:api', 'where' =>
     Route::put('/{id}', [PublicationController::class, 'update']);
     Route::delete('/{id}', [PublicationController::class, 'destroy']);
     Route::post('/import', [PublicationController::class, 'import']);
+});
+
+Route::group(['prefix' => 'honors', 'middleware' => 'auth:api', 'where' => ['id' => '[0-9]+']], function (){
+    Route::get('/', [HonorController::class, 'all']);
+    Route::get('/{id}', [HonorController::class, 'single']);
+    Route::post('/add', [HonorController::class, 'store']);
+    Route::put('/{id}', [HonorController::class, 'update']);
+    Route::delete('/{id}', [HonorController::class, 'destroy']);
+    Route::post('/import', [HonorController::class, 'import']);
 });
