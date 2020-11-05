@@ -15,9 +15,13 @@ class PhotoUploader
     ];
 
     public function uploadAvatar(UploadedFile $file): string {
-        $name = Str::random(32) . '.' . $file->extension();
-        Storage::putFileAs($this->dirs['avatars'], $file, $name);
+        //save
+        $path = $file->store($this->dirs['avatars']);
 
-        return $name;
+        //return url
+        if(env('APP_ENV') == 'production')
+            return Storage::disk('s3')->url($path);
+        else
+            return env('APP_URL') . '/storage/' . mb_substr($path, 6);
     }
 }

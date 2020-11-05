@@ -161,7 +161,7 @@ class User extends Authenticatable
 
     public function getAvatar(){
         if($this->avatar)
-            return env('APP_URL') . '/storage/avatars/' . $this->avatar;
+            return $this->avatar;
         else
             return env('APP_URL') . '/storage/avatars/noAva.jpg';
     }
