@@ -26,9 +26,8 @@ class EditHonorRequest extends FormRequest
         return [
             'title' => 'required|string',
             'order' => 'required|string',
-            'date' => 'required|date',
-            'user' => 'required|exists:users,id',
-            'type' => 'required|numeric'
+            'datePresentation' => 'required|date',
+            'user' => 'required|exists:users,id'
         ];
     }
 }

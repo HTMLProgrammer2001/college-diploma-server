@@ -55,6 +55,7 @@ Route::group(['prefix' => 'examples'], function(){
    //Model import files examples
 
     Route::get('/publications', [ExportExampleController::class, 'getPublicationExample']);
+    Route::get('/honors', [ExportExampleController::class, 'getHonorExample']);
 });
 
 //models CRUD routes

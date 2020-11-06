@@ -31,27 +31,20 @@ class HonorsExampleExporter implements FromCollection, WithHeadings, WithEvents
 
     public function headings(): array
     {
-        return ['Викладач', 'Тип нагороди', 'Назва', 'Дата вручення', 'Номер нагороди'];
+        return ['Викладач', 'Назва', 'Дата вручення', 'Номер нагороди'];
     }
 
     public function createRanges($sheet){
         //get data from repositories
         $users = $this->userRep->getForExportList();
-        $honorTypes = $this->honorRep->getTypes();
 
         //set data to cells
-        for($i = 1; $i <= sizeof($honorTypes); $i++)
-            $sheet->getCell("Y$i")->setValue($honorTypes[$i - 1]);
-
         for($i = 1; $i <= sizeof($users); $i++)
             $sheet->getCell("Z$i")->setValue($users[$i - 1]);
 
         //create ranges
-        $sheet->getParent()->addNamedRange( new NamedRange('honorTypes',
-            $sheet->getDelegate(), "Y1:Y" . sizeof($honorTypes)) );
-
         $sheet->getParent()->addNamedRange( new NamedRange('users',
-            $sheet->getDelegate(), "Z1:Z" . sizeof($users)) );
+            $sheet->getDelegate(), '$Z$1:$Z$' . sizeof($users)) );
     }
 
     public function setRanges($sheet, $validation){
@@ -59,10 +52,6 @@ class HonorsExampleExporter implements FromCollection, WithHeadings, WithEvents
             $val = clone $validation;
             $val->setFormula1('users');
             $sheet->getCell("A$i")->setDataValidation($val);
-
-            $val = clone $validation;
-            $val->setFormula1('honorTypes');
-            $sheet->getCell("B$i")->setDataValidation($val);
         }
     }
 

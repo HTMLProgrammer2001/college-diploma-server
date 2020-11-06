@@ -11,6 +11,7 @@ use App\Repositories\Rules\DateMoreRule;
 use App\Repositories\Rules\EqualRule;
 use App\Repositories\Rules\LikeRule;
 use App\Repositories\Rules\SortRule;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class HonorRepository extends BaseRepository implements HonorRepositoryInterface
@@ -19,8 +20,7 @@ class HonorRepository extends BaseRepository implements HonorRepositoryInterface
     protected $sortFields = [
         'ID' => 'id',
         'title' => 'title',
-        'datePresentation' => 'date_presentation',
-        'type' => 'type'
+        'datePresentation' => 'date_presentation'
     ];
 
     public function createRules(array $inputData): array
@@ -29,6 +29,9 @@ class HonorRepository extends BaseRepository implements HonorRepositoryInterface
 
         if($inputData['user_id'] ?? null)
             $rules[] = new EqualRule('user_id', $inputData['user_id']);
+
+        if($inputData['filterUser'] ?? null)
+            $rules[] = new EqualRule('user_id', $inputData['filterUser']);
 
         if($inputData['filterTitle'] ?? null)
             $rules[] = new LikeRule('title', $inputData['filterTitle']);
@@ -50,8 +53,8 @@ class HonorRepository extends BaseRepository implements HonorRepositoryInterface
 
     public function create($data)
     {
-//        if($data['date_presentation'] ?? false)
-//            $data['date_presentation'] = from_locale_date($data['date_presentation']);
+        if($data['date_presentation'] ?? false)
+            $data['date_presentation'] = Carbon::parse($data['date_presentation'])->format('Y-m-d');
 
         $honor = $this->getModel()->query()->newModelInstance($data);
         $honor->setUser($data['user']);
@@ -94,28 +97,10 @@ class HonorRepository extends BaseRepository implements HonorRepositoryInterface
 
         //parse string
         $honorsString = $honors->reduce(function(string $acc, $item){
-            return $acc . implode(', ', [$item->title, $item->type,
-                    $item->date_presentation, $item->order]) . ';';
+            return $acc . implode(', ', [$item->title, $item->date_presentation, $item->order]) . ';';
         }, '');
 
         //return info
         return $honorsString ? $honorsString : 'Немає інформації';
-    }
-
-    public function getTypes(): array{
-        return [
-            'МОН',
-            'Президента',
-            'КМУ',
-            'Ректора ОНПУ',
-            'Директора коледжу',
-            'Облдержадміністрації',
-            'Управління освіти',
-            'МАН',
-            'Спортивні досягнення',
-            'Облради',
-            'Олімпіади та конкурси',
-            'Інші'
-        ];
     }
 }

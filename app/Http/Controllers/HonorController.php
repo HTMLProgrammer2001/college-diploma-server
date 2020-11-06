@@ -44,7 +44,8 @@ class HonorController extends Controller
 
     public function store(AddHonorRequest $request)
     {
-        $data = $request->all();
+        $data = $request->except('datePresentation');
+        $data['date_presentation'] = $request->input('datePresentation');
         $this->honorRep->create($data);
 
         return response()->json([

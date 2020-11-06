@@ -9,7 +9,7 @@ class Honor extends Model
 {
     use HasFactory;
 
-    public $fillable = ['order', 'title', 'date_presentation', 'type'];
+    public $fillable = ['order', 'title', 'date_presentation'];
 
     //relations
     public function user(){

@@ -10,7 +10,5 @@ interface HonorRepositoryInterface extends BaseRepositoryInterface
 
     public function paginateForUser($user_id, ?int $size = null);
 
-    public function getTypes(): array;
-
     public function getUserString(int $user_id): string;
 }

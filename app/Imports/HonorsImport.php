@@ -26,10 +26,9 @@ class HonorsImport implements ToModel
 
         $data = [
             'user' => from_export_item($row[0])[0],
-            'type' => $row[1],
-            'title' => $row[2],
-            'date_presentation' => Carbon::instance(Date::excelToDateTimeObject($row[3]))->format('d.m.Y'),
-            'order' => $row[4]
+            'title' => $row[1],
+            'date_presentation' => Carbon::instance(Date::excelToDateTimeObject($row[2]))->format('d.m.Y'),
+            'order' => $row[3]
         ];
 
         $this->honorRep->create($data);
