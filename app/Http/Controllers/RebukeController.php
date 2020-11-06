@@ -2,51 +2,52 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Honor\AddHonorRequest;
-use App\Http\Requests\Honor\AllRebukeRequest;
-use App\Http\Requests\Honor\EditRebukeRequest;
+
 use App\Http\Requests\ImportRequest;
-use App\Http\Resources\HonorResource;
-use App\Http\Resources\HonorsGroupResource;
-use App\Imports\HonorsImport;
-use App\Repositories\Interfaces\HonorRepositoryInterface;
+use App\Http\Requests\Rebuke\AddRebukeRequest;
+use App\Http\Requests\Rebuke\AllRebukeRequest;
+use App\Http\Requests\Rebuke\EditRebukeRequest;
+use App\Http\Resources\Rebukes\RebukeResource;
+use App\Http\Resources\Rebukes\RebukesGroupResource;
+use App\Imports\RebukesImport;
+use App\Repositories\Interfaces\RebukeRepositoryInterface;
 use Maatwebsite\Excel\Facades\Excel;
 
-class HonorController extends Controller
+class RebukeController extends Controller
 {
-    private $honorRep;
+    private $rebukeRep;
 
-    public function __construct(HonorRepositoryInterface $honorRep)
+    public function __construct(RebukeRepositoryInterface $rebukeRep)
     {
-        $this->honorRep = $honorRep;
+        $this->rebukeRep = $rebukeRep;
     }
 
     public function all(AllRebukeRequest $request)
     {
         $inputData = $request->query();
 
-        $rules = $this->honorRep->createRules($inputData);
+        $rules = $this->rebukeRep->createRules($inputData);
         $pageSize = $request->query('pageSize', 5);
-        $honors = $this->honorRep->filterPaginate($rules, $pageSize);
+        $rebukes = $this->rebukeRep->filterPaginate($rules, $pageSize);
 
-        return new HonorsGroupResource($honors);
+        return new RebukesGroupResource($rebukes);
     }
 
     public function single(int $id)
     {
-        $honor = $this->honorRep->getById($id);
+        $rebuke = $this->rebukeRep->getById($id);
 
-        if(!$honor)
+        if(!$rebuke)
             return abort(404);
 
-        return new HonorResource($honor);
+        return new RebukeResource($rebuke);
     }
 
-    public function store(AddHonorRequest $request)
+    public function store(AddRebukeRequest $request)
     {
         $data = $request->except('datePresentation');
         $data['date_presentation'] = $request->input('datePresentation');
-        $this->honorRep->create($data);
+        $this->rebukeRep->create($data);
 
         return response()->json([
             'message' => 'Created'
@@ -56,14 +57,14 @@ class HonorController extends Controller
     public function update(EditRebukeRequest $request, int $id)
     {
         $data = $request->all();
-        $honor = $this->honorRep->update($id, $data);
+        $rebuke = $this->rebukeRep->update($id, $data);
 
-        return new HonorResource($honor);
+        return new RebukeResource($rebuke);
     }
 
     public function destroy(int $id)
     {
-        if($this->honorRep->destroy($id))
+        if($this->rebukeRep->destroy($id))
             return response()->json(['message' => 'ok']);
         else
             return abort(422);
@@ -73,7 +74,7 @@ class HonorController extends Controller
     {
         try {
             //Import models
-            Excel::import(new HonorsImport(), $request->file('importFile'));
+            Excel::import(new RebukesImport(), $request->file('importFile'));
         }
         catch(\Exception $exception){
             return response()->json([

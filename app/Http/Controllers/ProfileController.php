@@ -10,12 +10,12 @@ use App\Http\Requests\Profile\ProfileQualificationRequest;
 use App\Http\Requests\Profile\ProfileRebukeRequest;
 
 use App\Http\Resources\EducationsGroupResource;
-use App\Http\Resources\HonorsGroupResource;
+use App\Http\Resources\Honor\HonorsGroupResource;
 use App\Http\Resources\InternshipsGroupResource;
 use App\Http\Resources\PublicationsGroupResource;
 use App\Http\Resources\QualificationsGroupResource;
-use App\Http\Resources\RebukesGroupResource;
 
+use App\Http\Resources\Rebukes\RebukesGroupResource;
 use App\Repositories\Interfaces\EducationRepositoryInterface;
 use App\Repositories\Interfaces\HonorRepositoryInterface;
 use App\Repositories\Interfaces\InternshipRepositoryInterface;

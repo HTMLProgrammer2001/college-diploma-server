@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Rebukes;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class HonorsGroupResource extends ResourceCollection
+class RebukesGroupResource extends ResourceCollection
 {
-    public $collects = HonorResource::class;
+    public $collects = RebukeResource::class;
 
     /**
      * Transform the resource collection into an array.

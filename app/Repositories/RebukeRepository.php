@@ -10,6 +10,7 @@ use App\Repositories\Rules\DateLessRule;
 use App\Repositories\Rules\DateMoreRule;
 use App\Repositories\Rules\EqualRule;
 use App\Repositories\Rules\LikeRule;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class RebukeRepository extends BaseRepository implements RebukeRepositoryInterface
@@ -27,6 +28,9 @@ class RebukeRepository extends BaseRepository implements RebukeRepositoryInterfa
 
         if($inputData['user_id'] ?? null)
             $rules[] = new EqualRule('user_id', $inputData['user_id']);
+
+        if($inputData['filterUser'] ?? null)
+            $rules[] = new EqualRule('user_id', $inputData['filterUser']);
 
         if($inputData['filterTitle'] ?? null)
             $rules[] = new LikeRule('title', $inputData['filterTitle']);
@@ -48,8 +52,8 @@ class RebukeRepository extends BaseRepository implements RebukeRepositoryInterfa
 
     public function create($data)
     {
-//        if($data['date_presentation'] ?? false)
-//            $data['date_presentation'] = from_locale_date($data['date_presentation']);
+        if($data['date_presentation'] ?? false)
+            $data['date_presentation'] = Carbon::parse($data['date_presentation'])->format('Y-m-d');
 
         $rebuke = $this->getModel()->query()->newModelInstance($data);
         $rebuke->changeActive(true);
@@ -61,8 +65,8 @@ class RebukeRepository extends BaseRepository implements RebukeRepositoryInterfa
 
     public function update($id, $data)
     {
-//        if($data['date_presentation'] ?? false)
-//            $data['date_presentation'] = from_locale_date($data['date_presentation']);
+        if($data['date_presentation'] ?? false)
+            $data['date_presentation'] = Carbon::parse($data['date_presentation'])->format('Y-m-d');
 
         $rebuke = $this->getModel()->query()->findOrFail($id);
         $rebuke->fill($data);

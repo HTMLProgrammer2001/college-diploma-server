@@ -12,6 +12,7 @@ use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\ExportExampleController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HonorController;
+use App\Http\Controllers\RebukeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +57,7 @@ Route::group(['prefix' => 'examples'], function(){
 
     Route::get('/publications', [ExportExampleController::class, 'getPublicationExample']);
     Route::get('/honors', [ExportExampleController::class, 'getHonorExample']);
+    Route::get('/rebukes', [ExportExampleController::class, 'getRebukeExample']);
 });
 
 //models CRUD routes
@@ -107,4 +109,13 @@ Route::group(['prefix' => 'honors', 'middleware' => 'auth:api', 'where' => ['id'
     Route::put('/{id}', [HonorController::class, 'update']);
     Route::delete('/{id}', [HonorController::class, 'destroy']);
     Route::post('/import', [HonorController::class, 'import']);
+});
+
+Route::group(['prefix' => 'rebukes', 'middleware' => 'auth:api', 'where' => ['id' => '[0-9]+']], function (){
+    Route::get('/', [RebukeController::class, 'all']);
+    Route::get('/{id}', [RebukeController::class, 'single']);
+    Route::post('/add', [RebukeController::class, 'store']);
+    Route::put('/{id}', [RebukeController::class, 'update']);
+    Route::delete('/{id}', [RebukeController::class, 'destroy']);
+    Route::post('/import', [RebukeController::class, 'import']);
 });

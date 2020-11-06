@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\HonorsExampleExporter;
 use App\Exports\PublicationsExampleExporter;
+use App\Exports\RebukesExampleExporter;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ExportExampleController extends Controller
@@ -16,5 +17,10 @@ class ExportExampleController extends Controller
     public function getHonorExample(){
         return Excel::download(new HonorsExampleExporter(),
             'honors.xlsx');
+    }
+
+    public function getRebukeExample(){
+        return Excel::download(new RebukesExampleExporter(),
+            'rebukes.xlsx');
     }
 }

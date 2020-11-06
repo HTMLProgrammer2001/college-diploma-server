@@ -17,8 +17,11 @@ class HonorResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'type' => $this->type,
-            'user' => new UserResource($this->user)
+            'title' => $this->title,
+            'order' => $this->order,
+            'datePresentation' => $this->date_presentation,
+            'user' => new UserResource($this->user),
+            'active' => $this->active
         ];
     }
 }
