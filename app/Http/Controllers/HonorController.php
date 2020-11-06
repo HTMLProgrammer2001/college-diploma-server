@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Honor\AddHonorRequest;
-use App\Http\Requests\Honor\AllRebukeRequest;
-use App\Http\Requests\Honor\EditRebukeRequest;
+use App\Http\Requests\Honor\AllHonorRequest;
+use App\Http\Requests\Honor\EditHonorRequest;
 use App\Http\Requests\ImportRequest;
-use App\Http\Resources\HonorResource;
-use App\Http\Resources\HonorsGroupResource;
+use App\Http\Resources\Honor\HonorResource;
+use App\Http\Resources\Honor\HonorsGroupResource;
 use App\Imports\HonorsImport;
 use App\Repositories\Interfaces\HonorRepositoryInterface;
 use Maatwebsite\Excel\Facades\Excel;
@@ -21,7 +21,7 @@ class HonorController extends Controller
         $this->honorRep = $honorRep;
     }
 
-    public function all(AllRebukeRequest $request)
+    public function all(AllHonorRequest $request)
     {
         $inputData = $request->query();
 
@@ -53,7 +53,7 @@ class HonorController extends Controller
         ]);
     }
 
-    public function update(EditRebukeRequest $request, int $id)
+    public function update(EditHonorRequest $request, int $id)
     {
         $data = $request->all();
         $honor = $this->honorRep->update($id, $data);
