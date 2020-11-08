@@ -13,6 +13,7 @@ use App\Http\Controllers\ExportExampleController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HonorController;
 use App\Http\Controllers\RebukeController;
+use App\Http\Controllers\EducationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -118,4 +119,12 @@ Route::group(['prefix' => 'rebukes', 'middleware' => 'auth:api', 'where' => ['id
     Route::put('/{id}', [RebukeController::class, 'update']);
     Route::delete('/{id}', [RebukeController::class, 'destroy']);
     Route::post('/import', [RebukeController::class, 'import']);
+});
+
+Route::group(['prefix' => 'educations', 'middleware' => 'auth:api', 'where' => ['id' => '[0-9]+']], function (){
+    Route::get('/', [EducationController::class, 'all']);
+    Route::get('/{id}', [EducationController::class, 'single']);
+    Route::post('/add', [EducationController::class, 'store']);
+    Route::put('/{id}', [EducationController::class, 'update']);
+    Route::delete('/{id}', [EducationController::class, 'destroy']);
 });

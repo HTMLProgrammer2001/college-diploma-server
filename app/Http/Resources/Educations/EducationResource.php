@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Educations;
 
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class EducationResource extends JsonResource
@@ -18,7 +19,9 @@ class EducationResource extends JsonResource
             'id' => $this->id,
             'institution' => $this->institution,
             'graduate_year' => $this->graduate_year,
-            'qualification' => $this->qualification
+            'qualification' => $this->qualification,
+            'specialty' => $this->specialty,
+            'user' => new UserResource($this->user)
         ];
     }
 }

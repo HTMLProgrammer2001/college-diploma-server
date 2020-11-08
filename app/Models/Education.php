@@ -12,7 +12,7 @@ class Education extends Model
     const QUALIFICATIONS = ['Молодший спеціаліст', 'Бакалавр', 'Магістр'];
 
     protected $table = 'educations';
-    public $fillable = ['institution', 'graduate_year', 'qualification'];
+    public $fillable = ['institution', 'graduate_year', 'specialty'];
 
     //relations
     public function user(){
@@ -39,5 +39,9 @@ class Education extends Model
             return;
 
         return $this->user->getShortName();
+    }
+
+    public function setQualification(string $qualification){
+        $this->qualification = $qualification;
     }
 }

@@ -3,6 +3,9 @@
 
 namespace App\Repositories;
 
+use App\Repositories\Rules\LessEqualRule;
+use App\Repositories\Rules\LikeRule;
+use App\Repositories\Rules\MoreEqualRule;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Education;
@@ -31,18 +34,30 @@ class EducationRepository extends BaseRepository implements EducationRepositoryI
         if($inputData['user_id'] ?? null)
             $rules[] = new EqualRule('user_id', $inputData['user_id']);
 
-        if($inputData['filterQualification'] ?? null){
+        if($inputData['filterUser'] ?? null)
+            $rules[] = new EqualRule('user_id', $inputData['filterUser']);
+
+        if(($inputData['filterQualification'] ?? null) != null){
             if($inputData['filterQualification'] != -1){
                 $qualification = Education::QUALIFICATIONS[$inputData['filterQualification']];
-                $rules[] = new EqualRule('qualification', $qualification);
+                $rules[] = new LikeRule('qualification', $qualification);
             }
         }
+
+        if($inputData['filterSpecialty'] ?? null)
+            $rules[] = new LikeRule('specialty', $inputData['filterSpecialty']);
 
         if($inputData['filterGraduateYear'] ?? null)
             $rules[] = new EqualRule('graduate_year', $inputData['filterGraduateYear']);
 
+        if($inputData['filterGraduateFrom'] ?? null)
+            $rules[] = new MoreEqualRule('graduate_year', $inputData['filterGraduateFrom']);
+
+        if($inputData['filterGraduateTo'] ?? null)
+            $rules[] = new LessEqualRule('graduate_year', $inputData['filterGraduateTo']);
+
         if($inputData['filterInstitution'] ?? null)
-            $rules[] = new EqualRule('institution', $inputData['filterInstitution']);
+            $rules[] = new LikeRule('institution', $inputData['filterInstitution']);
 
         $rules = array_merge($rules, $this->createSortRules($inputData['sort'] ?? null, $this->sortFields));
         return $rules;
@@ -52,6 +67,7 @@ class EducationRepository extends BaseRepository implements EducationRepositoryI
     {
         $education = $this->getModel()->query()->newModelInstance($data);
         $education->setUser($data['user']);
+        $education->setQualification(Education::QUALIFICATIONS[$data['qualification']]);
         $education->save();
     }
 
@@ -60,6 +76,7 @@ class EducationRepository extends BaseRepository implements EducationRepositoryI
         $education = $this->getModel()->query()->findOrFail($id);
         $education->fill($data);
         $education->setUser($data['user']);
+        $education->setQualification(Education::QUALIFICATIONS[$data['qualification']]);
         $education->save();
 
         return $education;
