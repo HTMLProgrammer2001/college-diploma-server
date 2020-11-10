@@ -17,13 +17,13 @@ class AddInternshipsTable extends Migration
             $table->id();
             $table->bigInteger('category_id')->unsigned()->nullable();
             $table->bigInteger('user_id')->unsigned();
-            $table->string('place');
+            $table->string('place')->nullable();
             $table->string('title');
             $table->date('from');
             $table->date('to');
             $table->integer('hours')->nullable();
             $table->integer('credits')->nullable();
-            $table->string('code')->unique();
+            $table->string('code')->unique()->nullable();
             $table->timestamps();
 
             //relations

@@ -14,6 +14,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HonorController;
 use App\Http\Controllers\RebukeController;
 use App\Http\Controllers\EducationController;
+use App\Http\Controllers\InternshipController;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,6 +60,7 @@ Route::group(['prefix' => 'examples'], function(){
     Route::get('/publications', [ExportExampleController::class, 'getPublicationExample']);
     Route::get('/honors', [ExportExampleController::class, 'getHonorExample']);
     Route::get('/rebukes', [ExportExampleController::class, 'getRebukeExample']);
+    Route::get('/internships', [ExportExampleController::class, 'getInternshipExample']);
 });
 
 //models CRUD routes
@@ -127,4 +129,13 @@ Route::group(['prefix' => 'educations', 'middleware' => 'auth:api', 'where' => [
     Route::post('/add', [EducationController::class, 'store']);
     Route::put('/{id}', [EducationController::class, 'update']);
     Route::delete('/{id}', [EducationController::class, 'destroy']);
+});
+
+Route::group(['prefix' => 'internships', 'middleware' => 'auth:api', 'where' => ['id' => '[0-9]+']], function (){
+    Route::get('/', [InternshipController::class, 'all']);
+    Route::get('/{id}', [InternshipController::class, 'single']);
+    Route::post('/add', [InternshipController::class, 'store']);
+    Route::put('/{id}', [InternshipController::class, 'update']);
+    Route::delete('/{id}', [InternshipController::class, 'destroy']);
+    Route::post('/import', [InternshipController::class, 'import']);
 });

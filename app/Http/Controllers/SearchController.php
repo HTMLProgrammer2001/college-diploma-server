@@ -22,7 +22,7 @@ class SearchController extends Controller
     }
 
     public function searchCategories(Request $request){
-        $inputData = ['name' => $request->input('q')];
+        $inputData = ['filterName' => $request->input('q')];
         $pageSize = $request->query('pageSize', 5);
 
         $rules = $this->catRep->createRules($inputData);

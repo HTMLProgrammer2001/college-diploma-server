@@ -2,9 +2,6 @@
 
 namespace App\Exports;
 
-use App\Repositories\Interfaces\CategoryRepositoryInterface;
-use App\Repositories\Interfaces\PlaceRepositoryInterface;
-use App\Repositories\Interfaces\UserRepositoryInterface;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -13,14 +10,16 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
 use PhpOffice\PhpSpreadsheet\NamedRange;
 
+use App\Repositories\Interfaces\CategoryRepositoryInterface;
+use App\Repositories\Interfaces\UserRepositoryInterface;
+
 class InternshipsExampleExporter implements FromCollection, WithHeadings, WithEvents
 {
-    private $categoryRep, $placeRep, $userRep;
+    private $categoryRep, $userRep;
 
     public function __construct()
     {
         $this->categoryRep = app(CategoryRepositoryInterface::class);
-        $this->placeRep = app(PlaceRepositoryInterface::class);
         $this->userRep = app(UserRepositoryInterface::class);
 
         $this->countRows = 500;
@@ -40,28 +39,21 @@ class InternshipsExampleExporter implements FromCollection, WithHeadings, WithEv
     public function createRanges($sheet){
         //get data from repositories
         $categories = $this->categoryRep->getForExportList();
-        $places = $this->placeRep->getForExportList();
         $users = $this->userRep->getForExportList();
 
         //set data to cells
         for($i = 1; $i <= sizeof($categories); $i++)
-            $sheet->getCell("X$i")->setValue($categories[$i - 1]);
-
-        for($i = 1; $i <= sizeof($places); $i++)
-            $sheet->getCell("Y$i")->setValue($places[$i - 1]);
+            $sheet->getCell("Y$i")->setValue($categories[$i - 1]);
 
         for($i = 1; $i <= sizeof($users); $i++)
             $sheet->getCell("Z$i")->setValue($users[$i - 1]);
 
         //create ranges
         $sheet->getParent()->addNamedRange( new NamedRange('categories',
-            $sheet->getDelegate(), "X1:X" . sizeof($categories)) );
-
-        $sheet->getParent()->addNamedRange( new NamedRange('places',
-            $sheet->getDelegate(), "Y1:Y" . sizeof($places)) );
+            $sheet->getDelegate(), '$Y$1:$Y$' . sizeof($categories)) );
 
         $sheet->getParent()->addNamedRange( new NamedRange('users',
-            $sheet->getDelegate(), "Z1:Z" . sizeof($users)) );
+            $sheet->getDelegate(), '$Z$1:$Z$' . sizeof($users)) );
     }
 
     public function setRanges($sheet, $validation){
@@ -73,10 +65,6 @@ class InternshipsExampleExporter implements FromCollection, WithHeadings, WithEv
             $val = clone $validation;
             $val->setFormula1('categories');
             $sheet->getCell("C$i")->setDataValidation($val);
-
-            $val = clone $validation;
-            $val->setFormula1('places');
-            $sheet->getCell("D$i")->setDataValidation($val);
         }
     }
 

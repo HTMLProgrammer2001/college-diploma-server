@@ -14,7 +14,7 @@ class SortAssociateRule implements RuleInterface
     {
         $this->association = $association;
         $this->field = $field;
-        $this->direction = $direction;
+        $this->direction = $direction == 1 ? 'DESC' : 'ASC';
         $this->select = $select;
     }
 

@@ -11,7 +11,7 @@ use App\Http\Requests\Profile\ProfileRebukeRequest;
 
 use App\Http\Resources\Educations\EducationsGroupResource;
 use App\Http\Resources\Honor\HonorsGroupResource;
-use App\Http\Resources\InternshipsGroupResource;
+use App\Http\Resources\Internships\InternshipsGroupResource;
 use App\Http\Resources\PublicationsGroupResource;
 use App\Http\Resources\QualificationsGroupResource;
 

@@ -2,10 +2,11 @@
 
 namespace App\Imports;
 
-use App\Repositories\Interfaces\InternshipRepositoryInterface;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\ToModel;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
+
+use App\Repositories\Interfaces\InternshipRepositoryInterface;
 
 class InternshipsImport implements ToModel
 {
@@ -27,7 +28,7 @@ class InternshipsImport implements ToModel
             'user' => from_export_item($row[0])[0],
             'title' => $row[1],
             'category' => from_export_item($row[2])[0],
-            'place' => from_export_item($row[3])[0],
+            'place' => $row[3],
             'from' => Carbon::instance(Date::excelToDateTimeObject($row[4]))->format('d.m.Y'),
             'to' => Carbon::instance(Date::excelToDateTimeObject($row[5]))->format('d.m.Y'),
             'hours' => $row[6]

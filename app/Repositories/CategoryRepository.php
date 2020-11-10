@@ -21,9 +21,6 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
     {
         $rules = [];
 
-        if($inputData['name'] ?? null)
-            $rules[] = new LikeRule('name', $inputData['name']);
-
         if($inputData['filterName'] ?? null)
             $rules[] = new LikeRule('name', $inputData['filterName']);
 
@@ -60,7 +57,6 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
 
     public function getForExportList(): array
     {
-        //return to_export_list($this->getModel()->all('id', 'name')->toArray());
-        return [];
+        return to_export_list($this->getModel()->all('id', 'name')->toArray());
     }
 }

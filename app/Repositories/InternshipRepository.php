@@ -15,6 +15,7 @@ use App\Repositories\Rules\LessEqualRule;
 use App\Repositories\Rules\LikeRule;
 use App\Repositories\Rules\MoreEqualRule;
 
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -25,7 +26,17 @@ class InternshipRepository extends BaseRepository implements InternshipRepositor
         'ID' => 'id',
         'hours' => 'hours',
         'to' => 'to',
-        'theme' => 'title'
+        'theme' => 'title',
+        'user' => [
+            'associate' => ['users', 'users.id', '=', 'internships.user_id'],
+            'field' => 'fullName',
+            'select' => 'internships.*'
+        ],
+        'category' => [
+            'associate' => ['internship_categories', 'internship_categories.id', '=', 'internships.category_id'],
+            'field' => 'name',
+            'select' => 'internships.*'
+        ]
     ];
 
     public function __construct(QualificationRepositoryInterface $qualificationRep)
@@ -42,6 +53,9 @@ class InternshipRepository extends BaseRepository implements InternshipRepositor
 
         if($inputData['filterCategory'] ?? null && $inputData['filterCategory'] != -1)
             $rules[] = new EqualRule('category_id', $inputData['filterCategory']);
+
+        if($inputData['filterUser'] ?? null && $inputData['filterUser'] != -1)
+            $rules[] = new EqualRule('user_id', $inputData['filterUser']);
 
         if($inputData['filterFrom'] ?? null)
             $rules[] = new DateMoreRule('to', $inputData['filterFrom']);
@@ -69,16 +83,15 @@ class InternshipRepository extends BaseRepository implements InternshipRepositor
 
     public function create($data)
     {
-//        if($data['from'] ?? false)
-//            $data['from'] = from_locale_date($data['from']);
-//
-//        if($data['to'] ?? false)
-//            $data['to'] = from_locale_date($data['to']);
+        if($data['from'] ?? false)
+            $data['from'] = Carbon::parse($data['from'])->format('Y-m-d');
+
+        if($data['to'] ?? false)
+            $data['to'] = Carbon::parse($data['to'])->format('Y-m-d');
 
         $internship = $this->getModel()->query()->newModelInstance($data);
         $internship->setCategory($data['category']);
         $internship->setUser($data['user']);
-        $internship->setPlace($data['place']);
 
         $internship->save();
 
@@ -87,18 +100,17 @@ class InternshipRepository extends BaseRepository implements InternshipRepositor
 
     public function update($id, $data)
     {
-//        if($data['from'] ?? false)
-//            $data['from'] = from_locale_date($data['from']);
-//
-//        if($data['to'] ?? false)
-//            $data['to'] = from_locale_date($data['to']);
+        if($data['from'] ?? false)
+            $data['from'] = Carbon::parse($data['from'])->format('Y-m-d');
+
+        if($data['to'] ?? false)
+            $data['to'] = Carbon::parse($data['to'])->format('Y-m-d');
 
         $internship = $this->getModel()->query()->findOrFail($id);
         $internship->fill($data);
 
         $internship->setCategory($data['category']);
         $internship->setUser($data['user']);
-        $internship->setPlace($data['place']);
 
         $internship->save();
 
