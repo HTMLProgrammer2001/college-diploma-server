@@ -15,6 +15,7 @@ use App\Http\Controllers\HonorController;
 use App\Http\Controllers\RebukeController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\InternshipController;
+use App\Http\Controllers\QualificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,6 +62,7 @@ Route::group(['prefix' => 'examples'], function(){
     Route::get('/honors', [ExportExampleController::class, 'getHonorExample']);
     Route::get('/rebukes', [ExportExampleController::class, 'getRebukeExample']);
     Route::get('/internships', [ExportExampleController::class, 'getInternshipExample']);
+    Route::get('/qualifications', [ExportExampleController::class, 'getQualificationExample']);
 });
 
 //models CRUD routes
@@ -138,4 +140,13 @@ Route::group(['prefix' => 'internships', 'middleware' => 'auth:api', 'where' => 
     Route::put('/{id}', [InternshipController::class, 'update']);
     Route::delete('/{id}', [InternshipController::class, 'destroy']);
     Route::post('/import', [InternshipController::class, 'import']);
+});
+
+Route::group(['prefix' => 'qualifications', 'middleware' => 'auth:api', 'where' => ['id' => '[0-9]+']], function (){
+    Route::get('/', [QualificationController::class, 'all']);
+    Route::get('/{id}', [QualificationController::class, 'single']);
+    Route::post('/add', [QualificationController::class, 'store']);
+    Route::put('/{id}', [QualificationController::class, 'update']);
+    Route::delete('/{id}', [QualificationController::class, 'destroy']);
+    Route::post('/import', [QualificationController::class, 'import']);
 });

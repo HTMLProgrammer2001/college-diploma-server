@@ -13,7 +13,7 @@ use App\Http\Resources\Educations\EducationsGroupResource;
 use App\Http\Resources\Honor\HonorsGroupResource;
 use App\Http\Resources\Internships\InternshipsGroupResource;
 use App\Http\Resources\PublicationsGroupResource;
-use App\Http\Resources\QualificationsGroupResource;
+use App\Http\Resources\Qualifications\QualificationsGroupResource;
 
 use App\Http\Resources\Rebukes\RebukesGroupResource;
 use App\Repositories\Interfaces\EducationRepositoryInterface;
