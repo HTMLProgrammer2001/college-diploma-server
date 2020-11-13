@@ -48,10 +48,10 @@ class QualificationsExampleExporter implements FromCollection, WithHeadings, Wit
 
         //create ranges
         $sheet->getParent()->addNamedRange( new NamedRange('qualifications',
-            $sheet->getDelegate(), "Y1:Y" . sizeof($qualifications)) );
+            $sheet->getDelegate(), '$Y$1:$Y$' . sizeof($qualifications)) );
 
         $sheet->getParent()->addNamedRange( new NamedRange('users',
-            $sheet->getDelegate(), "Z1:Z" . sizeof($users)) );
+            $sheet->getDelegate(), '$Z$1:$Z$' . sizeof($users)) );
     }
 
     public function setRanges($sheet, $validation){

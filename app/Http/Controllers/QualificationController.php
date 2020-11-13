@@ -47,9 +47,8 @@ class QualificationController extends Controller
 
     public function store(AddQualificationRequest $request)
     {
-        $data = $request->except('date');
-        $data = array_merge($data, ['date_of_qualification' => $request->input('date')]);
-
+        $data = $request->except('name');
+        $data['name'] = $this->qualificationRep->getQualificationNames()[$request->input('name')];
         $this->qualificationRep->create($data);
 
         return response()->json([
@@ -59,7 +58,8 @@ class QualificationController extends Controller
 
     public function update(EditQualificationRequest $request, int $id)
     {
-        $data = $request->all();
+        $data = $request->except('name');
+        $data['name'] = $this->qualificationRep->getQualificationNames()[$request->input('name')];
         $qualification = $this->qualificationRep->update($id, $data);
 
         return new QualificationResource($qualification);

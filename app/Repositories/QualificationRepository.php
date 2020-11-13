@@ -48,8 +48,8 @@ class QualificationRepository extends BaseRepository implements QualificationRep
 
     public function create($data)
     {
-//        if($data['date'] ?? false)
-//            $data['date'] = from_locale_date($data['date']);
+        if($data['date'] ?? false)
+            $data['date'] = Carbon::parse($data['date'])->format('Y-m-d');
 
         $qualification = $this->getModel()->query()->newModelInstance($data);
         $qualification->setUser($data['user']);
@@ -60,8 +60,8 @@ class QualificationRepository extends BaseRepository implements QualificationRep
 
     public function update($id, $data)
     {
-//        if($data['date'] ?? false)
-//            $data['date'] = from_locale_date($data['date']);
+        if($data['date'] ?? false)
+            $data['date'] = Carbon::parse($data['date'])->format('Y-m-d');
 
         $qualification = $this->getModel()->query()->findOrFail($id);
         $qualification->fill($data);

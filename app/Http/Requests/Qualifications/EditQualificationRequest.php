@@ -24,7 +24,10 @@ class EditQualificationRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'user' => 'required|numeric|exists:users,id',
+            'name' => 'required|numeric',
+            'date' => 'required|date',
+            'description' => 'nullable|string'
         ];
     }
 }

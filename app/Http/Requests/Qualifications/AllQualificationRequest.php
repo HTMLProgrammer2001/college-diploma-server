@@ -24,7 +24,11 @@ class AllQualificationRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'filterUser' => 'nullable|numeric|exists:users,id',
+            'filterFrom' => 'nullable|date',
+            'filterTo' => 'nullable|date',
+            'filterName' => 'nullable|string',
+            'sort' => 'nullable|array'
         ];
     }
 }

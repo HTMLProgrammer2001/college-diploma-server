@@ -24,7 +24,10 @@ class AddQualificationRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'user' => 'required|numeric|exists:users,id',
+            'date' => 'required|date',
+            'name' => 'required|numeric',
+            'description' => 'nullable|string'
         ];
     }
 }
