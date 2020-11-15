@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserActions\EditMeRequest;
 use App\Http\Requests\UserActions\LoginRequest;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\Users\UserResource;
 use App\Services\PhotoUploader;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

@@ -16,6 +16,8 @@ use App\Http\Controllers\RebukeController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\InternshipController;
 use App\Http\Controllers\QualificationController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +29,8 @@ use App\Http\Controllers\QualificationController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::get('/report', ReportController::class);
 
 Route::group([], function(){
     //User actions routes
@@ -149,4 +153,13 @@ Route::group(['prefix' => 'qualifications', 'middleware' => 'auth:api', 'where' 
     Route::put('/{id}', [QualificationController::class, 'update']);
     Route::delete('/{id}', [QualificationController::class, 'destroy']);
     Route::post('/import', [QualificationController::class, 'import']);
+});
+
+Route::group(['prefix' => 'users', 'middleware' => 'auth:api', 'where' => ['id' => '[0-9]+']], function (){
+    Route::get('/', [UserController::class, 'all']);
+    Route::get('/{id}', [UserController::class, 'single']);
+    Route::post('/add', [UserController::class, 'store']);
+    Route::put('/{id}', [UserController::class, 'update']);
+    Route::delete('/{id}', [UserController::class, 'destroy']);
+    Route::post('/import', [UserController::class, 'import']);
 });

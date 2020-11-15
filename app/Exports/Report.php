@@ -13,7 +13,7 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Events\AfterSheet;
 
-class Export implements FromCollection, WithHeadings, WithEvents
+class Report implements FromCollection, WithHeadings, WithEvents
 {
     private $educationRep, $qualificationRep, $internshipRep, $honorRep, $rebukeRep, $userRep, $rules;
     public function __construct(array $rules)
@@ -44,14 +44,14 @@ class Export implements FromCollection, WithHeadings, WithEvents
             $internships = $this->internshipRep->getInternshipsFor($item->id);
 
             return [
-                $item->getFullName(),
+                $item->fullName,
                 to_locale_date($item->birthday),
                 $this->educationRep->getUserString($item->id),
                 $item->hiring_year,
                 $item->experience,
                 $item->email . ', ' . $item->phone . ', ' . $item->address,
                 $item->getRankName(),
-                ($lastQualification->name ?? 'Немає') . ', ' . to_locale_date($lastQualification->date ?? null),
+                ($lastQualification->name ?? 'Немає') . ', ' . $lastQualification->date,
                 $item->pedagogical_title,
                 $item->scientific_degree . ', ' . $item->scientific_degree_year,
                 $item->academic_status . ', ' . $item->academic_status_year,
