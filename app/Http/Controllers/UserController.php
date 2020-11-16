@@ -8,7 +8,6 @@ use App\Http\Requests\User\AddUserRequest;
 use App\Http\Requests\User\AllUserRequest;
 use App\Http\Requests\User\EditUserRequest;
 use App\Http\Resources\Users\UserResource;
-use App\Http\Resources\Users\UsersGroupResource;
 use App\Http\Resources\Users\UsersGroupTableResource;
 use App\Imports\UsersImport;
 use App\Repositories\Interfaces\UserRepositoryInterface;
@@ -73,15 +72,17 @@ class UserController extends Controller
 
     public function import(ImportRequest $request)
     {
-        try {
-            //Import models
-            Excel::import(new UsersImport(), $request->file('importFile'));
-        }
-        catch(\Exception $exception){
-            return response()->json([
-                'message' => 'Error in import'
-            ], 422);
-        }
+        Excel::import(new UsersImport(), $request->file('importFile'));
+
+//        try {
+//            //Import models
+//            Excel::import(new UsersImport(), $request->file('importFile'));
+//        }
+//        catch(\Exception $exception){
+//            return response()->json([
+//                'message' => 'Error in import'
+//            ], 422);
+//        }
 
         //return success response
         return response()->json(['message' => 'Ok']);

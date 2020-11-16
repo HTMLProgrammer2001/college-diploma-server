@@ -7,6 +7,7 @@ use App\Exports\InternshipsExampleExporter;
 use App\Exports\PublicationsExampleExporter;
 use App\Exports\QualificationsExampleExporter;
 use App\Exports\RebukesExampleExporter;
+use App\Exports\UsersExampleExporter;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ExportExampleController extends Controller
@@ -29,5 +30,9 @@ class ExportExampleController extends Controller
 
     public function getQualificationExample(){
         return Excel::download(new QualificationsExampleExporter(), 'qualifications.xlsx');
+    }
+
+    public function getUserExample(){
+        return Excel::download(new UsersExampleExporter(), 'users.xlsx');
     }
 }

@@ -36,7 +36,7 @@ class UsersExampleExporter implements FromCollection, WithHeadings, WithEvents
 
     public function headings(): array
     {
-        return ['Ім\'я', 'Прізвище', 'По-батькові', 'Email', 'Комісія', 'Відділення', 'Посада', 'Педагогічне звання',
+        return ['ФІО', 'Email', 'Комісія', 'Відділення', 'Посада', 'Педагогічне звання',
             'Рік прийняття на роботу', 'Трудовий стаж на 2020 рік', 'Вчене звання', 'Рік встановлення вченого звання',
             'Наукова ступінь', 'Рік встановлення наукової ступені'];
     }
@@ -45,10 +45,10 @@ class UsersExampleExporter implements FromCollection, WithHeadings, WithEvents
         //get data from repositories
         $commissions = $this->commissionRep->getForExportList();
         $departments = $this->departmentRep->getForExportList();
-        $pedagogicals = $this->userRep->getPedagogicalTitles();
+        $pedagogicals = to_export_list($this->userRep->getPedagogicalTitles(), true);
         $ranks = $this->rankRep->getForExportList();
-        $academics = $this->userRep->getAcademicStatusList();
-        $scientifics = $this->userRep->getScientificDegreeList();
+        $academics = to_export_list($this->userRep->getAcademicStatusList(), true);
+        $scientifics = to_export_list($this->userRep->getScientificDegreeList(), true);
 
         //set data to cells
         for($i = 1; $i <= sizeof($academics); $i++)
@@ -71,49 +71,49 @@ class UsersExampleExporter implements FromCollection, WithHeadings, WithEvents
 
         //create ranges
         $sheet->getParent()->addNamedRange( new NamedRange('scientifics',
-            $sheet->getDelegate(), "V1:V" . sizeof($scientifics)) );
+            $sheet->getDelegate(), '$V$1:$V$' . sizeof($scientifics)) );
 
         $sheet->getParent()->addNamedRange( new NamedRange('academics',
-            $sheet->getDelegate(), "U1:U" . sizeof($academics)) );
+            $sheet->getDelegate(), '$U$1:$U$' . sizeof($academics)) );
 
         $sheet->getParent()->addNamedRange( new NamedRange('commissions',
-            $sheet->getDelegate(), "W1:W" . sizeof($commissions)) );
+            $sheet->getDelegate(), '$W$1:$W$' . sizeof($commissions)) );
 
         $sheet->getParent()->addNamedRange( new NamedRange('departments',
-            $sheet->getDelegate(), "X1:X" . sizeof($departments)) );
+            $sheet->getDelegate(), '$X$1:$X$' . sizeof($departments)) );
 
         $sheet->getParent()->addNamedRange( new NamedRange('pedagogicals',
-            $sheet->getDelegate(), "Y1:Y" . sizeof($pedagogicals)) );
+            $sheet->getDelegate(), '$Y$1:$Y$' . sizeof($pedagogicals)) );
 
         $sheet->getParent()->addNamedRange( new NamedRange('ranks',
-            $sheet->getDelegate(), "Z1:Z" . sizeof($ranks)) );
+            $sheet->getDelegate(), '$Z$1:$Z$' . sizeof($ranks)) );
     }
 
     public function setRanges($sheet, $validation){
         for($i = 3; $i <= $this->countRows; $i++){
             $val = clone $validation;
             $val->setFormula1('scientifics');
-            $sheet->getCell("K$i")->setDataValidation($val);
+            $sheet->getCell("I$i")->setDataValidation($val);
 
             $val = clone $validation;
             $val->setFormula1('academics');
-            $sheet->getCell("M$i")->setDataValidation($val);
+            $sheet->getCell("K$i")->setDataValidation($val);
 
             $val = clone $validation;
             $val->setFormula1('commissions');
-            $sheet->getCell("E$i")->setDataValidation($val);
+            $sheet->getCell("C$i")->setDataValidation($val);
 
             $val = clone $validation;
             $val->setFormula1('departments');
-            $sheet->getCell("F$i")->setDataValidation($val);
+            $sheet->getCell("D$i")->setDataValidation($val);
 
             $val = clone $validation;
             $val->setFormula1('ranks');
-            $sheet->getCell("G$i")->setDataValidation($val);
+            $sheet->getCell("E$i")->setDataValidation($val);
 
             $val = clone $validation;
             $val->setFormula1('pedagogicals');
-            $sheet->getCell("H$i")->setDataValidation($val);
+            $sheet->getCell("F$i")->setDataValidation($val);
         }
     }
 

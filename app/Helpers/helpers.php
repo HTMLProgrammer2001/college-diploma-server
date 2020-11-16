@@ -21,10 +21,10 @@ if(!function_exists('from_locale_date')){
 }
 
 if(!function_exists('to_export_list')){
-    function to_export_list(array $items){
-        return array_map(function($item) {
-            return implode(' - ', $item);
-        }, array_values($items));
+    function to_export_list(array $items, ?bool $withIndexes = false): array{
+        return array_map(function($item, $index) use($withIndexes) {
+            return $withIndexes ? $index . ' - ' . $item : implode(' - ', $item);
+        }, array_values($items), array_keys($items));
     }
 }
 

@@ -22,20 +22,18 @@ class UsersImport implements ToModel
             return;
 
         $data = [
-            'name' => $row[0],
-            'surname' => $row[1],
-            'patronymic' => $row[2],
-            'email' => $row[3],
-            'commission' => from_export_item($row[4])[0],
-            'department' => from_export_item($row[5])[0],
-            'rank' => from_export_item($row[6])[0],
-            'pedagogical_title' => $row[7],
-            'hiring_year' => $row[8],
-            'experience' => $row[9] || 0,
-            'scientific_degree' => $row[10],
-            'scientific_degree_year' => $row[11],
-            'academic_status' => $row[12],
-            'academic_status_year' => $row[13],
+            'fullName' => $row[0],
+            'email' => $row[1],
+            'commission' => from_export_item($row[2])[0],
+            'department' => from_export_item($row[3])[0],
+            'rank' => from_export_item($row[4])[0],
+            'pedagogical_title' => from_export_item($row[5])[0],
+            'hiring_year' => $row[6],
+            'experience' => $row[7] || 0,
+            'scientific_degree' => from_export_item($row[8])[0],
+            'scientific_degree_year' => $row[9],
+            'academic_status' => from_export_item($row[10])[0],
+            'academic_status_year' => $row[11],
             'password' => '123456'
         ];
 

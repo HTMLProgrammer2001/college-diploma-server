@@ -14,7 +14,10 @@ class PhotoUploader
         'avatars' => 'public/avatars'
     ];
 
-    public function uploadAvatar(UploadedFile $file): string {
+    public function uploadAvatar(?UploadedFile $file): ?string {
+        if(!$file)
+            return null;
+
         //save
         $path = $file->store($this->dirs['avatars']);
 

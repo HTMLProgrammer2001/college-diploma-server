@@ -70,6 +70,7 @@ Route::group(['prefix' => 'examples'], function(){
     Route::get('/rebukes', [ExportExampleController::class, 'getRebukeExample']);
     Route::get('/internships', [ExportExampleController::class, 'getInternshipExample']);
     Route::get('/qualifications', [ExportExampleController::class, 'getQualificationExample']);
+    Route::get('/users', [ExportExampleController::class, 'getUserExample']);
 });
 
 //models CRUD routes

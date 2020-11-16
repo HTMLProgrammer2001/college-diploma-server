@@ -78,7 +78,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         if($data['rank'] ?? false)
             $user->setRank($data['rank']);
 
-        $user->avatar = $this->avatarService->uploadAvatar($data['avatar'] ?? false);
+        $user->avatar = $this->avatarService->uploadAvatar($data['avatar'] ?? null);
         $user->save();
 
         return $user;
@@ -117,7 +117,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         $user = $this->getModel()->query()->findOrFail($id);
         $this->avatarService->deleteAvatar($user->avatar);
 
-        $this->getModel()->destroy($id);
+        return $this->getModel()->destroy($id);
     }
 
     public function all()

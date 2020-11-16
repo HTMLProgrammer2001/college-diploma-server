@@ -49,11 +49,11 @@ class User extends Authenticatable
     public function publications(){
         return $this->belongsToMany(Publication::class, 'users_publications', 'user_id');
     }
-//
-//    public function internships(){
-//        return $this->hasMany(Internship::class);
-//    }
-//
+
+    public function internships(){
+        return $this->hasMany(Internship::class);
+    }
+
     public function qualifications(){
         return $this->hasMany(Qualification::class);
     }
@@ -88,7 +88,6 @@ class User extends Authenticatable
 
     public function setDepartment($department){
         $this->department_id = $department;
-        $this->save();
     }
 
     public function getDepartmentID(){
@@ -105,7 +104,6 @@ class User extends Authenticatable
 
     public function setCommission($commission){
         $this->commission_id = $commission;
-        $this->save();
     }
 
     public function getCommissionID(){
@@ -123,8 +121,6 @@ class User extends Authenticatable
     public function setRank($id){
         if($id)
             $this->rank_id = $id;
-
-        $this->save();
     }
 
     public function getRankID(){
@@ -170,7 +166,6 @@ class User extends Authenticatable
     public function generatePassword($password){
         if($password){
             $this->password = bcrypt($password);
-            $this->save();
         }
     }
 

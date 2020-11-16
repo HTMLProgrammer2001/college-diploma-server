@@ -56,7 +56,6 @@ class DepartmentRepository extends BaseRepository implements DepartmentRepositor
 
     public function getForExportList()
     {
-        //return to_export_list($this->getModel()->all('id', 'name')->toArray());
-        return [];
+        return to_export_list($this->getModel()->all('id', 'name')->toArray());
     }
 }

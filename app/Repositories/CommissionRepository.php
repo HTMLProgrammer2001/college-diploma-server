@@ -59,7 +59,6 @@ class CommissionRepository extends BaseRepository implements CommissionRepositor
 
     public function getForExportList()
     {
-        //return to_export_list($this->getModel()->all('id', 'name')->toArray());
-        return [];
+        return to_export_list($this->getModel()->all('id', 'name')->toArray());
     }
 }
