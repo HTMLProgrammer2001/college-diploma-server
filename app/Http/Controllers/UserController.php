@@ -9,6 +9,7 @@ use App\Http\Requests\User\AllUserRequest;
 use App\Http\Requests\User\EditUserRequest;
 use App\Http\Resources\Users\UserResource;
 use App\Http\Resources\Users\UsersGroupResource;
+use App\Http\Resources\Users\UsersGroupTableResource;
 use App\Imports\UsersImport;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use Maatwebsite\Excel\Facades\Excel;
@@ -30,7 +31,7 @@ class UserController extends Controller
         $pageSize = $request->query('pageSize', 5);
         $users = $this->userRep->filterPaginate($rules, $pageSize);
 
-        return new UsersGroupResource($users);
+        return new UsersGroupTableResource($users);
     }
 
     public function single(int $id)

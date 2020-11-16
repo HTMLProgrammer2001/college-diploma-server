@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Users;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class RanksGroupResource extends ResourceCollection
+class UsersGroupTableResource extends ResourceCollection
 {
-    public $collects = RankResource::class;
+    public $collects = UserTableResource::class;
 
     /**
      * Transform the resource collection into an array.

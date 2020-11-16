@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Commission\AddCommissionRequest;
 use App\Http\Requests\Commission\AllCommissionsRequest;
 use App\Http\Requests\Commission\EditCommissionRequest;
-use App\Http\Resources\CommissionResource;
-use App\Http\Resources\CommissionsGroupResource;
+use App\Http\Resources\Commissions\CommissionResource;
+use App\Http\Resources\Commissions\CommissionsGroupResource;
 use App\Repositories\Interfaces\CommissionRepositoryInterface;
 
 class CommissionController extends Controller

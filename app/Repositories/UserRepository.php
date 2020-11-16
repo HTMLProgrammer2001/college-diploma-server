@@ -5,6 +5,7 @@ namespace App\Repositories;
 
 
 use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Repositories\Rules\EqualRule;
 use App\Repositories\Rules\LikeRule;
 use App\Services\PhotoUploader;
 use App\Models\User;
@@ -15,7 +16,9 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     private $avatarService;
     private $model = User::class;
     private $sortFields = [
-        'ID' => 'id'
+        'ID' => 'id',
+        'name' => 'fullName',
+        'email' => 'email'
     ];
 
     public function __construct(PhotoUploader $avatarService)
@@ -29,6 +32,25 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
         if($inputData['filterName'] ?? null)
             $rules[] = new LikeRule('fullName', $inputData['filterName']);
+
+        if($inputData['filterEmail'] ?? null)
+            $rules[] = new LikeRule('email', $inputData['filterEmail']);
+
+        if($inputData['filterCommission'] ?? null)
+            $rules[] = new EqualRule('commission_id', $inputData['filterCommission']);
+
+        if($inputData['filterDepartment'] ?? null)
+            $rules[] = new EqualRule('department_id', $inputData['filterDepartment']);
+
+        if($inputData['filterRank'] ?? null)
+            $rules[] = new EqualRule('rank_id', $inputData['filterRank']);
+
+        if($inputData['filterTitle'] ?? null)
+            $rules[] = new EqualRule('pedagogical_title', $inputData['filterTitle']);
+
+        if($inputData['filterCategory'] ?? null) {
+            //$rules[] = new EqualRule('pedagogical_title', $inputData['filterTitle']);
+        }
 
         $rules = array_merge($rules, $this->createSortRules($inputData['sort'] ?? null, $this->sortFields));
         return $rules;

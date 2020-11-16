@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Department\AddDepartmentRequest;
 use App\Http\Requests\Department\AllDepartmentsRequest;
 use App\Http\Requests\Department\EditDepartmentRequest;
-use App\Http\Resources\DepartmentResource;
-use App\Http\Resources\DepartmentsGroupResource;
+use App\Http\Resources\Departments\DepartmentResource;
+use App\Http\Resources\Departments\DepartmentsGroupResource;
 use App\Repositories\Interfaces\DepartmentRepositoryInterface;
 
 class DepartmentController extends Controller

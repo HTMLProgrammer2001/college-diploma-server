@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources\Users;
 
+use App\Http\Resources\Commissions\CommissionResource;
+use App\Http\Resources\Departments\DepartmentResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -25,8 +27,8 @@ class UserResource extends JsonResource
             'pedagogical_title' => $this->pedagogical_title,
             'experience' => $this->expirience,
             'rank' => $this->rank,
-            'commission' => $this->commission,
-            'department' => $this->department
+            'commission' => new CommissionResource($this->commission),
+            'department' => new DepartmentResource($this->department)
         ];
     }
 }

@@ -57,6 +57,9 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'search'], function (){
 
     Route::get('/categories', [SearchController::class, 'searchCategories']);
     Route::get('/users', [SearchController::class, 'searchUsers']);
+    Route::get('/commissions', [SearchController::class, 'searchCommissions']);
+    Route::get('/departments', [SearchController::class, 'searchDepartments']);
+    Route::get('/ranks', [SearchController::class, 'searchRanks']);
 });
 
 Route::group(['prefix' => 'examples'], function(){

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Departments;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class CommissionsGroupResource extends ResourceCollection
+class DepartmentsGroupResource extends ResourceCollection
 {
-    public $collects = CommissionResource::class;
+    public $collects = DepartmentResource::class;
 
     /**
      * Transform the resource collection into an array.

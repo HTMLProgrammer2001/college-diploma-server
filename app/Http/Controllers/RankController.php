@@ -6,8 +6,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Rank\AddRankRequest;
 use App\Http\Requests\Rank\AllRanksRequest;
 use App\Http\Requests\Rank\EditRankRequest;
-use App\Http\Resources\RankResource;
-use App\Http\Resources\RanksGroupResource;
+use App\Http\Resources\Ranks\RankResource;
+use App\Http\Resources\Ranks\RanksGroupResource;
 use App\Repositories\Interfaces\RankRepositoryInterface;
 
 class RankController extends Controller

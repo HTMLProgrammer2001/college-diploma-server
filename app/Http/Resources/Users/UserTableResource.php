@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Users;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CommissionResource extends JsonResource
+class UserTableResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,7 +16,9 @@ class CommissionResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name
+            'fullName' => $this->fullName,
+            'email' => $this->email,
+            'avatar' => $this->getAvatar()
         ];
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Ranks;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class DepartmentsGroupResource extends ResourceCollection
+class SearchRanksGroupResource extends ResourceCollection
 {
-    public $collects = DepartmentResource::class;
+    public $collects = SearchRankResource::class;
 
     /**
      * Transform the resource collection into an array.

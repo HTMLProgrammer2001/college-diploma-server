@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Resources\Users;
+namespace App\Http\Resources\Commissions;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class UsersGroupResource extends ResourceCollection
+class SearchCommissionsGroupResource extends ResourceCollection
 {
-    public $collects = UserResource::class;
+    public $collects = SearchCommissionResource::class;
 
     /**
      * Transform the resource collection into an array.
