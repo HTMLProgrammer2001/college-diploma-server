@@ -43,6 +43,9 @@ class Report implements FromCollection, WithHeadings, WithEvents
             $lastQualification = $this->qualificationRep->getLastQualificationOf($item->id);
             $internships = $this->internshipRep->getInternshipsFor($item->id);
 
+            $lastQualificationStr = $lastQualification ?
+                ($lastQualification->name ?? 'Немає') . ', ' . $lastQualification->date :'Немає';
+
             return [
                 $item->fullName,
                 to_locale_date($item->birthday),
@@ -51,7 +54,7 @@ class Report implements FromCollection, WithHeadings, WithEvents
                 $item->experience,
                 $item->email . ', ' . $item->phone . ', ' . $item->address,
                 $item->getRankName(),
-                ($lastQualification->name ?? 'Немає') . ', ' . $lastQualification->date,
+                $lastQualificationStr,
                 $item->pedagogical_title,
                 $item->scientific_degree . ', ' . $item->scientific_degree_year,
                 $item->academic_status . ', ' . $item->academic_status_year,

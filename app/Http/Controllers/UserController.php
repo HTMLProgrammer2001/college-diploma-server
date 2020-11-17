@@ -45,8 +45,7 @@ class UserController extends Controller
 
     public function store(AddUserRequest $request)
     {
-        $data = $request->except('datePresentation');
-        $data['date_presentation'] = $request->input('datePresentation');
+        $data = $request->all();
         $this->userRep->create($data);
 
         return response()->json([
@@ -72,17 +71,15 @@ class UserController extends Controller
 
     public function import(ImportRequest $request)
     {
-        Excel::import(new UsersImport(), $request->file('importFile'));
-
-//        try {
-//            //Import models
-//            Excel::import(new UsersImport(), $request->file('importFile'));
-//        }
-//        catch(\Exception $exception){
-//            return response()->json([
-//                'message' => 'Error in import'
-//            ], 422);
-//        }
+        try {
+            //Import models
+            Excel::import(new UsersImport(), $request->file('importFile'));
+        }
+        catch(\Exception $exception){
+            return response()->json([
+                'message' => 'Error in import'
+            ], 422);
+        }
 
         //return success response
         return response()->json(['message' => 'Ok']);

@@ -24,7 +24,13 @@ class AllUserRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'filterName' => 'nullable|string',
+            'filterEmail' => 'nullable|string',
+            'filterCommission' => 'nullable|numeric|exists:commissions,id',
+            'filterDepartment' => 'nullable|numeric|exists:departments,id',
+            'filterRank' => 'nullable|numeric|exists:ranks,id',
+            'filterTitle' => 'nullable|numeric',
+            'filterCategory' => 'nullable|numeric'
         ];
     }
 }
