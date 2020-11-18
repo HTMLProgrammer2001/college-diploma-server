@@ -5,7 +5,7 @@ namespace App\Http\Resources\Internships;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 use App\Http\Resources\InternshipCategoryResource;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\Users\UserResource;
 
 class InternshipResource extends JsonResource
 {

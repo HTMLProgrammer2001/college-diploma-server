@@ -25,7 +25,7 @@ class AddUserRequest extends FormRequest
     {
         return [
             'fullName' => 'required|string',
-            'email' => 'required|string|email',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|string|confirmed',
             'commission' => 'required|numeric|exists:commissions,id',
             'department' => 'required|numeric|exists:departments,id'

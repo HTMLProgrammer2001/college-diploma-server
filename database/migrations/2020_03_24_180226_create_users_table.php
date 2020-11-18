@@ -28,7 +28,7 @@ class CreateUsersTable extends Migration
             $table->string('avatar')->nullable();
             $table->smallInteger('hiring_year')->nullable();
             $table->string('pedagogical_title')->nullable();
-            $table->smallInteger('experience')->default(0);
+            $table->smallInteger('experience')->default(0)->nullable();
             $table->string('address')->nullable();
             $table->string('phone')->nullable();
             $table->string('academic_status')->nullable();

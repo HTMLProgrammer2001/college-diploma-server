@@ -11,6 +11,9 @@ use App\Http\Resources\Users\UserResource;
 use App\Http\Resources\Users\UsersGroupTableResource;
 use App\Imports\UsersImport;
 use App\Repositories\Interfaces\UserRepositoryInterface;
+
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
@@ -55,7 +58,20 @@ class UserController extends Controller
 
     public function update(EditUserRequest $request, int $id)
     {
+        Validator::make($request->all(), [
+            'email' => [Rule::unique('users', 'email')->ignore($id)]
+        ]);
+
         $data = $request->all();
+
+        $ped = $request->input('pedagogical_title');
+        $acad = $request->input('academic_status');
+        $scie = $request->input('scientific_degree');
+
+        $data['pedagogical_title'] = (!$ped || $ped == -1) ?? $this->userRep->getPedagogicalTitles()[$ped];
+        $data['academic_status'] = (!$acad || $acad == -1) ?? $this->userRep->getAcademicStatusList()[$acad];
+        $data['scientific_degree'] = (!$scie || $scie == -1) ?? $this->userRep->getScientificDegreeList()[$scie];
+
         $user = $this->userRep->update($id, $data);
 
         return new UserResource($user);

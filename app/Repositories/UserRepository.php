@@ -9,6 +9,7 @@ use App\Repositories\Rules\EqualRule;
 use App\Repositories\Rules\LikeRule;
 use App\Services\PhotoUploader;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
@@ -64,7 +65,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     public function create($data)
     {
         if($data['birthday'] ?? false)
-            $data['birthday'] = from_locale_date($data['birthday']);
+            $data['birthday'] = Carbon::parse($data['birthday'])->format('Y-m-d');
 
         $user = $this->getModel()->query()->newModelInstance($data);
 
@@ -87,15 +88,13 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     public function update($id, $data)
     {
         if($data['birthday'] ?? false)
-            $data['birthday'] = from_locale_date($data['birthday']);
+            $data['birthday'] = Carbon::parse($data['birthday'])->format('Y-m-d');
 
         $user = $this->getModel()->query()->findOrFail($id);
         $user->fill($data);
 
         //generate secret values
         $user->generatePassword($data['password'] ?? false);
-        $user->cryptPassport($data['passport'] ?? false);
-        $user->cryptCode($data['code'] ?? false);
 
         //relationships
         $user->setDepartment($data['department'] ?? false);
@@ -104,12 +103,13 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
         //set new avatar
         $this->avatarService->deleteAvatar($user->avatar ?? false);
-        $user->avatar = $this->avatarService->uploadAvatar($data['avatar'] ?? false);
+        $user->avatar = $this->avatarService->uploadAvatar($data['avatar'] ?? null);
 
         if($data['role'] ?? false)
             $user->role = $data['role'];
 
         $user->save();
+        return $user;
     }
 
     public function destroy($id)
