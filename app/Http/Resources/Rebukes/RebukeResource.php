@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\Rebukes;
 
-use App\Http\Resources\UserResource;
+use App\Http\Resources\Users\UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class RebukeResource extends JsonResource
