@@ -44,12 +44,12 @@ Route::group([], function(){
 Route::group(['middleware' => 'auth:api', 'prefix' => 'profile'], function(){
     //Profile info routes
 
-    Route::get('/publications', [ProfileController::class, 'getPublications']);
-    Route::get('/educations', [ProfileController::class, 'getEducations']);
-    Route::get('/honors', [ProfileController::class, 'getHonors']);
-    Route::get('/rebukes', [ProfileController::class, 'getRebukes']);
-    Route::get('/qualifications', [ProfileController::class, 'getQualifications']);
-    Route::get('/internships', [ProfileController::class, 'getInternships']);
+    Route::get('/publications/{id}', [ProfileController::class, 'getPublications']);
+    Route::get('/educations/{id}', [ProfileController::class, 'getEducations']);
+    Route::get('/honors/{id}', [ProfileController::class, 'getHonors']);
+    Route::get('/rebukes/{id}', [ProfileController::class, 'getRebukes']);
+    Route::get('/qualifications/{id}', [ProfileController::class, 'getQualifications']);
+    Route::get('/internships/{id}', [ProfileController::class, 'getInternships']);
 });
 
 Route::group(['middleware' => 'auth:api', 'prefix' => 'search'], function (){

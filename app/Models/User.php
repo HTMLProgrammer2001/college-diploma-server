@@ -151,8 +151,15 @@ class User extends Authenticatable
     }
 
     public function getShortName(): string {
-        list($surname, $name) = explode(' ', $this->fullName);
-        return $surname . ' ' . mb_substr($name, 0, 1) . '.';
+        $fullName = explode(' ', $this->fullName);
+
+        if(sizeof($fullName) == 1){
+            return $fullName[0];
+        }
+        else{
+            list($name, $surname) = $fullName;
+            return $surname . ' ' . mb_substr($name, 0, 1) . '.';
+        }
     }
 
     public function getAvatar(){

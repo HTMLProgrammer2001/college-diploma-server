@@ -45,9 +45,9 @@ class ProfileController extends Controller
         $this->internshipRep = $internshipRep;
     }
 
-    public function getPublications(ProfilePublicationRequest $request){
+    public function getPublications(ProfilePublicationRequest $request, $id){
         $inputData = $request->query();
-        $inputData['user_id'] = $request->user()->id;
+        $inputData['user_id'] = $id;
 
         $rules = $this->publicationRep->createRules($inputData);
         $pageSize = $request->query('pageSize', 5);
@@ -56,9 +56,9 @@ class ProfileController extends Controller
         return new PublicationsGroupResource($publications);
     }
 
-    public function getEducations(ProfileEducationsRequest $request){
+    public function getEducations(ProfileEducationsRequest $request, $id){
         $inputData = $request->query();
-        $inputData['user_id'] = $request->user()->id;
+        $inputData['user_id'] = $id;
 
         $rules = $this->educationRep->createRules($inputData);
         $pageSize = $request->query('pageSize', 5);
@@ -67,9 +67,9 @@ class ProfileController extends Controller
         return new EducationsGroupResource($educations);
     }
 
-    public function getHonors(ProfileHonorsRequest $request){
+    public function getHonors(ProfileHonorsRequest $request, $id){
         $inputData = $request->query();
-        $inputData['user_id'] = $request->user()->id;
+        $inputData['user_id'] = $id;
 
         $rules = $this->honorRep->createRules($inputData);
         $pageSize = $request->query('pageSize', 5);
@@ -78,9 +78,9 @@ class ProfileController extends Controller
         return new HonorsGroupResource($honors);
     }
 
-    public function getRebukes(ProfileRebukeRequest $request){
+    public function getRebukes(ProfileRebukeRequest $request, $id){
         $inputData = $request->query();
-        $inputData['user_id'] = $request->user()->id;
+        $inputData['user_id'] = $id;
 
         $rules = $this->rebukeRep->createRules($inputData);
         $pageSize = $request->query('pageSize', 5);
@@ -89,9 +89,9 @@ class ProfileController extends Controller
         return new RebukesGroupResource($rebukes);
     }
 
-    public function getQualifications(ProfileQualificationRequest $request){
+    public function getQualifications(ProfileQualificationRequest $request, $id){
         $inputData = $request->query();
-        $inputData['user_id'] = $request->user()->id;
+        $inputData['user_id'] = $id;
 
         $rules = $this->qualificationRep->createRules($inputData);
         $pageSize = $request->query('pageSize', 5);
@@ -105,9 +105,9 @@ class ProfileController extends Controller
         return $response;
     }
 
-    public function getInternships(ProfileInternshipRequest $request){
+    public function getInternships(ProfileInternshipRequest $request, $id){
         $inputData = $request->query();
-        $inputData['user_id'] = $request->user()->id;
+        $inputData['user_id'] = $id;
 
         $rules = $this->internshipRep->createRules($inputData);
         $pageSize = $request->query('pageSize', 5);
