@@ -2,8 +2,8 @@
 
 namespace App\Exports;
 
-use App\Repositories\Interfaces\PublicationRepositoryInterface;
-use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Services\PublicationService;
+use App\Services\UserService;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -11,33 +11,52 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
 use PhpOffice\PhpSpreadsheet\NamedRange;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class PublicationsExampleExporter implements FromCollection, WithHeadings, WithEvents
 {
-    private $userRep, $publicationRep;
+    /**
+     * @var UserService
+     */
+    private $userService;
+
+    /**
+     * @var PublicationService
+     */
+    private $publicationService;
 
     public function __construct()
     {
-        $this->userRep = app(UserRepositoryInterface::class);
-        $this->publicationRep = app(PublicationRepositoryInterface::class);
+        $this->userService = app(UserService::class);
+        $this->publicationService = app(PublicationService::class);
 
         $this->countRows = 500;
         $this->maxAuthorCount = 10;
     }
 
+    /**
+     * @return Collection
+     */
     public function collection()
     {
         return new Collection();
     }
 
+    /**
+     * @return array
+     */
     public function headings(): array
     {
         return ['Назва публікації', 'Дата публікації', 'Видавець', 'Автори не з коледжа', 'Автори з коледжа'];
     }
 
+    /**
+     * @param Worksheet $sheet
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
     public function createRanges($sheet){
         //get data from repositories
-        $users = $this->userRep->getForExportList();
+        $users = $this->userService->getForExportList();
 
         //set data to cells
         for($i = 1; $i <= sizeof($users); $i++)
@@ -48,6 +67,11 @@ class PublicationsExampleExporter implements FromCollection, WithHeadings, WithE
             $sheet->getDelegate(), "\$Z\$1:\$Z\$" . sizeof($users)) );
     }
 
+    /**
+     * @param Worksheet $sheet
+     * @param DataValidation $validation
+     * @throws \Exception
+     */
     public function setRanges($sheet, $validation){
         for($i = 3; $i <= $this->countRows; $i++){
             foreach (range('E', 'P') as $col) {
@@ -58,6 +82,11 @@ class PublicationsExampleExporter implements FromCollection, WithHeadings, WithE
         }
     }
 
+    /**
+     * @param Worksheet $sheet
+     * @return mixed
+     * @throws \Exception
+     */
     public function createValidation($sheet){
         $validation = $sheet->getCell('B1')->getDataValidation();
         $validation->setType(DataValidation::TYPE_LIST);
@@ -74,17 +103,23 @@ class PublicationsExampleExporter implements FromCollection, WithHeadings, WithE
         return $validation;
     }
 
+    /**
+     * @return array
+     */
     public function registerEvents(): array
     {
         return [
             AfterSheet::class => function(AfterSheet $event){
-              $sheet = $event->sheet;
+                /**
+                 * @var Worksheet $sheet
+                 */
+                $sheet = $event->sheet;
 
-              foreach (range('A', 'Z') as $col) {
-                  if (in_array($col, range('F', 'P')))
-                      continue;
+                foreach (range('A', 'Z') as $col) {
+                    if (in_array($col, range('F', 'P')))
+                        continue;
 
-                  $sheet->getColumnDimension($col)->setAutoSize(true);
+                    $sheet->getColumnDimension($col)->setAutoSize(true);
               }
 
               //get data for lists

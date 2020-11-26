@@ -2,12 +2,13 @@
 
 namespace App\Exports;
 
-use App\Repositories\Interfaces\EducationRepositoryInterface;
-use App\Repositories\Interfaces\HonorRepositoryInterface;
-use App\Repositories\Interfaces\InternshipRepositoryInterface;
-use App\Repositories\Interfaces\QualificationRepositoryInterface;
-use App\Repositories\Interfaces\RebukeRepositoryInterface;
-use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Repositories\Rules\RuleInterface;
+use App\Services\EducationService;
+use App\Services\HonorService;
+use App\Services\InternshipService;
+use App\Services\QualificationService;
+use App\Services\RebukeService;
+use App\Services\UserService;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -15,19 +16,60 @@ use Maatwebsite\Excel\Events\AfterSheet;
 
 class Report implements FromCollection, WithHeadings, WithEvents
 {
-    private $educationRep, $qualificationRep, $internshipRep, $honorRep, $rebukeRep, $userRep, $rules;
+    /**
+     * @var EducationService
+     */
+    private $educationRep;
+
+    /**
+     * @var QualificationService
+     */
+    private $qualificationRep;
+
+    /**
+     * @var InternshipService
+     */
+    private $internshipRep;
+
+    /**
+     * @var HonorService
+     */
+    private $honorRep;
+
+    /**
+     * @var RebukeService
+     */
+    private $rebukeRep;
+
+    /**
+     * @var UserService
+     */
+    private $userRep;
+
+    /**
+     * @var RuleInterface[]
+     */
+    private $rules;
+
+    /**
+     * Report constructor.
+     * @param RuleInterface[] $rules
+     */
     public function __construct(array $rules)
     {
-        $this->educationRep = app(EducationRepositoryInterface::class);
-        $this->qualificationRep = app(QualificationRepositoryInterface::class);
-        $this->internshipRep = app(InternshipRepositoryInterface::class);
-        $this->honorRep = app(HonorRepositoryInterface::class);
-        $this->rebukeRep = app(RebukeRepositoryInterface::class);
-        $this->userRep = app(UserRepositoryInterface::class);
+        $this->educationRep = app(EducationService::class);
+        $this->qualificationRep = app(QualificationService::class);
+        $this->internshipRep = app(InternshipService::class);
+        $this->honorRep = app(HonorService::class);
+        $this->rebukeRep = app(RebukeService::class);
+        $this->userRep = app(UserService::class);
 
         $this->rules = $rules;
     }
 
+    /**
+     * @return array
+     */
     public function headings(): array
     {
         return ['ФІО', 'Дата народження', 'Освіта', 'Рік прийому на роботу', 'Вислуга', 'Особисті дані',
@@ -36,6 +78,9 @@ class Report implements FromCollection, WithHeadings, WithEvents
                     'Годин стажувань', 'Нагороди', 'Догани'];
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection
+     */
     public function collection()
     {
         //parse data
@@ -71,6 +116,9 @@ class Report implements FromCollection, WithHeadings, WithEvents
         return $result;
     }
 
+    /**
+     * @return array
+     */
     public function registerEvents(): array
     {
         return [

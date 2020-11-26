@@ -2,8 +2,8 @@
 
 namespace App\Exports;
 
-use App\Repositories\Interfaces\QualificationRepositoryInterface;
-use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Services\QualificationService;
+use App\Services\UserService;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -11,29 +11,51 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
 use PhpOffice\PhpSpreadsheet\NamedRange;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class QualificationsExampleExporter implements FromCollection, WithHeadings, WithEvents
 {
-    private $qualificationRep, $userRep;
+    /**
+     * @var QualificationService
+     */
+    private $qualificationRep;
 
+    /**
+     * @var UserService
+     */
+    private $userRep;
+
+    /**
+     * QualificationsExampleExporter constructor.
+     */
     public function __construct()
     {
-        $this->qualificationRep = app(QualificationRepositoryInterface::class);
-        $this->userRep = app(UserRepositoryInterface::class);
+        $this->qualificationRep = app(QualificationService::class);
+        $this->userRep = app(UserService::class);
 
         $this->countRows = 500;
     }
 
+    /**
+     * @return Collection
+     */
     public function collection()
     {
         return new Collection();
     }
 
+    /**
+     * @return array
+     */
     public function headings(): array
     {
         return ['Викладач', 'Категорія', 'Дата встановлення'];
     }
 
+    /**
+     * @param Worksheet $sheet
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
     public function createRanges($sheet){
         //get data from repositories
         $users = $this->userRep->getForExportList();
@@ -54,6 +76,11 @@ class QualificationsExampleExporter implements FromCollection, WithHeadings, Wit
             $sheet->getDelegate(), '$Z$1:$Z$' . sizeof($users)) );
     }
 
+    /**
+     * @param Worksheet $sheet
+     * @param DataValidation $validation
+     * @throws \Exception
+     */
     public function setRanges($sheet, $validation){
         for($i = 3; $i <= $this->countRows; $i++){
             $val = clone $validation;
@@ -66,6 +93,11 @@ class QualificationsExampleExporter implements FromCollection, WithHeadings, Wit
         }
     }
 
+    /**
+     * @param Worksheet $sheet
+     * @return mixed
+     * @throws \Exception
+     */
     public function createValidation($sheet){
         $validation = $sheet->getCell('B1')->getDataValidation();
         $validation->setType(DataValidation::TYPE_LIST);
@@ -82,10 +114,16 @@ class QualificationsExampleExporter implements FromCollection, WithHeadings, Wit
         return $validation;
     }
 
+    /**
+     * @return array
+     */
     public function registerEvents(): array
     {
         return [
           AfterSheet::class => function(AfterSheet $event){
+              /**
+               * @var Worksheet $sheet
+               */
               $sheet = $event->sheet;
 
               foreach (range('A', 'Z') as $col)

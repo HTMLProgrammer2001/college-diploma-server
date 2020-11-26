@@ -2,38 +2,65 @@
 
 namespace App\Exports;
 
-use App\Repositories\Interfaces\CommissionRepositoryInterface;
-use App\Repositories\Interfaces\DepartmentRepositoryInterface;
-use App\Repositories\Interfaces\RankRepositoryInterface;
-use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Services\CommissionService;
+use App\Services\DepartmentService;
+use App\Services\RankService;
+use App\Services\UserService;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Events\AfterSheet;
-use Maatwebsite\Excel\Sheet;
 use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
 use PhpOffice\PhpSpreadsheet\NamedRange;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class UsersExampleExporter implements FromCollection, WithHeadings, WithEvents
 {
-    private $commissionRep, $departmentRep, $userRep, $rankRep;
+    /**
+     * @var CommissionService
+     */
+    private $commissionService;
 
+    /**
+     * @var DepartmentService
+     */
+    private $departmentService;
+
+    /**
+     * @var UserService
+     */
+    private $userService;
+
+    /**
+     * @var RankService
+     */
+    private $rankService;
+
+    /**
+     * UsersExampleExporter constructor.
+     */
     public function __construct()
     {
-        $this->commissionRep = app(CommissionRepositoryInterface::class);
-        $this->departmentRep = app(DepartmentRepositoryInterface::class);
-        $this->userRep = app(UserRepositoryInterface::class);
-        $this->rankRep = app(RankRepositoryInterface::class);
+        $this->commissionService = app(CommissionService::class);
+        $this->departmentService = app(DepartmentService::class);
+        $this->userService = app(UserService::class);
+        $this->rankService = app(RankService::class);
 
         $this->countRows = 500;
     }
 
+    /**
+     * @return Collection
+     */
     public function collection()
     {
         return new Collection();
     }
 
+    /**
+     * @return array
+     */
     public function headings(): array
     {
         return ['ФІО', 'Email', 'Комісія', 'Відділення', 'Посада', 'Педагогічне звання',
@@ -41,14 +68,18 @@ class UsersExampleExporter implements FromCollection, WithHeadings, WithEvents
             'Наукова ступінь', 'Рік встановлення наукової ступені'];
     }
 
+    /**
+     * @param $sheet
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
     public function createRanges($sheet){
         //get data from repositories
-        $commissions = $this->commissionRep->getForExportList();
-        $departments = $this->departmentRep->getForExportList();
-        $pedagogicals = to_export_list($this->userRep->getPedagogicalTitles(), true);
-        $ranks = $this->rankRep->getForExportList();
-        $academics = to_export_list($this->userRep->getAcademicStatusList(), true);
-        $scientifics = to_export_list($this->userRep->getScientificDegreeList(), true);
+        $commissions = $this->commissionService->getForExportList();
+        $departments = $this->departmentService->getForExportList();
+        $pedagogicals = to_export_list($this->userService->getPedagogicalTitles(), true);
+        $ranks = $this->rankService->getForExportList();
+        $academics = to_export_list($this->userService->getAcademicStatusList(), true);
+        $scientifics = to_export_list($this->userService->getScientificDegreeList(), true);
 
         //set data to cells
         for($i = 1; $i <= sizeof($academics); $i++)
@@ -89,6 +120,11 @@ class UsersExampleExporter implements FromCollection, WithHeadings, WithEvents
             $sheet->getDelegate(), '$Z$1:$Z$' . sizeof($ranks)) );
     }
 
+    /**
+     * @param Worksheet $sheet
+     * @param DataValidation $validation
+     * @throws \Exception
+     */
     public function setRanges($sheet, $validation){
         for($i = 3; $i <= $this->countRows; $i++){
             $val = clone $validation;
@@ -117,6 +153,11 @@ class UsersExampleExporter implements FromCollection, WithHeadings, WithEvents
         }
     }
 
+    /**
+     * @param Worksheet $sheet
+     * @return mixed
+     * @throws \Exception
+     */
     public function createValidation($sheet){
         $validation = $sheet->getCell('B1')->getDataValidation();
         $validation->setType(DataValidation::TYPE_LIST);
@@ -133,10 +174,16 @@ class UsersExampleExporter implements FromCollection, WithHeadings, WithEvents
         return $validation;
     }
 
+    /**
+     * @return array
+     */
     public function registerEvents(): array
     {
         return [
           AfterSheet::class => function(AfterSheet $event){
+              /**
+               * @var Worksheet $sheet
+               */
               $sheet = $event->sheet;
 
               foreach (range('A', 'Z') as $col)

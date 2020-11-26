@@ -2,41 +2,62 @@
 
 namespace App\Exports;
 
-use App\Repositories\Interfaces\HonorRepositoryInterface;
-use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Services\HonorService;
+use App\Services\UserService;
+
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
+use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\NamedRange;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class HonorsExampleExporter implements FromCollection, WithHeadings, WithEvents
 {
-    private $honorRep, $userRep;
+    /**
+     * @var HonorService
+     */
+    private $honorService;
+
+    /**
+     * @var UserService
+     */
+    private $userService;
 
     public function __construct()
     {
-        $this->honorRep = app(HonorRepositoryInterface::class);
-        $this->userRep = app(UserRepositoryInterface::class);
+        $this->honorService = app(HonorService::class);
+        $this->userService = app(UserService::class);
 
         $this->countRows = 500;
     }
 
+    /**
+     * @return Collection
+     */
     public function collection()
     {
         return new Collection();
     }
 
+    /**
+     * @return array
+     */
     public function headings(): array
     {
         return ['Викладач', 'Назва', 'Дата вручення', 'Номер нагороди'];
     }
 
+    /**
+     * @param Worksheet $sheet
+     * @throws \Exception
+     */
     public function createRanges($sheet){
         //get data from repositories
-        $users = $this->userRep->getForExportList();
+        $users = $this->userService->getForExportList();
 
         //set data to cells
         for($i = 1; $i <= sizeof($users); $i++)
@@ -47,6 +68,11 @@ class HonorsExampleExporter implements FromCollection, WithHeadings, WithEvents
             $sheet->getDelegate(), '$Z$1:$Z$' . sizeof($users)) );
     }
 
+    /**
+     * @param Worksheet $sheet
+     * @param DataValidation $validation
+     * @throws Exception
+     */
     public function setRanges($sheet, $validation){
         for($i = 3; $i <= $this->countRows; $i++){
             $val = clone $validation;
@@ -55,6 +81,11 @@ class HonorsExampleExporter implements FromCollection, WithHeadings, WithEvents
         }
     }
 
+    /**
+     * @param Worksheet $sheet
+     * @return DataValidation
+     * @throws \Exception
+     */
     public function createValidation($sheet){
         $validation = $sheet->getCell('B1')->getDataValidation();
         $validation->setType(DataValidation::TYPE_LIST);
@@ -71,10 +102,16 @@ class HonorsExampleExporter implements FromCollection, WithHeadings, WithEvents
         return $validation;
     }
 
+    /**
+     * @return array
+     */
     public function registerEvents(): array
     {
         return [
           AfterSheet::class => function(AfterSheet $event){
+              /**
+               * @var Worksheet $sheet
+               */
               $sheet = $event->sheet;
 
               foreach (range('A', 'Z') as $col)

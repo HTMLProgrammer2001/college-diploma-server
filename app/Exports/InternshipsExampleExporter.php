@@ -2,6 +2,8 @@
 
 namespace App\Exports;
 
+use App\Services\CategoryService;
+use App\Services\UserService;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -9,37 +11,56 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
 use PhpOffice\PhpSpreadsheet\NamedRange;
-
-use App\Repositories\Interfaces\CategoryRepositoryInterface;
-use App\Repositories\Interfaces\UserRepositoryInterface;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class InternshipsExampleExporter implements FromCollection, WithHeadings, WithEvents
 {
-    private $categoryRep, $userRep;
+    /**
+     * @var CategoryService
+     */
+    private $categoryService;
 
+    /**
+     * @var UserService
+     */
+    private $userService;
+
+    /**
+     * InternshipsExampleExporter constructor.
+     */
     public function __construct()
     {
-        $this->categoryRep = app(CategoryRepositoryInterface::class);
-        $this->userRep = app(UserRepositoryInterface::class);
+        $this->categoryService = app(CategoryService::class);
+        $this->userService = app(UserService::class);
 
         $this->countRows = 500;
     }
 
+    /**
+     * @return Collection
+     */
     public function collection()
     {
         return new Collection();
     }
 
+    /**
+     * @return array
+     */
     public function headings(): array
     {
         return ['Викладач', 'Тема стажування', 'Категорія стажування', 'Місце стажування', 'Стажувався з',
             'Стажувався до', 'Годин стажувань'];
     }
 
+    /**
+     * @param Worksheet $sheet
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
     public function createRanges($sheet){
         //get data from repositories
-        $categories = $this->categoryRep->getForExportList();
-        $users = $this->userRep->getForExportList();
+        $categories = $this->categoryService->getForExportList();
+        $users = $this->userService->getForExportList();
 
         //set data to cells
         for($i = 1; $i <= sizeof($categories); $i++)
@@ -56,6 +77,11 @@ class InternshipsExampleExporter implements FromCollection, WithHeadings, WithEv
             $sheet->getDelegate(), '$Z$1:$Z$' . sizeof($users)) );
     }
 
+    /**
+     * @param Worksheet $sheet
+     * @param DataValidation $validation
+     * @throws \Exception
+     */
     public function setRanges($sheet, $validation){
         for($i = 3; $i <= $this->countRows; $i++){
             $val = clone $validation;
@@ -68,6 +94,11 @@ class InternshipsExampleExporter implements FromCollection, WithHeadings, WithEv
         }
     }
 
+    /**
+     * @param Worksheet $sheet
+     * @return mixed
+     * @throws \Exception
+     */
     public function createValidation($sheet){
         $validation = $sheet->getCell('B1')->getDataValidation();
         $validation->setType(DataValidation::TYPE_LIST);
@@ -84,10 +115,16 @@ class InternshipsExampleExporter implements FromCollection, WithHeadings, WithEv
         return $validation;
     }
 
+    /**
+     * @return array
+     */
     public function registerEvents(): array
     {
         return [
           AfterSheet::class => function(AfterSheet $event){
+              /**
+               * @var Worksheet $sheet
+               */
               $sheet = $event->sheet;
 
               foreach (range('A', 'Z') as $col)
