@@ -88,15 +88,6 @@ class UserController extends Controller
         ]);
 
         $data = $request->all();
-
-        $ped = $request->input('pedagogical_title');
-        $acad = $request->input('academic_status');
-        $scie = $request->input('scientific_degree');
-
-        $data['pedagogical_title'] = (!$ped || $ped == -1) ?? $this->userRep->getPedagogicalTitles()[$ped];
-        $data['academic_status'] = (!$acad || $acad == -1) ?? $this->userRep->getAcademicStatusList()[$acad];
-        $data['scientific_degree'] = (!$scie || $scie == -1) ?? $this->userRep->getScientificDegreeList()[$scie];
-
         $user = $this->userRep->update($id, $data);
 
         return new UserResource($user);

@@ -10,7 +10,7 @@ class Qualification extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'date'];
+    protected $fillable = ['description', 'date'];
 
     //relations
     public function user(){
@@ -30,5 +30,14 @@ class Qualification extends Model
             return;
 
         return $this->user->getShortName();
+    }
+
+    public function setCategory(int $category){
+        if($category >= 0 && $category < sizeof(\Constants::$categoriesNames))
+            $this->name = $category;
+    }
+
+    public function getCategoryString(): ?string {
+        return array_search($this->name, \Constants::$categoriesNames) ?? null;
     }
 }

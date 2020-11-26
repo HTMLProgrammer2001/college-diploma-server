@@ -30,7 +30,8 @@ class UserFactory extends Factory
             'password' => bcrypt('20012007'),
             'commission_id' => Commission::all('id')->random(),
             'department_id' => Department::all('id')->random(),
-            'rank_id' => Rank::all('id')->random()
+            'rank_id' => Rank::all('id')->random(),
+            'pedagogical_title' => $this->faker->randomKey(\Constants::$pedagogicalTitles)
         ];
     }
 }

@@ -17,7 +17,7 @@ class CreateEducationsTable extends Migration
             $table->id();
             $table->string('institution', 255);
             $table->year('graduate_year');
-            $table->string('qualification')->nullable();
+            $table->smallInteger('qualification');
             $table->bigInteger('user_id')->unsigned();
             $table->timestamps();
 

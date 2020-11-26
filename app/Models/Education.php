@@ -9,8 +9,6 @@ class Education extends Model
 {
     use HasFactory;
 
-    const QUALIFICATIONS = ['Молодший спеціаліст', 'Бакалавр', 'Магістр'];
-
     protected $table = 'educations';
     public $fillable = ['institution', 'graduate_year', 'specialty'];
 
@@ -41,7 +39,12 @@ class Education extends Model
         return $this->user->getShortName();
     }
 
-    public function setQualification(string $qualification){
-        $this->qualification = $qualification;
+    public function setQualification(int $qualification){
+        if($qualification >= 0 && $qualification < sizeof(\Constants::$qualificationNames))
+            $this->qualification = $qualification;
+    }
+
+    public function getQualification(): string {
+        return \Constants::$qualificationNames[$this->qualification];
     }
 }

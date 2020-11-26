@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Models\Qualification;
 use App\Models\User;
-use App\Repositories\QualificationRepository;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class QualificationFactory extends Factory
@@ -23,10 +22,8 @@ class QualificationFactory extends Factory
      */
     public function definition()
     {
-        $qualificationRep = new QualificationRepository();
-
         return [
-            'name' => $this->faker->randomElement($qualificationRep->getQualificationNames()),
+            'name' => $this->faker->randomKey(\Constants::$categoriesNames),
             'date' => $this->faker->date(),
             'description' => $this->faker->paragraph,
             'user_id' => $this->faker->randomElement(User::query()->get('id'))

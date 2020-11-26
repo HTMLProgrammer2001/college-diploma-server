@@ -18,7 +18,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'fullName', 'email', 'birthday', 'pedagogical_title', 'address', 'phone',
-            'hiring_year', 'experience', 'academic_status', 'academic_status_year', 'scientific_degree',
+            'hiring_year', 'experience', 'academic_status_year',
             'scientific_degree_year'
     ];
 
@@ -76,6 +76,42 @@ class User extends Authenticatable
             return 'Не встановлено';
     }
 
+    public function setRole(int $role){
+        if(array_search($role, \Constants::$roles) !== false)
+            $this->role = $role;
+    }
+
+    public function getRoleString(): string {
+        return \Constants::$roles[$this->role];
+    }
+
+    public function setTitle(int $title){
+        if($title >= 0 && $title < sizeof(\Constants::$pedagogicalTitles))
+            $this->pedagogical_title = $title;
+    }
+
+    public function getTitle(): string {
+        return \Constants::$pedagogicalTitles[$this->pedagogical_title];
+    }
+
+    public function setAcademicStatus(int $status){
+        if($status >= 0 && $status < sizeof(\Constants::$academicStatusList))
+            $this->academic_status = $status;
+    }
+
+    public function getAcademicStatus(): string {
+        return \Constants::$academicStatusList[$this->academic_status];
+    }
+
+    public function setScientificDegree(int $scientific){
+        if($scientific >= 0 && $scientific < sizeof(\Constants::$scientificDegreeList))
+            $this->scientific_degree = $scientific;
+    }
+
+    public function getScientificDegree(): string {
+        return \Constants::$scientificDegreeList[$this->scientific_degree];
+    }
+
     public function setDepartment($department){
         $this->department_id = $department;
     }
@@ -123,11 +159,6 @@ class User extends Authenticatable
             return 'Не встановлено';
 
         return $this->rank->name;
-    }
-
-    public function getRoleString(){
-        $role = array_search($this->role, \Constants::$roles);
-        return $role ?? null;
     }
 
     public function getShortName(): string {

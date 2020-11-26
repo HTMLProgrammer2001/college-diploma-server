@@ -24,16 +24,16 @@ class CreateUsersTable extends Migration
             $table->bigInteger('commission_id')->unsigned();
             $table->bigInteger('department_id')->unsigned();
             $table->bigInteger('rank_id')->unsigned()->nullable();
-            $table->integer('role')->default(\App\Models\User::ROLE_USER);
+            $table->integer('role')->default(\Constants::$roles['user']);
             $table->string('avatar')->nullable();
             $table->smallInteger('hiring_year')->nullable();
-            $table->string('pedagogical_title')->nullable();
+            $table->smallInteger('pedagogical_title')->nullable();
             $table->smallInteger('experience')->default(0)->nullable();
             $table->string('address')->nullable();
             $table->string('phone')->nullable();
-            $table->string('academic_status')->nullable();
+            $table->smallInteger('academic_status')->nullable();
             $table->smallInteger('academic_status_year')->nullable();
-            $table->string('scientific_degree')->nullable();
+            $table->smallInteger('scientific_degree')->nullable();
             $table->smallInteger('scientific_degree_year')->nullable();
 
             $table->rememberToken();

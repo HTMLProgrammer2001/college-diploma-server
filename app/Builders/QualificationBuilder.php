@@ -6,7 +6,6 @@ namespace App\Builders;
 
 use App\Builders\Interfaces\QualificationBuilderInterface;
 use App\Models\Qualification;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class QualificationBuilder implements QualificationBuilderInterface
@@ -15,7 +14,7 @@ class QualificationBuilder implements QualificationBuilderInterface
     protected function fillData(Qualification $qualification, array $data): Model{
         $qualification->fill($data);
         $qualification->setUser($data['user']);
-
+        $qualification->setCategory($data['name']);
         $qualification->save();
         return $qualification;
     }

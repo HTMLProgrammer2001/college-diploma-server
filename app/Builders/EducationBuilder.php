@@ -14,7 +14,9 @@ class EducationBuilder implements EducationBuilderInterface
     protected function fillData(Education $education, array $data): Model{
         $education->fill($data);
         $education->setUser($data['user']);
-        $education->setQualification(Education::QUALIFICATIONS[$data['qualifications']]);
+
+        if($data['qualification'])
+            $education->setQualification($data['qualification']);
 
         $education->save();
         return $education;

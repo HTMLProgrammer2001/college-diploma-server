@@ -25,7 +25,7 @@ class EducationFactory extends Factory
         return [
             'institution' => $this->faker->name,
             'graduate_year' => $this->faker->year,
-            'qualification' => $this->faker->randomElement(Education::QUALIFICATIONS),
+            'qualification' => $this->faker->randomKey(\Constants::$qualificationNames),
             'user_id' => $this->faker->randomElement(User::query()->get('id'))
         ];
     }
