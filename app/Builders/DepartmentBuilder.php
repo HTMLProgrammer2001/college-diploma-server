@@ -4,10 +4,11 @@
 namespace App\Builders;
 
 
+use App\Builders\Interfaces\DepartmentBuilderInterface;
 use App\Models\Department;
 use Illuminate\Database\Eloquent\Model;
 
-class DepartmentBuilder implements BuilderInterface
+class DepartmentBuilder implements DepartmentBuilderInterface
 {
     //create model instance
     public function create(array $data): Model

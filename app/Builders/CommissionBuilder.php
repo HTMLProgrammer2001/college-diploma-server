@@ -4,10 +4,11 @@
 namespace App\Builders;
 
 
+use App\Builders\Interfaces\CommissionBuilderInterface;
 use App\Models\Commission;
 use Illuminate\Database\Eloquent\Model;
 
-class CommissionBuilder implements BuilderInterface
+class CommissionBuilder implements CommissionBuilderInterface
 {
     //create model instance
     public function create(array $data): Model

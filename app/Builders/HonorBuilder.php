@@ -4,10 +4,11 @@
 namespace App\Builders;
 
 
+use App\Builders\Interfaces\HonorBuilderInterface;
 use App\Models\Honor;
 use Illuminate\Database\Eloquent\Model;
 
-class HonorBuilder implements BuilderInterface
+class HonorBuilder implements HonorBuilderInterface
 {
     //function to fill model instance by data
     protected function fillData(Honor $honor, array $data): Model{

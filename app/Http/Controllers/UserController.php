@@ -10,21 +10,33 @@ use App\Http\Requests\User\EditUserRequest;
 use App\Http\Resources\Users\UserResource;
 use App\Http\Resources\Users\UsersGroupTableResource;
 use App\Imports\UsersImport;
-use App\Repositories\Interfaces\UserRepositoryInterface;
 
+use App\Services\UserService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
+    /**
+     * @var UserService
+     */
     private $userRep;
 
-    public function __construct(UserRepositoryInterface $userRep)
+    /**
+     * UserController constructor.
+     * @param UserService $userRep
+     */
+    public function __construct(UserService $userRep)
     {
         $this->userRep = $userRep;
     }
 
+    /**
+     * @param AllUserRequest $request
+     * @return UsersGroupTableResource
+     */
     public function all(AllUserRequest $request)
     {
         $inputData = $request->query();
@@ -36,6 +48,10 @@ class UserController extends Controller
         return new UsersGroupTableResource($users);
     }
 
+    /**
+     * @param int $id
+     * @return UserResource|void
+     */
     public function single(int $id)
     {
         $user = $this->userRep->getById($id);
@@ -46,6 +62,10 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
+    /**
+     * @param AddUserRequest $request
+     * @return JsonResponse
+     */
     public function store(AddUserRequest $request)
     {
         $data = $request->all();
@@ -56,6 +76,11 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * @param EditUserRequest $request
+     * @param int $id
+     * @return UserResource
+     */
     public function update(EditUserRequest $request, int $id)
     {
         Validator::make($request->all(), [
@@ -77,6 +102,10 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
+    /**
+     * @param int $id
+     * @return JsonResponse|void
+     */
     public function destroy(int $id)
     {
         if($this->userRep->destroy($id))
@@ -85,6 +114,10 @@ class UserController extends Controller
             return abort(422);
     }
 
+    /**
+     * @param ImportRequest $request
+     * @return JsonResponse
+     */
     public function import(ImportRequest $request)
     {
         try {

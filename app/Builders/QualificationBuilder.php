@@ -4,11 +4,12 @@
 namespace App\Builders;
 
 
+use App\Builders\Interfaces\QualificationBuilderInterface;
 use App\Models\Qualification;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
-class QualificationBuilder implements BuilderInterface
+class QualificationBuilder implements QualificationBuilderInterface
 {
     //function to fill model instance by data
     protected function fillData(Qualification $qualification, array $data): Model{

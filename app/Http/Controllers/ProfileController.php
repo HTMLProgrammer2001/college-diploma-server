@@ -14,110 +14,172 @@ use App\Http\Resources\Honor\HonorsGroupResource;
 use App\Http\Resources\Internships\InternshipsGroupResource;
 use App\Http\Resources\PublicationsGroupResource;
 use App\Http\Resources\Qualifications\QualificationsGroupResource;
-
 use App\Http\Resources\Rebukes\RebukesGroupResource;
-use App\Repositories\Interfaces\EducationRepositoryInterface;
-use App\Repositories\Interfaces\HonorRepositoryInterface;
-use App\Repositories\Interfaces\InternshipRepositoryInterface;
-use App\Repositories\Interfaces\PublicationRepositoryInterface;
-use App\Repositories\Interfaces\QualificationRepositoryInterface;
-use App\Repositories\Interfaces\RebukeRepositoryInterface;
+use App\Services\EducationService;
+use App\Services\HonorService;
+use App\Services\InternshipService;
+use App\Services\PublicationService;
+use App\Services\QualificationService;
+use App\Services\RebukeService;
+
 
 class ProfileController extends Controller
 {
-    private $publicationRep;
-    private $educationRep;
-    private $honorRep;
-    private $rebukeRep;
-    private $qualificationRep;
-    private $internshipRep;
+    /**
+     * @var PublicationService 
+     */
+    private $publicationService;
 
-    public function __construct(PublicationRepositoryInterface $publicationRep,
-        EducationRepositoryInterface $educationRep, HonorRepositoryInterface $honorRep,
-        RebukeRepositoryInterface $rebukeRep, QualificationRepositoryInterface $qualificationRep,
-        InternshipRepositoryInterface $internshipRep)
+    /**
+     * @var EducationService 
+     */
+    private $educationService;
+
+    /**
+     * @var HonorService 
+     */
+    private $honorService;
+
+    /**
+     * @var RebukeService 
+     */
+    private $rebukeService;
+
+    /**
+     * @var QualificationService 
+     */
+    private $qualificationService;
+
+    /**
+     * @var InternshipService 
+     */
+    private $internshipService;
+
+    /**
+     * ProfileController constructor.
+     * @param PublicationService $publicationService
+     * @param EducationService $educationService
+     * @param HonorService $honorService
+     * @param RebukeService $rebukeService
+     * @param QualificationService $qualificationService
+     * @param InternshipService $internshipService
+     */
+    public function __construct(PublicationService $publicationService,
+        EducationService $educationService, HonorService $honorService,
+        RebukeService $rebukeService, QualificationService $qualificationService,
+        InternshipService $internshipService)
     {
-        $this->publicationRep = $publicationRep;
-        $this->educationRep = $educationRep;
-        $this->honorRep = $honorRep;
-        $this->rebukeRep = $rebukeRep;
-        $this->qualificationRep = $qualificationRep;
-        $this->internshipRep = $internshipRep;
+        $this->publicationService = $publicationService;
+        $this->educationService = $educationService;
+        $this->honorService = $honorService;
+        $this->rebukeService = $rebukeService;
+        $this->qualificationService = $qualificationService;
+        $this->internshipService = $internshipService;
     }
 
-    public function getPublications(ProfilePublicationRequest $request, $id){
+    /**
+     * @param ProfilePublicationRequest $request
+     * @param int $id ID of user to get data for
+     * @return PublicationsGroupResource
+     */
+    public function getPublications(ProfilePublicationRequest $request, int $id){
         $inputData = $request->query();
         $inputData['user_id'] = $id;
 
-        $rules = $this->publicationRep->createRules($inputData);
+        $rules = $this->publicationService->createRules($inputData);
         $pageSize = $request->query('pageSize', 5);
-        $publications = $this->publicationRep->filterPaginate($rules, $pageSize);
+        $publications = $this->publicationService->filterPaginate($rules, $pageSize);
 
         return new PublicationsGroupResource($publications);
     }
 
-    public function getEducations(ProfileEducationsRequest $request, $id){
+    /**
+     * @param ProfileEducationsRequest $request
+     * @param int $id ID of user to get data for
+     * @return EducationsGroupResource
+     */
+    public function getEducations(ProfileEducationsRequest $request, int $id){
         $inputData = $request->query();
         $inputData['user_id'] = $id;
 
-        $rules = $this->educationRep->createRules($inputData);
+        $rules = $this->educationService->createRules($inputData);
         $pageSize = $request->query('pageSize', 5);
-        $educations = $this->educationRep->filterPaginate($rules, $pageSize);
+        $educations = $this->educationService->filterPaginate($rules, $pageSize);
 
         return new EducationsGroupResource($educations);
     }
 
-    public function getHonors(ProfileHonorsRequest $request, $id){
+    /**
+     * @param ProfileHonorsRequest $request
+     * @param int $id ID of user to get data for
+     * @return HonorsGroupResource
+     */
+    public function getHonors(ProfileHonorsRequest $request, int $id){
         $inputData = $request->query();
         $inputData['user_id'] = $id;
 
-        $rules = $this->honorRep->createRules($inputData);
+        $rules = $this->honorService->createRules($inputData);
         $pageSize = $request->query('pageSize', 5);
-        $honors = $this->honorRep->filterPaginate($rules, $pageSize);
+        $honors = $this->honorService->filterPaginate($rules, $pageSize);
 
         return new HonorsGroupResource($honors);
     }
 
-    public function getRebukes(ProfileRebukeRequest $request, $id){
+    /**
+     * @param ProfileRebukeRequest $request
+     * @param int $id ID of user to get data for
+     * @return RebukesGroupResource
+     */
+    public function getRebukes(ProfileRebukeRequest $request, int $id){
         $inputData = $request->query();
         $inputData['user_id'] = $id;
 
-        $rules = $this->rebukeRep->createRules($inputData);
+        $rules = $this->rebukeService->createRules($inputData);
         $pageSize = $request->query('pageSize', 5);
-        $rebukes = $this->rebukeRep->filterPaginate($rules, $pageSize);
+        $rebukes = $this->rebukeService->filterPaginate($rules, $pageSize);
 
         return new RebukesGroupResource($rebukes);
     }
 
-    public function getQualifications(ProfileQualificationRequest $request, $id){
+    /**
+     * @param ProfileQualificationRequest $request
+     * @param int $id ID of user to get data for
+     * @return QualificationsGroupResource
+     */
+    public function getQualifications(ProfileQualificationRequest $request, int $id){
         $inputData = $request->query();
         $inputData['user_id'] = $id;
 
-        $rules = $this->qualificationRep->createRules($inputData);
+        $rules = $this->qualificationService->createRules($inputData);
         $pageSize = $request->query('pageSize', 5);
-        $qualifications = $this->qualificationRep->filterPaginate($rules, $pageSize);
+        $qualifications = $this->qualificationService->filterPaginate($rules, $pageSize);
         
         $response = new QualificationsGroupResource($qualifications);
         $response->additional([
-           'nextDate' => $this->qualificationRep->getNextQualificationDateOf($request->user()->id)
+           'nextDate' => $this->qualificationService->getNextQualificationDateOf($request->user()->id)
         ]);
         
         return $response;
     }
 
-    public function getInternships(ProfileInternshipRequest $request, $id){
+    /**
+     * @param ProfileInternshipRequest $request
+     * @param int $id ID of user to get data for
+     * @return InternshipsGroupResource
+     */
+    public function getInternships(ProfileInternshipRequest $request, int $id){
         $inputData = $request->query();
         $inputData['user_id'] = $id;
 
-        $rules = $this->internshipRep->createRules($inputData);
+        $rules = $this->internshipService->createRules($inputData);
         $pageSize = $request->query('pageSize', 5);
-        $internships = $this->internshipRep->filterPaginate($rules, $pageSize);
+        $internships = $this->internshipService->filterPaginate($rules, $pageSize);
 
         $response = new InternshipsGroupResource($internships);
-        $lastInternships = $this->internshipRep->getInternshipsFor($request->user()->id);
+        $lastInternships = $this->internshipService->getInternshipsFor($request->user()->id);
 
         $response->additional([
-            'hours' => $this->internshipRep->getInternshipHoursOf($lastInternships)
+            'hours' => $this->internshipService->getInternshipHoursOf($lastInternships)
         ]);
 
         return $response;

@@ -9,33 +9,49 @@ use App\Http\Requests\Publication\EditPublicationRequest;
 use App\Http\Resources\PublicationResource;
 use App\Http\Resources\PublicationsGroupResource;
 use App\Imports\PublicationsImport;
-use App\Repositories\Interfaces\PublicationRepositoryInterface;
+use App\Services\PublicationService;
+use Illuminate\Http\JsonResponse;
 use Maatwebsite\Excel\Facades\Excel;
 
 class PublicationController extends Controller
 {
-    private $publicationRep;
+    /**
+     * @var PublicationService
+     */
+    private $publicationService;
 
-    public function __construct(PublicationRepositoryInterface $publicationRep)
+    /**
+     * PublicationController constructor.
+     * @param PublicationService $publicationService
+     */
+    public function __construct(PublicationService $publicationService)
     {
-        $this->publicationRep = $publicationRep;
+        $this->publicationService = $publicationService;
     }
 
+    /**
+     * @param AllPublicationRequest $request
+     * @return PublicationsGroupResource
+     */
     public function all(AllPublicationRequest $request)
     {
         $inputData = $request->query();
         $inputData['user_id'] = $request->query('filterUser');
 
-        $rules = $this->publicationRep->createRules($inputData);
+        $rules = $this->publicationService->createRules($inputData);
         $pageSize = $request->query('pageSize', 5);
-        $publications = $this->publicationRep->filterPaginate($rules, $pageSize);
+        $publications = $this->publicationService->filterPaginate($rules, $pageSize);
 
         return new PublicationsGroupResource($publications);
     }
 
+    /**
+     * @param int $id ID of publication to get info
+     * @return PublicationResource|void
+     */
     public function single(int $id)
     {
-        $publication = $this->publicationRep->getById($id);
+        $publication = $this->publicationService->getById($id);
 
         if(!$publication)
             return abort(404);
@@ -43,34 +59,51 @@ class PublicationController extends Controller
         return new PublicationResource($publication);
     }
 
+    /**
+     * @param AddPublicationRequest $request
+     * @return JsonResponse
+     */
     public function store(AddPublicationRequest $request)
     {
         $data = $request->except('date');
         $data = array_merge($data, ['date_of_publication' => $request->input('date')]);
 
-        $this->publicationRep->create($data);
+        $this->publicationService->create($data);
 
         return response()->json([
             'message' => 'Created'
         ]);
     }
 
+    /**
+     * @param EditPublicationRequest $request
+     * @param int $id
+     * @return PublicationResource
+     */
     public function update(EditPublicationRequest $request, int $id)
     {
         $data = $request->all();
-        $publication = $this->publicationRep->update($id, $data);
+        $publication = $this->publicationService->update($id, $data);
 
         return new PublicationResource($publication);
     }
 
+    /**
+     * @param int $id
+     * @return JsonResponse|void
+     */
     public function destroy(int $id)
     {
-        if($this->publicationRep->destroy($id))
+        if($this->publicationService->destroy($id))
             return response()->json(['message' => 'ok']);
         else
             return abort(422);
     }
 
+    /**
+     * @param ImportRequest $request
+     * @return JsonResponse
+     */
     public function import(ImportRequest $request)
     {
         try {

@@ -7,31 +7,43 @@ use App\Http\Requests\Category\AllCategoryRequest;
 use App\Http\Requests\Category\EditCategoryRequest;
 use App\Http\Resources\Categories\CategoriesGroupResource;
 use App\Http\Resources\Categories\CategoryResource;
-use App\Repositories\Interfaces\CategoryRepositoryInterface;
+use App\Services\CategoryService;
+use Illuminate\Http\JsonResponse;
 
 class CategoryController extends Controller
 {
-    private $categoryRep;
+    /**
+     * @var CategoryService
+     */
+    private $categoryService;
 
-    public function __construct(CategoryRepositoryInterface $categoryRep)
+    public function __construct(CategoryService $categoryService)
     {
-        $this->categoryRep = $categoryRep;
+        $this->categoryService = $categoryService;
     }
 
+    /**
+     * @param AllCategoryRequest $request
+     * @return CategoriesGroupResource
+     */
     public function all(AllCategoryRequest $request)
     {
         $inputData = $request->query();
 
-        $rules = $this->categoryRep->createRules($inputData);
+        $rules = $this->categoryService->createRules($inputData);
         $pageSize = $request->query('pageSize', 5);
-        $categories = $this->categoryRep->filterPaginate($rules, $pageSize);
+        $categories = $this->categoryService->filterPaginate($rules, $pageSize);
 
         return new CategoriesGroupResource($categories);
     }
 
+    /**
+     * @param int $id Category id to get
+     * @return CategoryResource|null
+     */
     public function single(int $id)
     {
-        $category = $this->categoryRep->getById($id);
+        $category = $this->categoryService->getById($id);
 
         if(!$category)
             return abort(404);
@@ -39,27 +51,41 @@ class CategoryController extends Controller
         return new CategoryResource($category);
     }
 
+    /**
+     * Method to create new category
+     * @param AddCategoryRequest $request
+     * @return JsonResponse
+     */
     public function store(AddCategoryRequest $request)
     {
         $data = $request->all();
-        $this->categoryRep->create($data);
+        $this->categoryService->create($data);
 
         return response()->json([
             'message' => 'Created'
         ]);
     }
 
+    /**
+     * @param EditCategoryRequest $request
+     * @param int $id ID of category to update
+     * @return CategoryResource
+     */
     public function update(EditCategoryRequest $request, int $id)
     {
         $data = $request->all();
-        $category = $this->categoryRep->update($id, $data);
+        $category = $this->categoryService->update($id, $data);
 
         return new CategoryResource($category);
     }
 
+    /**
+     * @param int $id
+     * @return JsonResponse|void
+     */
     public function destroy(int $id)
     {
-        if($this->categoryRep->destroy($id))
+        if($this->categoryService->destroy($id))
             return response()->json(['message' => 'ok']);
         else
             return abort(422);

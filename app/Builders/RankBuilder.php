@@ -4,10 +4,11 @@
 namespace App\Builders;
 
 
+use App\Builders\Interfaces\RankBuilderInterface;
 use App\Models\Rank;
 use Illuminate\Database\Eloquent\Model;
 
-class RankBuilder implements BuilderInterface
+class RankBuilder implements RankBuilderInterface
 {
     //create model instance
     public function create(array $data): Model

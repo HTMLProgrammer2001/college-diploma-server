@@ -10,18 +10,30 @@ use App\Http\Requests\Rebuke\EditRebukeRequest;
 use App\Http\Resources\Rebukes\RebukeResource;
 use App\Http\Resources\Rebukes\RebukesGroupResource;
 use App\Imports\RebukesImport;
-use App\Repositories\Interfaces\RebukeRepositoryInterface;
+use App\Services\RebukeService;
+use Illuminate\Http\JsonResponse;
 use Maatwebsite\Excel\Facades\Excel;
 
 class RebukeController extends Controller
 {
+    /**
+     * @var RebukeService
+     */
     private $rebukeRep;
 
-    public function __construct(RebukeRepositoryInterface $rebukeRep)
+    /**
+     * RebukeController constructor.
+     * @param RebukeService $rebukeRep
+     */
+    public function __construct(RebukeService $rebukeRep)
     {
         $this->rebukeRep = $rebukeRep;
     }
 
+    /**
+     * @param AllRebukeRequest $request
+     * @return RebukesGroupResource
+     */
     public function all(AllRebukeRequest $request)
     {
         $inputData = $request->query();
@@ -33,6 +45,10 @@ class RebukeController extends Controller
         return new RebukesGroupResource($rebukes);
     }
 
+    /**
+     * @param int $id
+     * @return RebukeResource|void
+     */
     public function single(int $id)
     {
         $rebuke = $this->rebukeRep->getById($id);
@@ -43,6 +59,10 @@ class RebukeController extends Controller
         return new RebukeResource($rebuke);
     }
 
+    /**
+     * @param AddRebukeRequest $request
+     * @return JsonResponse
+     */
     public function store(AddRebukeRequest $request)
     {
         $data = $request->except('datePresentation');
@@ -54,6 +74,11 @@ class RebukeController extends Controller
         ]);
     }
 
+    /**
+     * @param EditRebukeRequest $request
+     * @param int $id
+     * @return RebukeResource
+     */
     public function update(EditRebukeRequest $request, int $id)
     {
         $data = $request->all();
@@ -62,6 +87,10 @@ class RebukeController extends Controller
         return new RebukeResource($rebuke);
     }
 
+    /**
+     * @param int $id
+     * @return JsonResponse|void
+     */
     public function destroy(int $id)
     {
         if($this->rebukeRep->destroy($id))
@@ -70,6 +99,10 @@ class RebukeController extends Controller
             return abort(422);
     }
 
+    /**
+     * @param ImportRequest $request
+     * @return JsonResponse
+     */
     public function import(ImportRequest $request)
     {
         try {

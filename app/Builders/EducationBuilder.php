@@ -4,10 +4,11 @@
 namespace App\Builders;
 
 
+use App\Builders\Interfaces\EducationBuilderInterface;
 use App\Models\Education;
 use Illuminate\Database\Eloquent\Model;
 
-class EducationBuilder implements BuilderInterface
+class EducationBuilder implements EducationBuilderInterface
 {
     //function to fill model instance by data
     protected function fillData(Education $education, array $data): Model{

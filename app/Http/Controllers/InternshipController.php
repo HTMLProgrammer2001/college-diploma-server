@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\InternshipService;
+use Illuminate\Http\JsonResponse;
 use Maatwebsite\Excel\Facades\Excel;
 
 use App\Http\Requests\ImportRequest;
@@ -11,31 +13,45 @@ use App\Http\Requests\Internship\EditInternshipRequest;
 use App\Http\Resources\Internships\InternshipResource;
 use App\Http\Resources\Internships\InternshipsGroupResource;
 use App\Imports\InternshipsImport;
-use App\Repositories\Interfaces\InternshipRepositoryInterface;
 
 class InternshipController extends Controller
 {
-    private $internshipRep;
+    /**
+     * @var InternshipService
+     */
+    private $internshipService;
 
-    public function __construct(InternshipRepositoryInterface $internshipRep)
+    /**
+     * InternshipController constructor.
+     * @param InternshipService $internshipService
+     */
+    public function __construct(InternshipService $internshipService)
     {
-        $this->internshipRep = $internshipRep;
+        $this->internshipService = $internshipService;
     }
 
+    /**
+     * @param AllInternshipsRequest $request
+     * @return InternshipsGroupResource
+     */
     public function all(AllInternshipsRequest $request)
     {
         $inputData = $request->query();
 
-        $rules = $this->internshipRep->createRules($inputData);
+        $rules = $this->internshipService->createRules($inputData);
         $pageSize = $request->query('pageSize', 5);
-        $internships = $this->internshipRep->filterPaginate($rules, $pageSize);
+        $internships = $this->internshipService->filterPaginate($rules, $pageSize);
 
         return new InternshipsGroupResource($internships);
     }
 
+    /**
+     * @param int $id ID of internship to get info
+     * @return InternshipResource|void
+     */
     public function single(int $id)
     {
-        $internship = $this->internshipRep->getById($id);
+        $internship = $this->internshipService->getById($id);
 
         if(!$internship)
             return abort(404);
@@ -43,32 +59,49 @@ class InternshipController extends Controller
         return new InternshipResource($internship);
     }
 
+    /**
+     * @param AddInternshipRequest $request
+     * @return JsonResponse
+     */
     public function store(AddInternshipRequest $request)
     {
         $data = $request->all();
-        $this->internshipRep->create($data);
+        $this->internshipService->create($data);
 
         return response()->json([
             'message' => 'Created'
         ]);
     }
 
+    /**
+     * @param EditInternshipRequest $request
+     * @param int $id ID of internship to update
+     * @return InternshipResource
+     */
     public function update(EditInternshipRequest $request, int $id)
     {
         $data = $request->all();
-        $internship = $this->internshipRep->update($id, $data);
+        $internship = $this->internshipService->update($id, $data);
 
         return new InternshipResource($internship);
     }
 
+    /**
+     * @param int $id ID of internship to delete
+     * @return JsonResponse|void
+     */
     public function destroy(int $id)
     {
-        if($this->internshipRep->destroy($id))
+        if($this->internshipService->destroy($id))
             return response()->json(['message' => 'ok']);
         else
             return abort(422);
     }
 
+    /**
+     * @param ImportRequest $request
+     * @return JsonResponse
+     */
     public function import(ImportRequest $request)
     {
         try {

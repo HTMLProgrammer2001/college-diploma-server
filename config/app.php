@@ -180,6 +180,7 @@ return [
         //Custom
 
         App\Providers\RepositoryServiceProvider::class,
+        \App\Providers\BuilderServiceProvider::class
 
     ],
 

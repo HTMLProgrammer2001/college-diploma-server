@@ -5,19 +5,32 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserActions\EditMeRequest;
 use App\Http\Requests\UserActions\LoginRequest;
 use App\Http\Resources\Users\UserResource;
+use App\Models\User;
 use App\Services\PhotoUploader;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UserActions extends Controller
 {
+    /**
+     * @var PhotoUploader
+     */
     private $photoUploader;
 
+    /**
+     * UserActions constructor.
+     * @param PhotoUploader $photoUploader
+     */
     public function __construct(PhotoUploader $photoUploader)
     {
         $this->photoUploader = $photoUploader;
     }
 
+    /**
+     * @param LoginRequest $request
+     * @return JsonResponse
+     */
     public function login(LoginRequest $request){
         $credentials = $request->only(['email', 'password']);
 
@@ -27,6 +40,9 @@ class UserActions extends Controller
             ], 401);
         }
 
+        /**
+         * @var $user User
+         */
         $user = Auth::user();
         $token = $user->getToken();
 
@@ -37,6 +53,10 @@ class UserActions extends Controller
         ], 200);
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function logout(Request $request){
         $user = $request->user();
         $user->token()->revoke();
@@ -46,6 +66,9 @@ class UserActions extends Controller
         ], 200);
     }
 
+    /**
+     * @return JsonResponse
+     */
     public function getMe(){
         $user = auth('api')->user();
 
@@ -54,6 +77,10 @@ class UserActions extends Controller
         ]);
     }
 
+    /**
+     * @param EditMeRequest $request
+     * @return JsonResponse
+     */
     public function editMe(EditMeRequest $request){
         $fields = ['birthday', 'email', 'address', 'phone'];
         $user = $request->user();

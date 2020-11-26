@@ -4,11 +4,12 @@
 namespace App\Builders;
 
 
+use App\Builders\Interfaces\RebukeBuilderInterface;
 use App\Models\Rebuke;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
-class RebukeBuilder implements BuilderInterface
+class RebukeBuilder implements RebukeBuilderInterface
 {
     //function to fill model instance by data
     protected function fillData(Rebuke $rebuke, array $data): Model{

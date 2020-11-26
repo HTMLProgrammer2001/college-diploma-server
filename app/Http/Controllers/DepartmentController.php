@@ -7,31 +7,47 @@ use App\Http\Requests\Department\AllDepartmentsRequest;
 use App\Http\Requests\Department\EditDepartmentRequest;
 use App\Http\Resources\Departments\DepartmentResource;
 use App\Http\Resources\Departments\DepartmentsGroupResource;
-use App\Repositories\Interfaces\DepartmentRepositoryInterface;
+use App\Services\DepartmentService;
+use Illuminate\Http\JsonResponse;
 
 class DepartmentController extends Controller
 {
-    private $departmentRep;
+    /**
+     * @var DepartmentService
+     */
+    private $departmentService;
 
-    public function __construct(DepartmentRepositoryInterface $departmentRep)
+    /**
+     * DepartmentController constructor.
+     * @param DepartmentService $departmentService
+     */
+    public function __construct(DepartmentService $departmentService)
     {
-        $this->departmentRep = $departmentRep;
+        $this->departmentService = $departmentService;
     }
 
+    /**
+     * @param AllDepartmentsRequest $request
+     * @return DepartmentsGroupResource
+     */
     public function all(AllDepartmentsRequest $request)
     {
         $inputData = $request->query();
 
-        $rules = $this->departmentRep->createRules($inputData);
+        $rules = $this->departmentService->createRules($inputData);
         $pageSize = $request->query('pageSize', 5);
-        $departments = $this->departmentRep->filterPaginate($rules, $pageSize);
+        $departments = $this->departmentService->filterPaginate($rules, $pageSize);
 
         return new DepartmentsGroupResource($departments);
     }
 
+    /**
+     * @param int $id ID of department to get data
+     * @return DepartmentResource|void
+     */
     public function single(int $id)
     {
-        $department = $this->departmentRep->getById($id);
+        $department = $this->departmentService->getById($id);
 
         if(!$department)
             return abort(404);
@@ -39,27 +55,40 @@ class DepartmentController extends Controller
         return new DepartmentResource($department);
     }
 
+    /**
+     * @param AddDepartmentRequest $request
+     * @return JsonResponse
+     */
     public function store(AddDepartmentRequest $request)
     {
         $data = $request->all();
-        $this->departmentRep->create($data);
+        $this->departmentService->create($data);
 
         return response()->json([
             'message' => 'Created'
         ]);
     }
 
+    /**
+     * @param EditDepartmentRequest $request
+     * @param int $id ID of department to update
+     * @return DepartmentResource
+     */
     public function update(EditDepartmentRequest $request, int $id)
     {
         $data = $request->all();
-        $department = $this->departmentRep->update($id, $data);
+        $department = $this->departmentService->update($id, $data);
 
         return new DepartmentResource($department);
     }
 
+    /**
+     * @param int $id ID of department to delete
+     * @return JsonResponse|void
+     */
     public function destroy(int $id)
     {
-        if($this->departmentRep->destroy($id))
+        if($this->departmentService->destroy($id))
             return response()->json(['message' => 'ok']);
         else
             return abort(422);

@@ -4,11 +4,12 @@
 namespace App\Builders;
 
 
+use App\Builders\Interfaces\PublicationBuilderInterface;
 use App\Models\Publication;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
-class PublicationBuilder implements BuilderInterface
+class PublicationBuilder implements PublicationBuilderInterface
 {
     //function to fill model instance by data
     protected function fillData(Publication $publication, array $data): Model{

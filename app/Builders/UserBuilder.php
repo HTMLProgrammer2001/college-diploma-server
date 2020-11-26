@@ -4,12 +4,13 @@
 namespace App\Builders;
 
 
+use App\Builders\Interfaces\UserBuilderInterface;
 use App\Models\User;
 use App\Services\PhotoUploader;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
-class UserBuilder implements BuilderInterface
+class UserBuilder implements UserBuilderInterface
 {
     private $avatarService;
 

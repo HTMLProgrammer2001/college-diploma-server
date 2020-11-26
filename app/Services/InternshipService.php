@@ -43,4 +43,9 @@ class InternshipService extends ModelService
     {
         return $this->rep->getInternshipHoursOf($internship);
     }
+
+    public function getInternshipsFor(int $user)
+    {
+        return $this->rep->getInternshipsFor($user);
+    }
 }

@@ -4,11 +4,12 @@
 namespace App\Builders;
 
 
+use App\Builders\Interfaces\InternshipBuilderInterface;
 use App\Models\Internship;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
-class InternshipBuilder implements BuilderInterface
+class InternshipBuilder implements InternshipBuilderInterface
 {
     //function to fill model instance by data
     protected function fillData(Internship $internship, array $data): Model{
