@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\Users\SearchUsersGroupResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PublicationResource extends JsonResource
@@ -17,6 +18,7 @@ class PublicationResource extends JsonResource
         return [
             'id' => $this->id,
             'authors' => $this->getAuthorsString(),
+            'authorsList' => new SearchUsersGroupResource($this->authors),
             'title' => $this->title,
             'description' => $this->description,
             'date_of_publication' => $this->date_of_publication,

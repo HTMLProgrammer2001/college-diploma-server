@@ -7,6 +7,7 @@ namespace App\Repositories;
 use App\Models\Rank;
 use App\Repositories\Interfaces\RankRepositoryInterface;
 use App\Repositories\Rules\LikeRule;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class RankRepository extends BaseRepository implements RankRepositoryInterface
@@ -33,34 +34,17 @@ class RankRepository extends BaseRepository implements RankRepositoryInterface
         return app($this->model);
     }
 
-    public function create($data)
-    {
-        $rank = $this->getModel()->query()->newModelInstance($data);
-        $rank->save();
-
-        return $rank;
-    }
-
-    public function update($id, $data)
-    {
-        $rank = $this->getModel()->query()->findOrFail($id);
-        $rank->fill($data);
-        $rank->save();
-
-        return $rank;
-    }
-
-    public function all()
+    public function all(): Collection
     {
         return $this->getModel()->all();
     }
 
-    public function getForCombo()
+    public function getForCombo(): Collection
     {
         return $this->getModel()->all('id', 'name');
     }
 
-    public function getForExportList()
+    public function getForExportList(): array
     {
         return to_export_list($this->getModel()->all('id', 'name')->toArray());
     }

@@ -6,6 +6,7 @@ namespace App\Repositories;
 use App\Repositories\Rules\LessEqualRule;
 use App\Repositories\Rules\LikeRule;
 use App\Repositories\Rules\MoreEqualRule;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Education;
@@ -63,26 +64,7 @@ class EducationRepository extends BaseRepository implements EducationRepositoryI
         return $rules;
     }
 
-    public function create($data)
-    {
-        $education = $this->getModel()->query()->newModelInstance($data);
-        $education->setUser($data['user']);
-        $education->setQualification(Education::QUALIFICATIONS[$data['qualification']]);
-        $education->save();
-    }
-
-    public function update($id, $data)
-    {
-        $education = $this->getModel()->query()->findOrFail($id);
-        $education->fill($data);
-        $education->setUser($data['user']);
-        $education->setQualification(Education::QUALIFICATIONS[$data['qualification']]);
-        $education->save();
-
-        return $education;
-    }
-
-    public function all()
+    public function all(): Collection
     {
         return $this->getModel()->all();
     }
@@ -90,7 +72,6 @@ class EducationRepository extends BaseRepository implements EducationRepositoryI
     public function paginateForUser($user_id, ?int $size = null)
     {
         $size = $size ?? config('app.PAGINATE_SIZE', 10);
-
         return $this->getModel()->query()->where('user_id', $user_id)->paginate($size);
     }
 

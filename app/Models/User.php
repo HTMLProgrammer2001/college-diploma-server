@@ -31,12 +31,6 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    //User roles
-    const ROLE_ADMIN = 1;
-    const ROLE_MODERATOR = 10;
-    const ROLE_VIEWER = 30;
-    const ROLE_USER = 50;
-
     //Relations
     public function department(){
         return $this->belongsTo(Department::class);
@@ -75,10 +69,6 @@ class User extends Authenticatable
     }
 
     //Helper methods
-    public static function getPedagogicalTitles(){
-        return ['Старший викладач', 'Викладач-методист'];
-    }
-
     public function getBirthdayString(){
         if($this->birthday)
             return $this->birthday;
@@ -136,27 +126,19 @@ class User extends Authenticatable
     }
 
     public function getRoleString(){
-        $roles = self::getRolesArray();
-
-        return $roles[$this->role] ?? null;
-    }
-
-    public static function getRolesArray(){
-        return [
-          self::ROLE_ADMIN => 'Адміністратор',
-          self::ROLE_MODERATOR => 'Модератор',
-          self::ROLE_VIEWER => 'Переглядач',
-          self::ROLE_USER => 'Користувач',
-        ];
+        $role = array_search($this->role, \Constants::$roles);
+        return $role ?? null;
     }
 
     public function getShortName(): string {
         $fullName = explode(' ', $this->fullName);
 
+        //if we have only one word then return without catting
         if(sizeof($fullName) == 1){
             return $fullName[0];
         }
         else{
+            //cat name and return
             list($name, $surname) = $fullName;
             return $surname . ' ' . mb_substr($name, 0, 1) . '.';
         }

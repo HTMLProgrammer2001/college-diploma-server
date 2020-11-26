@@ -32,23 +32,6 @@ class CommissionRepository extends BaseRepository implements CommissionRepositor
         return app($this->model);
     }
 
-    public function create($data)
-    {
-        $commission = $this->getModel()->query()->newModelInstance($data);
-        $commission->save();
-
-        return $commission;
-    }
-
-    public function update($id, $data)
-    {
-        $commission = $this->getModel()->query()->findOrFail($id);
-        $commission->fill($data);
-        $commission->save();
-
-        return $commission;
-    }
-
     public function all(){
         return $this->getModel()->all();
     }

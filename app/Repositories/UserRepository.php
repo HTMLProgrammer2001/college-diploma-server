@@ -9,7 +9,7 @@ use App\Repositories\Rules\EqualRule;
 use App\Repositories\Rules\LikeRule;
 use App\Services\PhotoUploader;
 use App\Models\User;
-use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
@@ -62,102 +62,19 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         return app($this->model);
     }
 
-    public function create($data)
-    {
-        if($data['birthday'] ?? false)
-            $data['birthday'] = Carbon::parse($data['birthday'])->format('Y-m-d');
-
-        $user = $this->getModel()->query()->newModelInstance($data);
-
-        //generate secret values
-        $user->generatePassword($data['password']);
-
-        //relationships
-        $user->setDepartment($data['department']);
-        $user->setCommission($data['commission']);
-
-        if($data['rank'] ?? false)
-            $user->setRank($data['rank']);
-
-        $user->avatar = $this->avatarService->uploadAvatar($data['avatar'] ?? null);
-        $user->save();
-
-        return $user;
-    }
-
-    public function update($id, $data)
-    {
-        if($data['birthday'] ?? false)
-            $data['birthday'] = Carbon::parse($data['birthday'])->format('Y-m-d');
-
-        $user = $this->getModel()->query()->findOrFail($id);
-        $user->fill($data);
-
-        //generate secret values
-        $user->generatePassword($data['password'] ?? false);
-
-        //relationships
-        $user->setDepartment($data['department'] ?? false);
-        $user->setCommission($data['commission'] ?? false);
-        $user->setRank($data['rank'] ?? false);
-
-        //set new avatar
-        $this->avatarService->deleteAvatar($user->avatar ?? false);
-        $user->avatar = $this->avatarService->uploadAvatar($data['avatar'] ?? null);
-
-        if($data['role'] ?? false)
-            $user->role = $data['role'];
-
-        $user->save();
-        return $user;
-    }
-
-    public function destroy($id)
-    {
-        $user = $this->getModel()->query()->findOrFail($id);
-        $this->avatarService->deleteAvatar($user->avatar);
-
-        return $this->getModel()->destroy($id);
-    }
-
-    public function all()
+    public function all(): Collection
     {
         return $this->getModel()->all();
     }
 
-    public function getForCombo()
+    public function getForCombo(): Collection
     {
         return $this->getModel()->all('id', 'name', 'surname', 'patronymic');
-    }
-
-    public function getRoles(): array
-    {
-        return $this->getModel()->getRolesArray();
-    }
-
-    public function getPedagogicalTitles(): array
-    {
-        return $this->getModel()->getPedagogicalTitles();
     }
 
     public function getForExportList(): array
     {
         $users = $this->getModel()->all('id', 'fullName')->toArray();
         return to_export_list($users);
-    }
-
-    public function getAcademicStatusList(): array{
-        return [
-            'Кандидат наук',
-            'Доктор наук'
-        ];
-    }
-
-    public function getScientificDegreeList(): array{
-        return [
-            'Доцент',
-            'Старший дослідник',
-            'Професор'
-        ];
     }
 }

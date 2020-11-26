@@ -11,6 +11,8 @@ use App\Repositories\Rules\DateMoreRule;
 use App\Repositories\Rules\EqualRule;
 use App\Repositories\Rules\LikeRule;
 use Carbon\Carbon;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class RebukeRepository extends BaseRepository implements RebukeRepositoryInterface
@@ -50,40 +52,12 @@ class RebukeRepository extends BaseRepository implements RebukeRepositoryInterfa
         return app($this->model);
     }
 
-    public function create($data)
-    {
-        if($data['date_presentation'] ?? false)
-            $data['date_presentation'] = Carbon::parse($data['date_presentation'])->format('Y-m-d');
-
-        $rebuke = $this->getModel()->query()->newModelInstance($data);
-        $rebuke->changeActive(true);
-        $rebuke->setUser($data['user']);
-        $rebuke->save();
-
-        return $rebuke;
-    }
-
-    public function update($id, $data)
-    {
-        if($data['date_presentation'] ?? false)
-            $data['date_presentation'] = Carbon::parse($data['date_presentation'])->format('Y-m-d');
-
-        $rebuke = $this->getModel()->query()->findOrFail($id);
-        $rebuke->fill($data);
-
-        $rebuke->changeActive(true);
-        $rebuke->setUser($data['user']);
-        $rebuke->save();
-
-        return $rebuke;
-    }
-
-    public function all()
+    public function all(): Collection
     {
         return $this->getModel()->all();
     }
 
-    public function paginateForUser($user_id, ?int $size = null)
+    public function paginateForUser($user_id, ?int $size = null): LengthAwarePaginator
     {
         $size = $size ?? config('app.PAGINATE_SIZE', 10);
 

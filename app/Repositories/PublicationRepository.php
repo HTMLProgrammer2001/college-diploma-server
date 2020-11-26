@@ -14,7 +14,9 @@ use App\Repositories\Rules\HasAssociateRule;
 use App\Repositories\Rules\LikeRule;
 
 use Carbon\Carbon;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class PublicationRepository extends BaseRepository implements PublicationRepositoryInterface
@@ -52,42 +54,12 @@ class PublicationRepository extends BaseRepository implements PublicationReposit
         return $rules;
     }
 
-    public function create($data)
-    {
-        if($data['date_of_publication'] ?? false)
-            $data['date_of_publication'] = Carbon::parse($data['date_of_publication'])->format("Y-m-d");
-
-        $publication = $this->getModel()->query()->newModelInstance($data);
-        $publication->fill($data);
-        $publication->save();
-
-        $publication->setAuthors($data['authors']);
-        $publication->save();
-
-        return $publication;
-    }
-
-    public function update($id, $data)
-    {
-        if($data['date_of_publication'] ?? false)
-            $data['date_of_publication'] = Carbon::parse($data['date_of_publication'])->format("Y-m-d");
-
-        $publication = $this->getModel()->query()->findOrFail($id);
-        $publication->fill($data);
-        $publication->save();
-
-        $publication->setAuthors($data['authors']);
-        $publication->save();
-
-        return $publication;
-    }
-
-    public function all()
+    public function all(): Collection
     {
         return $this->getModel()->all();
     }
 
-    public function paginateForUser($user_id, ?int $size = null)
+    public function paginateForUser($user_id, ?int $size = null): LengthAwarePaginator
     {
         $size = $size ?? config('app.PAGINATE_SIZE', 10);
 

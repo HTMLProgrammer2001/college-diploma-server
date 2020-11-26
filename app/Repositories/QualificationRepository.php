@@ -10,6 +10,8 @@ use App\Repositories\Rules\DateLessRule;
 use App\Repositories\Rules\DateMoreRule;
 use App\Repositories\Rules\EqualRule;
 use Carbon\Carbon;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class QualificationRepository extends BaseRepository implements QualificationRepositoryInterface
@@ -46,59 +48,20 @@ class QualificationRepository extends BaseRepository implements QualificationRep
         return app($this->model);
     }
 
-    public function create($data)
-    {
-        if($data['date'] ?? false)
-            $data['date'] = Carbon::parse($data['date'])->format('Y-m-d');
-
-        $qualification = $this->getModel()->query()->newModelInstance($data);
-        $qualification->setUser($data['user']);
-        $qualification->save();
-
-        return $qualification;
-    }
-
-    public function update($id, $data)
-    {
-        if($data['date'] ?? false)
-            $data['date'] = Carbon::parse($data['date'])->format('Y-m-d');
-
-        $qualification = $this->getModel()->query()->findOrFail($id);
-        $qualification->fill($data);
-
-        $qualification->setUser($data['user']);
-        $qualification->save();
-
-        return $qualification;
-    }
-
-    public function all()
+    public function all(): Collection
     {
         return $this->getModel()->all();
     }
 
-    public function paginateForUser($user_id, ?int $size = null)
+    public function paginateForUser($user_id, ?int $size = null): LengthAwarePaginator
     {
         $size = $size ?? config('app.PAGINATE_SIZE', 10);
-
         return $this->getModel()->query()->where('user_id', $user_id)->paginate($size);
-    }
-
-    public function getQualificationNames(): array
-    {
-        return [
-            'Спеціаліст',
-            'Спеціаліст 2 категорії',
-            'Спеціаліст 1 категорії',
-            'Спеціаліст вищої категорії'
-        ];
     }
 
     public function getLastQualificationDateOf(int $user_id)
     {
-        $date = $this->getModel()->query()->where('user_id', $user_id)
-            ->orderBy('date', 'desc')->pluck('date')->first();
-
+        $date = $this->getLastQualificationOf($user_id)->pluck('date')->first();
         return $date ?? null;
     }
 

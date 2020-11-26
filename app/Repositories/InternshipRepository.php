@@ -81,47 +81,12 @@ class InternshipRepository extends BaseRepository implements InternshipRepositor
         return app($this->model);
     }
 
-    public function create($data)
+    public function all(): Collection
     {
-        if($data['from'] ?? false)
-            $data['from'] = Carbon::parse($data['from'])->format('Y-m-d');
-
-        if($data['to'] ?? false)
-            $data['to'] = Carbon::parse($data['to'])->format('Y-m-d');
-
-        $internship = $this->getModel()->query()->newModelInstance($data);
-        $internship->setCategory($data['category']);
-        $internship->setUser($data['user']);
-
-        $internship->save();
-
-        return $internship;
-    }
-
-    public function update($id, $data)
-    {
-        if($data['from'] ?? false)
-            $data['from'] = Carbon::parse($data['from'])->format('Y-m-d');
-
-        if($data['to'] ?? false)
-            $data['to'] = Carbon::parse($data['to'])->format('Y-m-d');
-
-        $internship = $this->getModel()->query()->findOrFail($id);
-        $internship->fill($data);
-
-        $internship->setCategory($data['category']);
-        $internship->setUser($data['user']);
-
-        $internship->save();
-
-        return $internship;
-    }
-
-    public function all(){
         return $this->getModel()->all();
     }
 
-    public function getInternshipHoursOf($internships): int
+    public function getInternshipHoursOf(Collection $internships): int
     {
         //get hours sum from last qualification update
         $hours = $internships->sum('hours');
@@ -131,7 +96,6 @@ class InternshipRepository extends BaseRepository implements InternshipRepositor
     public function paginateForUser(int $user_id, ?int $size = null)
     {
         $size = $size ?? config('app.PAGINATE_SIZE', 10);
-
         return $this->getModel()->query()->where('user_id', $user_id)->paginate($size);
     }
 

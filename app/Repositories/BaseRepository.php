@@ -10,11 +10,10 @@ use App\Repositories\Rules\SortRule;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 abstract class BaseRepository implements BaseRepositoryInterface
 {
-    private $sortFields = [];
-
     //method that return class of repository model
     abstract public function getModel(): Model;
 
@@ -78,7 +77,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
         return $query;
     }
 
-    public function filterPaginate(array $rules, ?int $size = null)
+    public function filterPaginate(array $rules, ?int $size = null): LengthAwarePaginator
     {
         //filter query
         $query = $this->filter($rules);

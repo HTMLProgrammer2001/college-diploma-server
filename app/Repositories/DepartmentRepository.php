@@ -32,23 +32,6 @@ class DepartmentRepository extends BaseRepository implements DepartmentRepositor
         return app($this->model);
     }
 
-    public function create($data)
-    {
-        $department = $this->getModel()->query()->newModelInstance($data);
-        $department->save();
-
-        return $department;
-    }
-
-    public function update($id, $data)
-    {
-        $department = $this->getModel()->query()->findOrFail($id);
-        $department->fill($data);
-        $department->save();
-
-        return $department;
-    }
-
     public function getForCombo()
     {
         return $this->getModel()->all('id', 'name');
