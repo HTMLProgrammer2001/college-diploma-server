@@ -73,7 +73,7 @@ class User extends Authenticatable
         if($this->birthday)
             return $this->birthday;
         else
-            return 'Не встановлено';
+            return __('messages.notSetted');
     }
 
     public function setRole(int $role){
@@ -125,7 +125,7 @@ class User extends Authenticatable
         if($this->department)
             return $this->department->name;
         else
-            return 'Не встановлено';
+            return __('messages.notSetted');
     }
 
     public function setCommission($commission){
@@ -141,7 +141,7 @@ class User extends Authenticatable
         if($this->commission)
             return $this->commission->name;
         else
-            return 'Не встановлено';
+            return __('messages.notSetted');
     }
 
     public function setRank($id){
@@ -156,7 +156,7 @@ class User extends Authenticatable
 
     public function getRankName(){
         if(!$this->rank)
-            return 'Не встановлено';
+            return __('messages.notSetted');
 
         return $this->rank->name;
     }

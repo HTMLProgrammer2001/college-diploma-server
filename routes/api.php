@@ -32,16 +32,17 @@ use App\Http\Controllers\ReportController;
 
 Route::get('/report', ReportController::class);
 
-Route::group([], function(){
+Route::group([], function () {
     //User actions routes
 
-    Route::post('/login', [UserActions::class, 'login'])->name('login');
+    Route::post('/login', [UserActions::class, 'login']);
+    Route::get('/login', function (){return abort(403);})->name('login');
     Route::post('/logout', [UserActions::class, 'logout'])->middleware('auth:api');
     Route::get('/me', [UserActions::class, 'getMe']);
     Route::post('/editMe', [UserActions::class, 'editMe'])->middleware('auth:api');
 });
 
-Route::group(['middleware' => 'auth:api', 'prefix' => 'profile'], function(){
+Route::group(['middleware' => 'auth:api', 'prefix' => 'profile'], function () {
     //Profile info routes
 
     Route::get('/publications/{id}', [ProfileController::class, 'getPublications']);
@@ -52,8 +53,8 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'profile'], function(){
     Route::get('/internships/{id}', [ProfileController::class, 'getInternships']);
 });
 
-Route::group(['middleware' => 'auth:api', 'prefix' => 'search'], function (){
-   //Search routes for dropdowns with live search
+Route::group(['middleware' => 'auth:api', 'prefix' => 'search'], function () {
+    //Search routes for dropdowns with live search
 
     Route::get('/categories', [SearchController::class, 'searchCategories']);
     Route::get('/users', [SearchController::class, 'searchUsers']);
@@ -62,8 +63,8 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'search'], function (){
     Route::get('/ranks', [SearchController::class, 'searchRanks']);
 });
 
-Route::group(['prefix' => 'examples'], function(){
-   //Model import files examples
+Route::group(['prefix' => 'examples'], function () {
+    //Model import files examples
 
     Route::get('/publications', [ExportExampleController::class, 'getPublicationExample']);
     Route::get('/honors', [ExportExampleController::class, 'getHonorExample']);
@@ -74,7 +75,7 @@ Route::group(['prefix' => 'examples'], function(){
 });
 
 //models CRUD routes
-Route::group(['prefix' => 'departments', 'middleware' => 'auth:api', 'where' => ['id' => '[0-9]+']], function (){
+Route::group(['prefix' => 'departments', 'middleware' => 'auth:api'], function () {
     Route::get('/', [DepartmentController::class, 'all']);
     Route::get('/{id}', [DepartmentController::class, 'single']);
     Route::post('/add', [DepartmentController::class, 'store']);
@@ -82,7 +83,7 @@ Route::group(['prefix' => 'departments', 'middleware' => 'auth:api', 'where' => 
     Route::delete('/{id}', [DepartmentController::class, 'destroy']);
 });
 
-Route::group(['prefix' => 'commissions', 'middleware' => 'auth:api', 'where' => ['id' => '[0-9]+']], function (){
+Route::group(['prefix' => 'commissions', 'middleware' => 'auth:api'], function () {
     Route::get('/', [CommissionController::class, 'all']);
     Route::get('/{id}', [CommissionController::class, 'single']);
     Route::post('/add', [CommissionController::class, 'store']);
@@ -90,7 +91,7 @@ Route::group(['prefix' => 'commissions', 'middleware' => 'auth:api', 'where' => 
     Route::delete('/{id}', [CommissionController::class, 'destroy']);
 });
 
-Route::group(['prefix' => 'ranks', 'middleware' => 'auth:api', 'where' => ['id' => '[0-9]+']], function (){
+Route::group(['prefix' => 'ranks', 'middleware' => 'auth:api'], function () {
     Route::get('/', [RankController::class, 'all']);
     Route::get('/{id}', [RankController::class, 'single']);
     Route::post('/add', [RankController::class, 'store']);
@@ -98,7 +99,7 @@ Route::group(['prefix' => 'ranks', 'middleware' => 'auth:api', 'where' => ['id' 
     Route::delete('/{id}', [RankController::class, 'destroy']);
 });
 
-Route::group(['prefix' => 'categories', 'middleware' => 'auth:api', 'where' => ['id' => '[0-9]+']], function (){
+Route::group(['prefix' => 'categories', 'middleware' => 'auth:api'], function () {
     Route::get('/', [CategoryController::class, 'all']);
     Route::get('/{id}', [CategoryController::class, 'single']);
     Route::post('/add', [CategoryController::class, 'store']);
@@ -106,7 +107,7 @@ Route::group(['prefix' => 'categories', 'middleware' => 'auth:api', 'where' => [
     Route::delete('/{id}', [CategoryController::class, 'destroy']);
 });
 
-Route::group(['prefix' => 'publications', 'middleware' => 'auth:api', 'where' => ['id' => '[0-9]+']], function (){
+Route::group(['prefix' => 'publications', 'middleware' => 'auth:api'], function () {
     Route::get('/', [PublicationController::class, 'all']);
     Route::get('/{id}', [PublicationController::class, 'single']);
     Route::post('/add', [PublicationController::class, 'store']);
@@ -115,7 +116,7 @@ Route::group(['prefix' => 'publications', 'middleware' => 'auth:api', 'where' =>
     Route::post('/import', [PublicationController::class, 'import']);
 });
 
-Route::group(['prefix' => 'honors', 'middleware' => 'auth:api', 'where' => ['id' => '[0-9]+']], function (){
+Route::group(['prefix' => 'honors', 'middleware' => 'auth:api'], function () {
     Route::get('/', [HonorController::class, 'all']);
     Route::get('/{id}', [HonorController::class, 'single']);
     Route::post('/add', [HonorController::class, 'store']);
@@ -124,7 +125,7 @@ Route::group(['prefix' => 'honors', 'middleware' => 'auth:api', 'where' => ['id'
     Route::post('/import', [HonorController::class, 'import']);
 });
 
-Route::group(['prefix' => 'rebukes', 'middleware' => 'auth:api', 'where' => ['id' => '[0-9]+']], function (){
+Route::group(['prefix' => 'rebukes', 'middleware' => 'auth:api'], function () {
     Route::get('/', [RebukeController::class, 'all']);
     Route::get('/{id}', [RebukeController::class, 'single']);
     Route::post('/add', [RebukeController::class, 'store']);
@@ -133,7 +134,7 @@ Route::group(['prefix' => 'rebukes', 'middleware' => 'auth:api', 'where' => ['id
     Route::post('/import', [RebukeController::class, 'import']);
 });
 
-Route::group(['prefix' => 'educations', 'middleware' => 'auth:api', 'where' => ['id' => '[0-9]+']], function (){
+Route::group(['prefix' => 'educations', 'middleware' => 'auth:api'], function () {
     Route::get('/', [EducationController::class, 'all']);
     Route::get('/{id}', [EducationController::class, 'single']);
     Route::post('/add', [EducationController::class, 'store']);
@@ -141,7 +142,7 @@ Route::group(['prefix' => 'educations', 'middleware' => 'auth:api', 'where' => [
     Route::delete('/{id}', [EducationController::class, 'destroy']);
 });
 
-Route::group(['prefix' => 'internships', 'middleware' => 'auth:api', 'where' => ['id' => '[0-9]+']], function (){
+Route::group(['prefix' => 'internships', 'middleware' => 'auth:api'], function () {
     Route::get('/', [InternshipController::class, 'all']);
     Route::get('/{id}', [InternshipController::class, 'single']);
     Route::post('/add', [InternshipController::class, 'store']);
@@ -150,7 +151,7 @@ Route::group(['prefix' => 'internships', 'middleware' => 'auth:api', 'where' => 
     Route::post('/import', [InternshipController::class, 'import']);
 });
 
-Route::group(['prefix' => 'qualifications', 'middleware' => 'auth:api', 'where' => ['id' => '[0-9]+']], function (){
+Route::group(['prefix' => 'qualifications', 'middleware' => 'auth:api'], function () {
     Route::get('/', [QualificationController::class, 'all']);
     Route::get('/{id}', [QualificationController::class, 'single']);
     Route::post('/add', [QualificationController::class, 'store']);
@@ -159,7 +160,7 @@ Route::group(['prefix' => 'qualifications', 'middleware' => 'auth:api', 'where' 
     Route::post('/import', [QualificationController::class, 'import']);
 });
 
-Route::group(['prefix' => 'users', 'middleware' => 'auth:api', 'where' => ['id' => '[0-9]+']], function (){
+Route::group(['prefix' => 'users', 'middleware' => 'auth:api'], function () {
     Route::get('/', [UserController::class, 'all']);
     Route::get('/{id}', [UserController::class, 'single']);
     Route::post('/add', [UserController::class, 'store']);

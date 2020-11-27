@@ -3,6 +3,8 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
+use Throwable;
 
 class Handler extends ExceptionHandler
 {
@@ -33,5 +35,16 @@ class Handler extends ExceptionHandler
     public function register()
     {
         //
+    }
+
+    public function render($request, Throwable $e)
+    {
+        if($e instanceof ValidationException)
+            return response()->json([
+                'message' => __('messages.invalidData'),
+                'errors' => $e->validator->getMessageBag()
+            ], 422);
+
+        return parent::render($request, $e);
     }
 }
