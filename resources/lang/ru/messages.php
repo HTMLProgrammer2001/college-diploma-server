@@ -2,5 +2,41 @@
 
 return [
     'notSetted' => 'Не установлено',
-    'invalidData' => 'Ошибки в отправленных данных'
+    'invalidData' => 'Ошибка в данных',
+    'report' => [
+        'fullName' => 'ФИО',
+        'birthday' => 'День рождения',
+        'education' => 'Образование',
+        'hiringYear' => 'Год принятия на работу',
+        'experience' => 'Опыт',
+        'personal' => 'Личная',
+        'rank' => 'Должность',
+        'category' => 'Категория, год установки',
+        'pedagogical' => 'Педагогическое звание',
+        'scientificDegree' => 'Ученая степень, год присвоения',
+        'academicStatus' => 'Академическое звание, год присвоения',
+        'internships' => 'Стажировки',
+        'honors' => 'Награды',
+        'rebukes' => 'Выговоры',
+        'internHours' => 'Часы стажировок',
+        'teacher' => 'Учитель',
+        'name' => 'Название',
+        'date' => 'Дата',
+        'order' => 'Номер',
+        'theme' => 'Тема стажировки',
+        'internCategory' => 'Категория стажировки',
+        'place' => 'Место стажировки',
+        'internFrom' => 'Стажировался с',
+        'internTo' => 'Стажировался до',
+        'hours' => 'Часы',
+        'authors' => 'Авторы',
+        'anotherAuthors' => 'Другие авторы',
+        'publisher' => 'Издатель',
+        'commission' => 'Комиссия',
+        'department' => 'Отдел',
+        'scientificDegreeY' => 'Ученая степень',
+        'scientificDegreeYear' => 'Год присвоения ученой степени',
+        'academicStatusY' => 'Академическое звание',
+        'academicStatusYear' => 'Год присвоения академ звания'
+    ]
 ];

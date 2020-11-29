@@ -2,19 +2,18 @@
 
 namespace App\Imports;
 
-use App\Honor;
-use App\Repositories\Interfaces\HonorRepositoryInterface;
+use App\Services\HonorService;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\ToModel;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class HonorsImport implements ToModel
 {
-    private $honorRep, $rowNumber = 0;
+    private $honorService, $rowNumber = 0;
 
     public function __construct()
     {
-        $this->honorRep = app(HonorRepositoryInterface::class);
+        $this->honorService = app(HonorService::class);
     }
 
     public function model(array $row)
@@ -31,6 +30,6 @@ class HonorsImport implements ToModel
             'order' => $row[3]
         ];
 
-        $this->honorRep->create($data);
+        $this->honorService->create($data);
     }
 }

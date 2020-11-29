@@ -2,18 +2,18 @@
 
 namespace App\Imports;
 
-use App\Repositories\Interfaces\QualificationRepositoryInterface;
+use App\Services\QualificationService;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\ToModel;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class QualificationsImport implements ToModel
 {
-    private $qualificationRep;
+    private $qualificationService;
 
     public function __construct()
     {
-        $this->qualificationRep = app(QualificationRepositoryInterface::class);
+        $this->qualificationService = app(QualificationService::class);
     }
 
     private $rowNumber = 0;
@@ -31,6 +31,6 @@ class QualificationsImport implements ToModel
             'date' => Carbon::instance(Date::excelToDateTimeObject($row[2]))->format('d.m.Y')
         ];
 
-        return $this->qualificationRep->create($data);
+        return $this->qualificationService->create($data);
     }
 }

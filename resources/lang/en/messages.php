@@ -2,5 +2,41 @@
 
 return [
     'notSetted' => 'No value',
-    'invalidData' => 'The given data is invalid'
+    'invalidData' => 'The given data is invalid',
+    'report' => [
+        'fullName' => 'Full name',
+        'birthday' => 'Birthday',
+        'education' => 'Education',
+        'hiringYear' => 'Hiring year',
+        'experience' => 'Experience',
+        'personal' => 'Personal info',
+        'rank' => 'Rank',
+        'category' => 'Category, year',
+        'pedagogical' => 'Pedagogical title',
+        'scientificDegree' => 'Scientific degree, year',
+        'academicStatus' => 'Academic status, year',
+        'internships' => 'Internships',
+        'honors' => 'Honors',
+        'rebukes' => 'Rebukes',
+        'internHours' => 'Internship hours',
+        'teacher' => 'Teacher',
+        'name' => 'Honor name',
+        'date' => 'Date',
+        'order' => 'Order',
+        'theme' => 'Internship theme',
+        'internCategory' => 'Internship category',
+        'place' => 'Internship place',
+        'internFrom' => 'Internship from',
+        'internTo' => 'Internship to',
+        'hours' => 'Hours',
+        'authors' => 'Authors',
+        'anotherAuthors' => 'Another authors',
+        'publisher' => 'Publisher',
+        'commission' => 'Commission',
+        'department' => 'Department',
+        'scientificDegreeY' => 'Scientific degree',
+        'scientificDegreeYear' => 'Scientific degree year',
+        'academicStatusY' => 'Academic status',
+        'academicStatusYear' => 'Academic status year'
+    ]
 ];

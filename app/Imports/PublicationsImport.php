@@ -2,18 +2,18 @@
 
 namespace App\Imports;
 
-use App\Repositories\Interfaces\PublicationRepositoryInterface;
+use App\Services\PublicationService;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\ToModel;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class PublicationsImport implements ToModel
 {
-    private $publicationRep, $rowNumber = 0;
+    private $publicationService, $rowNumber = 0;
 
     public function __construct()
     {
-        $this->publicationRep = app(PublicationRepositoryInterface::class);
+        $this->publicationService = app(PublicationService::class);
     }
 
     public function model(array $row)
@@ -36,6 +36,6 @@ class PublicationsImport implements ToModel
             'authors' => $authors
         ];
 
-        return $this->publicationRep->create($data);
+        return $this->publicationService->create($data);
     }
 }

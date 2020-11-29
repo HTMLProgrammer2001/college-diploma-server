@@ -49,8 +49,12 @@ class InternshipsExampleExporter implements FromCollection, WithHeadings, WithEv
      */
     public function headings(): array
     {
-        return ['Викладач', 'Тема стажування', 'Категорія стажування', 'Місце стажування', 'Стажувався з',
-            'Стажувався до', 'Годин стажувань'];
+        return [
+            __('messages.report.teacher'), __('messages.report.theme'),
+            __('messages.report.internCategory'), __('messages.report.place'),
+            __('messages.report.internFrom'), __('messages.report.internTo'),
+            __('messages.report.hours')
+        ];
     }
 
     /**

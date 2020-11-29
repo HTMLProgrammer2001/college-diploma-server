@@ -63,7 +63,7 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'search'], function () {
     Route::get('/ranks', [SearchController::class, 'searchRanks']);
 });
 
-Route::group(['prefix' => 'examples'], function () {
+Route::group(['prefix' => 'examples', 'middleware' => ['auth:api', 'can:moderator']], function () {
     //Model import files examples
 
     Route::get('/publications', [ExportExampleController::class, 'getPublicationExample']);

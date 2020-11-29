@@ -42,24 +42,6 @@ class UserService extends ModelService
         return $this->rep->getForExportList();
     }
 
-    public function getAcademicStatusList(): array{
-        return $this->rep->getAcademicStatusList();
-    }
-
-    public function getScientificDegreeList(): array{
-        return $this->rep->getScientificDegreeList();
-    }
-
-    public function getRoles(): array
-    {
-        return $this->rep->getRoles();
-    }
-
-    public function getPedagogicalTitles(): array
-    {
-        return $this->rep->getPedagogicalTitles();
-    }
-
     public function destroy($id): bool
     {
         $user = $this->getModel()->query()->findOrFail($id);

@@ -42,7 +42,7 @@ class RebukesExampleExporter implements FromCollection, WithHeadings, WithEvents
      */
     public function headings(): array
     {
-        return ['Викладач', 'Назва', 'Дата видачі', 'Номер догани'];
+        return [__('messages.report.teacher'), __('messages.report.name'), __('messages.report.date'), __('messages.report.order')];
     }
 
     /**

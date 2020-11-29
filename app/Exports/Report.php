@@ -9,6 +9,7 @@ use App\Services\InternshipService;
 use App\Services\QualificationService;
 use App\Services\RebukeService;
 use App\Services\UserService;
+use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -72,14 +73,15 @@ class Report implements FromCollection, WithHeadings, WithEvents
      */
     public function headings(): array
     {
-        return ['ФІО', 'Дата народження', 'Освіта', 'Рік прийому на роботу', 'Вислуга', 'Особисті дані',
-                    'Посада', 'Категорія, рік встановлення', 'Педагогічне звання',
-                    'Вчене звання, рік встановлення', 'Науковий ступінь, рік встановлення', 'Стажування',
-                    'Годин стажувань', 'Нагороди', 'Догани'];
+        return [__('messages.report.fullName'), __('messages.report.birthday'), __('messages.report.education'),
+            __('messages.report.hiringYear'), __('messages.report.experience'), __('messages.report.personal'),
+            __('messages.report.rank'), __('messages.report.category'), __('messages.report.pedagogical'),
+            __('messages.report.scientificDegree'), __('messages.report.academicStatus'), __('messages.report.internships'),
+            __('messages.report.internHours'), __('messages.report.honors'), __('messages.report.rebukes')];
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection
+     * @return Collection
      */
     public function collection()
     {

@@ -1,0 +1,42 @@
+<?php
+
+return [
+    'notSetted' => 'Не встановлено',
+    'invalidData' => 'Помилка в даних',
+    'report' => [
+        'fullName' => 'ФІО',
+        'birthday' => 'День народження',
+        'education' => 'Освіта',
+        'hiringYear' => 'Рік прийняття на роботу',
+        'experience' => 'Досвід',
+        'personal' => 'Особиста',
+        'rank' => 'Посада',
+        'category' => 'Категорія, рік встановлення',
+        'pedagogical' => 'Педагогічне звання',
+        'scientificDegree' => 'Вчене звання, рік',
+        'academicStatus' => 'Академ ступінь, рік',
+        'internships' => 'Стажування',
+        'honors' => 'Нагороди',
+        'rebukes' => 'Догани',
+        'internHours' => 'Години стажування',
+        'teacher' => 'Вчитель',
+        'name' => 'Назва',
+        'date' => 'Дата',
+        'order' => 'Номер',
+        'theme' => 'Тема стажування',
+        'internCategory' => 'Категорія стажування',
+        'place' => 'Місце стажування',
+        'internFrom' => 'Стажувався з',
+        'internTo' => 'Стажувався до',
+        'hours' => 'Години',
+        'authors' => 'Автори',
+        'anotherAuthors' => 'Інші автори',
+        'publisher' => 'Видавець',
+        'commission' => 'Комісія',
+        'department' => 'Відділ',
+        'scientificDegreeY' => 'Вчене звання',
+        'scientificDegreeYear' => 'Рік присвоєння вченого звання',
+        'academicStatusY' => 'Академ звання',
+        'academicStatusYear' => 'Рік присвоєння академ звання'
+    ]
+];

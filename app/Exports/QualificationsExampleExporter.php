@@ -49,7 +49,7 @@ class QualificationsExampleExporter implements FromCollection, WithHeadings, Wit
      */
     public function headings(): array
     {
-        return ['Викладач', 'Категорія', 'Дата встановлення'];
+        return [__('messages.report.teacher'), __('messages.report.category'), __('messages.report.date')];
     }
 
     /**

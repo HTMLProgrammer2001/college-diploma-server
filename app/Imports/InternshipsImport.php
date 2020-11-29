@@ -2,19 +2,18 @@
 
 namespace App\Imports;
 
+use App\Services\InternshipService;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\ToModel;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 
-use App\Repositories\Interfaces\InternshipRepositoryInterface;
-
 class InternshipsImport implements ToModel
 {
-    private $internshipRep, $rowNumber = 0;
+    private $internshipService, $rowNumber = 0;
 
     public function __construct()
     {
-        $this->internshipRep = app(InternshipRepositoryInterface::class);
+        $this->internshipService = app(InternshipService::class);
     }
 
     public function model(array $row)
@@ -34,6 +33,6 @@ class InternshipsImport implements ToModel
             'hours' => $row[6]
         ];
 
-        return $this->internshipRep->create($data);
+        return $this->internshipService->create($data);
     }
 }

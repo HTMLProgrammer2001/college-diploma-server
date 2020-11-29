@@ -48,7 +48,10 @@ class HonorsExampleExporter implements FromCollection, WithHeadings, WithEvents
      */
     public function headings(): array
     {
-        return ['Викладач', 'Назва', 'Дата вручення', 'Номер нагороди'];
+        return [
+            __('messages.report.teacher'), __('messages.report.name'),
+            __('messages.report.date'), __('messages.report.order')
+        ];
     }
 
     /**

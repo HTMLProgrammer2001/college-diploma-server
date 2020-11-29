@@ -2,16 +2,16 @@
 
 namespace App\Imports;
 
-use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Services\UserService;
 use Maatwebsite\Excel\Concerns\ToModel;
 
 class UsersImport implements ToModel
 {
-    private $userRep, $rowNumber = 0;
+    private $userService, $rowNumber = 0;
 
     public function __construct()
     {
-        $this->userRep = app(UserRepositoryInterface::class);
+        $this->userService = app(UserService::class);
     }
 
     public function model(array $row)
@@ -37,6 +37,6 @@ class UsersImport implements ToModel
             'password' => '123456'
         ];
 
-        return $this->userRep->create($data);
+        return $this->userService->create($data);
     }
 }

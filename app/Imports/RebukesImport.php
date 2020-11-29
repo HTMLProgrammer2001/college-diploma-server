@@ -2,20 +2,18 @@
 
 namespace App\Imports;
 
-use App\Honor;
-use App\Repositories\Interfaces\HonorRepositoryInterface;
-use App\Repositories\Interfaces\RebukeRepositoryInterface;
+use App\Services\RebukeService;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\ToModel;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class RebukesImport implements ToModel
 {
-    private $rebukeRep, $rowNumber = 0;
+    private $rebukeService, $rowNumber = 0;
 
     public function __construct()
     {
-        $this->rebukeRep = app(RebukeRepositoryInterface::class);
+        $this->rebukeService = app(RebukeService::class);
     }
 
     public function model(array $row)
@@ -32,6 +30,6 @@ class RebukesImport implements ToModel
             'order' => $row[3]
         ];
 
-        $this->rebukeRep->create($data);
+        $this->rebukeService->create($data);
     }
 }

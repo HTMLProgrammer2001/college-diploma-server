@@ -47,7 +47,9 @@ class PublicationsExampleExporter implements FromCollection, WithHeadings, WithE
      */
     public function headings(): array
     {
-        return ['Назва публікації', 'Дата публікації', 'Видавець', 'Автори не з коледжа', 'Автори з коледжа'];
+        return [
+            __('messages.report.name'), __('messages.report.date'), __('messages.report.publisher'),
+            __('messages.report.authors'), __('messages.report.anotherAuthors')];
     }
 
     /**

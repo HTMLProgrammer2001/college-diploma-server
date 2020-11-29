@@ -63,9 +63,10 @@ class UsersExampleExporter implements FromCollection, WithHeadings, WithEvents
      */
     public function headings(): array
     {
-        return ['ФІО', 'Email', 'Комісія', 'Відділення', 'Посада', 'Педагогічне звання',
-            'Рік прийняття на роботу', 'Трудовий стаж на 2020 рік', 'Вчене звання', 'Рік встановлення вченого звання',
-            'Наукова ступінь', 'Рік встановлення наукової ступені'];
+        return [__('messages.report.fullName'), 'Email', __('messages.report.commission'), __('messages.report.department'),
+            __('messages.report.rank'), __('messages.report.pedagogical'), __('messages.report.hiringYear'), 
+            __('messages.report.experience'), __('messages.report.scientificDegreeY'), __('messages.report.scientificDegreeYear'), 
+            __('messages.report.academicStatusY'), __('messages.report.academicStatusYear')];
     }
 
     /**
@@ -76,10 +77,10 @@ class UsersExampleExporter implements FromCollection, WithHeadings, WithEvents
         //get data from repositories
         $commissions = $this->commissionService->getForExportList();
         $departments = $this->departmentService->getForExportList();
-        $pedagogicals = to_export_list($this->userService->getPedagogicalTitles(), true);
+        $pedagogicals = to_export_list(\Constants::$pedagogicalTitles, true);
         $ranks = $this->rankService->getForExportList();
-        $academics = to_export_list($this->userService->getAcademicStatusList(), true);
-        $scientifics = to_export_list($this->userService->getScientificDegreeList(), true);
+        $academics = to_export_list(\Constants::$academicStatusList, true);
+        $scientifics = to_export_list(\Constants::$scientificDegreeList, true);
 
         //set data to cells
         for($i = 1; $i <= sizeof($academics); $i++)
