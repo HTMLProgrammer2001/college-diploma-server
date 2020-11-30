@@ -9,6 +9,7 @@ use App\Http\Requests\Publication\EditPublicationRequest;
 use App\Http\Resources\PublicationResource;
 use App\Http\Resources\PublicationsGroupResource;
 use App\Imports\PublicationsImport;
+use App\Models\Publication;
 use App\Services\PublicationService;
 use Illuminate\Http\JsonResponse;
 use Maatwebsite\Excel\Facades\Excel;
@@ -27,13 +28,14 @@ class PublicationController extends Controller
     public function __construct(PublicationService $publicationService)
     {
         $this->publicationService = $publicationService;
+        $this->authorizeResource(Publication::class);
     }
 
     /**
      * @param AllPublicationRequest $request
      * @return PublicationsGroupResource
      */
-    public function all(AllPublicationRequest $request)
+    public function index(AllPublicationRequest $request)
     {
         $inputData = $request->query();
         $inputData['user_id'] = $request->query('filterUser');
@@ -46,13 +48,11 @@ class PublicationController extends Controller
     }
 
     /**
-     * @param int $id ID of publication to get info
+     * @param Publication $publication
      * @return PublicationResource|void
      */
-    public function single(int $id)
+    public function show(Publication $publication)
     {
-        $publication = $this->publicationService->getById($id);
-
         if(!$publication)
             return abort(404);
 
@@ -77,24 +77,24 @@ class PublicationController extends Controller
 
     /**
      * @param EditPublicationRequest $request
-     * @param int $id
+     * @param Publication $publication
      * @return PublicationResource
      */
-    public function update(EditPublicationRequest $request, int $id)
+    public function update(EditPublicationRequest $request, Publication $publication)
     {
         $data = $request->all();
-        $publication = $this->publicationService->update($id, $data);
+        $publication = $this->publicationService->update($publication->id, $data);
 
         return new PublicationResource($publication);
     }
 
     /**
-     * @param int $id
+     * @param Publication $publication
      * @return JsonResponse|void
      */
-    public function destroy(int $id)
+    public function destroy(Publication $publication)
     {
-        if($this->publicationService->destroy($id))
+        if($this->publicationService->destroy($publication->id))
             return response()->json(['message' => 'ok']);
         else
             return abort(422);

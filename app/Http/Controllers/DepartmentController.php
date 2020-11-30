@@ -7,6 +7,7 @@ use App\Http\Requests\Department\AllDepartmentsRequest;
 use App\Http\Requests\Department\EditDepartmentRequest;
 use App\Http\Resources\Departments\DepartmentResource;
 use App\Http\Resources\Departments\DepartmentsGroupResource;
+use App\Models\Department;
 use App\Services\DepartmentService;
 use Illuminate\Http\JsonResponse;
 
@@ -24,13 +25,14 @@ class DepartmentController extends Controller
     public function __construct(DepartmentService $departmentService)
     {
         $this->departmentService = $departmentService;
+        $this->authorizeResource(Department::class);
     }
 
     /**
      * @param AllDepartmentsRequest $request
      * @return DepartmentsGroupResource
      */
-    public function all(AllDepartmentsRequest $request)
+    public function index(AllDepartmentsRequest $request)
     {
         $inputData = $request->query();
 
@@ -42,13 +44,11 @@ class DepartmentController extends Controller
     }
 
     /**
-     * @param int $id ID of department to get data
+     * @param Department $department
      * @return DepartmentResource|void
      */
-    public function single(int $id)
+    public function show(Department $department)
     {
-        $department = $this->departmentService->getById($id);
-
         if(!$department)
             return abort(404);
 
@@ -71,24 +71,24 @@ class DepartmentController extends Controller
 
     /**
      * @param EditDepartmentRequest $request
-     * @param int $id ID of department to update
+     * @param Department $department
      * @return DepartmentResource
      */
-    public function update(EditDepartmentRequest $request, int $id)
+    public function update(EditDepartmentRequest $request, Department $department)
     {
         $data = $request->all();
-        $department = $this->departmentService->update($id, $data);
+        $department = $this->departmentService->update($department->id, $data);
 
         return new DepartmentResource($department);
     }
 
     /**
-     * @param int $id ID of department to delete
+     * @param Department $department
      * @return JsonResponse|void
      */
-    public function destroy(int $id)
+    public function destroy(Department $department)
     {
-        if($this->departmentService->destroy($id))
+        if($this->departmentService->destroy($department->id))
             return response()->json(['message' => 'ok']);
         else
             return abort(422);

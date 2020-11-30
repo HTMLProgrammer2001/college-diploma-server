@@ -7,6 +7,7 @@ use App\Http\Requests\Commission\AllCommissionsRequest;
 use App\Http\Requests\Commission\EditCommissionRequest;
 use App\Http\Resources\Commissions\CommissionResource;
 use App\Http\Resources\Commissions\CommissionsGroupResource;
+use App\Models\Commission;
 use App\Services\CommissionService;
 use Illuminate\Http\JsonResponse;
 
@@ -24,13 +25,14 @@ class CommissionController extends Controller
     public function __construct(CommissionService $commissionService)
     {
         $this->commissionService = $commissionService;
+        $this->authorizeResource(Commission::class);
     }
 
     /**
      * @param AllCommissionsRequest $request
      * @return CommissionsGroupResource
      */
-    public function all(AllCommissionsRequest $request)
+    public function index(AllCommissionsRequest $request)
     {
         $inputData = $request->query();
 
@@ -42,13 +44,11 @@ class CommissionController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param Commission $commission
      * @return CommissionResource|void
      */
-    public function single(int $id)
+    public function show(Commission $commission)
     {
-        $commission = $this->commissionService->getById($id);
-
         if(!$commission)
             return abort(404);
 
@@ -71,24 +71,24 @@ class CommissionController extends Controller
 
     /**
      * @param EditCommissionRequest $request
-     * @param int $id ID of commission to update
+     * @param Commission $commission
      * @return CommissionResource
      */
-    public function update(EditCommissionRequest $request, int $id)
+    public function update(EditCommissionRequest $request, Commission $commission)
     {
         $data = $request->all();
-        $commission = $this->commissionService->update($id, $data);
+        $commission = $this->commissionService->update($commission->id, $data);
 
         return new CommissionResource($commission);
     }
 
     /**
-     * @param int $id ID of commission to delete
+     * @param Commission $commission
      * @return JsonResponse|void
      */
-    public function destroy(int $id)
+    public function destroy(Commission $commission)
     {
-        if($this->commissionService->destroy($id))
+        if($this->commissionService->destroy($commission->id))
             return response()->json(['message' => 'ok']);
         else
             return abort(422);

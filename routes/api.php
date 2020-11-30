@@ -75,45 +75,47 @@ Route::group(['prefix' => 'examples', 'middleware' => ['auth:api', 'can:moderato
 });
 
 //models CRUD routes
+
 Route::group(['prefix' => 'departments', 'middleware' => 'auth:api'], function () {
-    Route::get('/', [DepartmentController::class, 'all']);
-    Route::get('/{id}', [DepartmentController::class, 'single']);
+    Route::get('/', [DepartmentController::class, 'index']);
+    Route::get('/{department}', [DepartmentController::class, 'show']);
     Route::post('/add', [DepartmentController::class, 'store']);
-    Route::put('/{id}', [DepartmentController::class, 'update']);
-    Route::delete('/{id}', [DepartmentController::class, 'destroy']);
+    Route::put('/{department}', [DepartmentController::class, 'update']);
+    Route::delete('/{department}', [DepartmentController::class, 'destroy']);
 });
 
 Route::group(['prefix' => 'commissions', 'middleware' => 'auth:api'], function () {
-    Route::get('/', [CommissionController::class, 'all']);
-    Route::get('/{id}', [CommissionController::class, 'single']);
+    Route::get('/', [CommissionController::class, 'index']);
+    Route::get('/{commission}', [CommissionController::class, 'show']);
     Route::post('/add', [CommissionController::class, 'store']);
-    Route::put('/{id}', [CommissionController::class, 'update']);
-    Route::delete('/{id}', [CommissionController::class, 'destroy']);
+    Route::put('/{commission}', [CommissionController::class, 'update']);
+    Route::delete('/{commission}', [CommissionController::class, 'destroy']);
 });
 
 Route::group(['prefix' => 'ranks', 'middleware' => 'auth:api'], function () {
-    Route::get('/', [RankController::class, 'all']);
-    Route::get('/{id}', [RankController::class, 'single']);
+    Route::get('/', [RankController::class, 'index']);
+    Route::get('/{rank}', [RankController::class, 'show']);
     Route::post('/add', [RankController::class, 'store']);
-    Route::put('/{id}', [RankController::class, 'update']);
-    Route::delete('/{id}', [RankController::class, 'destroy']);
+    Route::put('/{rank}', [RankController::class, 'update']);
+    Route::delete('/{rank}', [RankController::class, 'destroy']);
 });
 
 Route::group(['prefix' => 'categories', 'middleware' => 'auth:api'], function () {
-    Route::get('/', [CategoryController::class, 'all']);
-    Route::get('/{id}', [CategoryController::class, 'single']);
+    Route::get('/', [CategoryController::class, 'index']);
+    Route::get('/{interncategory}', [CategoryController::class, 'show']);
     Route::post('/add', [CategoryController::class, 'store']);
-    Route::put('/{id}', [CategoryController::class, 'update']);
-    Route::delete('/{id}', [CategoryController::class, 'destroy']);
+    Route::put('/{interncategory}', [CategoryController::class, 'update']);
+    Route::delete('/{interncategory}', [CategoryController::class, 'destroy']);
 });
 
 Route::group(['prefix' => 'publications', 'middleware' => 'auth:api'], function () {
-    Route::get('/', [PublicationController::class, 'all']);
-    Route::get('/{id}', [PublicationController::class, 'single']);
+    Route::get('/', [PublicationController::class, 'index']);
+    Route::get('/{publication}', [PublicationController::class, 'show']);
     Route::post('/add', [PublicationController::class, 'store']);
-    Route::put('/{id}', [PublicationController::class, 'update']);
-    Route::delete('/{id}', [PublicationController::class, 'destroy']);
-    Route::post('/import', [PublicationController::class, 'import']);
+    Route::put('/{publication}', [PublicationController::class, 'update']);
+    Route::delete('/{publication}', [PublicationController::class, 'destroy']);
+    Route::post('/import', [PublicationController::class, 'import'])
+        ->middleware('can:moderator');
 });
 
 Route::group(['prefix' => 'honors', 'middleware' => 'auth:api'], function () {

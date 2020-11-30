@@ -7,6 +7,7 @@ use App\Http\Requests\Category\AllCategoryRequest;
 use App\Http\Requests\Category\EditCategoryRequest;
 use App\Http\Resources\Categories\CategoriesGroupResource;
 use App\Http\Resources\Categories\CategoryResource;
+use App\Models\InternCategory;
 use App\Services\CategoryService;
 use Illuminate\Http\JsonResponse;
 
@@ -20,6 +21,7 @@ class CategoryController extends Controller
     public function __construct(CategoryService $categoryService)
     {
         $this->categoryService = $categoryService;
+        $this->authorizeResource(InternCategory::class);
     }
 
     /**
@@ -38,13 +40,11 @@ class CategoryController extends Controller
     }
 
     /**
-     * @param int $id Category id to get
+     * @param InternCategory $category
      * @return CategoryResource|null
      */
-    public function single(int $id)
+    public function single(InternCategory $category)
     {
-        $category = $this->categoryService->getById($id);
-
         if(!$category)
             return abort(404);
 
@@ -68,24 +68,24 @@ class CategoryController extends Controller
 
     /**
      * @param EditCategoryRequest $request
-     * @param int $id ID of category to update
+     * @param InternCategory $category
      * @return CategoryResource
      */
-    public function update(EditCategoryRequest $request, int $id)
+    public function update(EditCategoryRequest $request, InternCategory $category)
     {
         $data = $request->all();
-        $category = $this->categoryService->update($id, $data);
+        $category = $this->categoryService->update($category->id, $data);
 
         return new CategoryResource($category);
     }
 
     /**
-     * @param int $id
+     * @param InternCategory $category
      * @return JsonResponse|void
      */
-    public function destroy(int $id)
+    public function destroy(InternCategory $category)
     {
-        if($this->categoryService->destroy($id))
+        if($this->categoryService->destroy($category->id))
             return response()->json(['message' => 'ok']);
         else
             return abort(422);
