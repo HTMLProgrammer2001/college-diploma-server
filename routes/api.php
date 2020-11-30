@@ -157,21 +157,21 @@ Route::group(['prefix' => 'internships', 'middleware' => 'auth:api'], function (
 });
 
 Route::group(['prefix' => 'qualifications', 'middleware' => 'auth:api'], function () {
-    Route::get('/', [QualificationController::class, 'all']);
-    Route::get('/{id}', [QualificationController::class, 'single']);
+    Route::get('/', [QualificationController::class, 'index']);
+    Route::get('/{qualification}', [QualificationController::class, 'show']);
     Route::post('/add', [QualificationController::class, 'store']);
-    Route::put('/{id}', [QualificationController::class, 'update']);
-    Route::delete('/{id}', [QualificationController::class, 'destroy']);
+    Route::put('/{qualification}', [QualificationController::class, 'update']);
+    Route::delete('/{qualification}', [QualificationController::class, 'destroy']);
     Route::post('/import', [QualificationController::class, 'import'])
         ->middleware('can:moderator');
 });
 
 Route::group(['prefix' => 'users', 'middleware' => 'auth:api'], function () {
-    Route::get('/', [UserController::class, 'all']);
-    Route::get('/{id}', [UserController::class, 'single']);
+    Route::get('/', [UserController::class, 'index']);
+    Route::get('/{user}', [UserController::class, 'show']);
     Route::post('/add', [UserController::class, 'store']);
-    Route::put('/{id}', [UserController::class, 'update']);
-    Route::delete('/{id}', [UserController::class, 'destroy']);
+    Route::put('/{user}', [UserController::class, 'update']);
+    Route::delete('/{user}', [UserController::class, 'destroy']);
     Route::post('/import', [UserController::class, 'import'])
         ->middleware('can:moderator');
 });

@@ -9,8 +9,11 @@ use App\Models\Honor;
 use App\Models\InternCategory;
 use App\Models\Internship;
 use App\Models\Publication;
+use App\Models\Qualification;
 use App\Models\Rank;
 use App\Models\Rebuke;
+use App\Models\User;
+
 use App\Policies\CommissionPolicy;
 use App\Policies\DepartmentPolicy;
 use App\Policies\EducationPolicy;
@@ -18,8 +21,11 @@ use App\Policies\HonorPolicy;
 use App\Policies\InternCategoryPolicy;
 use App\Policies\InternshipPolicy;
 use App\Policies\PublicationPolicy;
+use App\Policies\QualificationPolicy;
 use App\Policies\RankPolicy;
 use App\Policies\RebukePolicy;
+use App\Policies\UserPolicy;
+
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Passport\Passport;
@@ -40,7 +46,9 @@ class AuthServiceProvider extends ServiceProvider
         Internship::class => InternshipPolicy::class,
         Publication::class => PublicationPolicy::class,
         Rank::class => RankPolicy::class,
-        Rebuke::class => RebukePolicy::class
+        Rebuke::class => RebukePolicy::class,
+        Qualification::class => QualificationPolicy::class,
+        User::class => UserPolicy::class
     ];
 
     /**

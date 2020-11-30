@@ -36,7 +36,7 @@ class InternshipPolicy
      */
     public function view(User $user, Internship $internship)
     {
-        return $user->can('viewer');
+        return $user->can('viewer') || $internship->user()->find($user->id);
     }
 
     /**

@@ -11,6 +11,7 @@ use App\Http\Resources\Users\UserResource;
 use App\Http\Resources\Users\UsersGroupTableResource;
 use App\Imports\UsersImport;
 
+use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
@@ -22,40 +23,39 @@ class UserController extends Controller
     /**
      * @var UserService
      */
-    private $userRep;
+    private $userService;
 
     /**
      * UserController constructor.
-     * @param UserService $userRep
+     * @param UserService $userService
      */
-    public function __construct(UserService $userRep)
+    public function __construct(UserService $userService)
     {
-        $this->userRep = $userRep;
+        $this->userService = $userService;
+        $this->authorizeResource(User::class);
     }
 
     /**
      * @param AllUserRequest $request
      * @return UsersGroupTableResource
      */
-    public function all(AllUserRequest $request)
+    public function index(AllUserRequest $request)
     {
         $inputData = $request->query();
 
-        $rules = $this->userRep->createRules($inputData);
+        $rules = $this->userService->createRules($inputData);
         $pageSize = $request->query('pageSize', 5);
-        $users = $this->userRep->filterPaginate($rules, $pageSize);
+        $users = $this->userService->filterPaginate($rules, $pageSize);
 
         return new UsersGroupTableResource($users);
     }
 
     /**
-     * @param int $id
+     * @param User $user
      * @return UserResource|void
      */
-    public function single(int $id)
+    public function single(User $user)
     {
-        $user = $this->userRep->getById($id);
-
         if(!$user)
             return abort(404);
 
@@ -69,7 +69,7 @@ class UserController extends Controller
     public function store(AddUserRequest $request)
     {
         $data = $request->all();
-        $this->userRep->create($data);
+        $this->userService->create($data);
 
         return response()->json([
             'message' => 'Created'
@@ -78,28 +78,28 @@ class UserController extends Controller
 
     /**
      * @param EditUserRequest $request
-     * @param int $id
+     * @param User $user
      * @return UserResource
      */
-    public function update(EditUserRequest $request, int $id)
+    public function update(EditUserRequest $request, User $user)
     {
         Validator::make($request->all(), [
-            'email' => [Rule::unique('users', 'email')->ignore($id)]
+            'email' => [Rule::unique('users', 'email')->ignore($user->id)]
         ]);
 
         $data = $request->all();
-        $user = $this->userRep->update($id, $data);
+        $user = $this->userService->update($user->id, $data);
 
         return new UserResource($user);
     }
 
     /**
-     * @param int $id
+     * @param User $user
      * @return JsonResponse|void
      */
-    public function destroy(int $id)
+    public function destroy(User $user)
     {
-        if($this->userRep->destroy($id))
+        if($this->userService->destroy($user->id))
             return response()->json(['message' => 'ok']);
         else
             return abort(422);

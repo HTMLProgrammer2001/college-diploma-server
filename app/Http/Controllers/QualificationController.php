@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Qualification;
 use Illuminate\Http\JsonResponse;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -29,13 +30,14 @@ class QualificationController extends Controller
     public function __construct(QualificationService $qualificationService)
     {
         $this->qualificationService = $qualificationService;
+        $this->authorizeResource(Qualification::class);
     }
 
     /**
      * @param AllQualificationRequest $request
      * @return QualificationsGroupResource
      */
-    public function all(AllQualificationRequest $request)
+    public function index(AllQualificationRequest $request)
     {
         $inputData = $request->query();
         $inputData['user_id'] = $request->query('filterUser');
@@ -48,13 +50,11 @@ class QualificationController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param Qualification $qualification
      * @return QualificationResource|void
      */
-    public function single(int $id)
+    public function show(Qualification $qualification)
     {
-        $qualification = $this->qualificationService->getById($id);
-
         if(!$qualification)
             return abort(404);
 
@@ -78,25 +78,25 @@ class QualificationController extends Controller
 
     /**
      * @param EditQualificationRequest $request
-     * @param int $id
+     * @param Qualification $qualification
      * @return QualificationResource
      */
-    public function update(EditQualificationRequest $request, int $id)
+    public function update(EditQualificationRequest $request, Qualification $qualification)
     {
         $data = $request->except('name');
         $data['name'] = $this->qualificationService->getQualificationNames()[$request->input('name')];
-        $qualification = $this->qualificationService->update($id, $data);
+        $qualification = $this->qualificationService->update($qualification->id, $data);
 
         return new QualificationResource($qualification);
     }
 
     /**
-     * @param int $id
+     * @param Qualification $qualification
      * @return JsonResponse|void
      */
-    public function destroy(int $id)
+    public function destroy(Qualification $qualification)
     {
-        if($this->qualificationService->destroy($id))
+        if($this->qualificationService->destroy($qualification->id))
             return response()->json(['message' => 'ok']);
         else
             return abort(422);

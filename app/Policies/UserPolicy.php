@@ -2,11 +2,10 @@
 
 namespace App\Policies;
 
-use App\Models\Publication;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class PublicationPolicy
+class UserPolicy
 {
     use HandlesAuthorization;
 
@@ -30,12 +29,12 @@ class PublicationPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Publication  $publication
+     * @param  \App\Models\User  $model
      * @return mixed
      */
-    public function view(User $user, Publication $publication)
+    public function view(User $user, User $model)
     {
-        return $user->can('viewer') || $publication->authors()->find($user->id);
+        return $user->can('viewer');
     }
 
     /**
@@ -53,10 +52,10 @@ class PublicationPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Publication  $publication
+     * @param  \App\Models\User  $model
      * @return mixed
      */
-    public function update(User $user, Publication $publication)
+    public function update(User $user, User $model)
     {
         //
     }
@@ -65,10 +64,10 @@ class PublicationPolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Publication  $publication
+     * @param  \App\Models\User  $model
      * @return mixed
      */
-    public function delete(User $user, Publication $publication)
+    public function delete(User $user, User $model)
     {
         //
     }
@@ -77,10 +76,10 @@ class PublicationPolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Publication  $publication
+     * @param  \App\Models\User  $model
      * @return mixed
      */
-    public function restore(User $user, Publication $publication)
+    public function restore(User $user, User $model)
     {
         //
     }
@@ -89,10 +88,10 @@ class PublicationPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Publication  $publication
+     * @param  \App\Models\User  $model
      * @return mixed
      */
-    public function forceDelete(User $user, Publication $publication)
+    public function forceDelete(User $user, User $model)
     {
         //
     }
