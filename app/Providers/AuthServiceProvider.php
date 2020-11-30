@@ -3,7 +3,23 @@
 namespace App\Providers;
 
 use App\Models\Commission;
+use App\Models\Department;
+use App\Models\Education;
+use App\Models\Honor;
+use App\Models\InternCategory;
+use App\Models\Internship;
+use App\Models\Publication;
+use App\Models\Rank;
+use App\Models\Rebuke;
 use App\Policies\CommissionPolicy;
+use App\Policies\DepartmentPolicy;
+use App\Policies\EducationPolicy;
+use App\Policies\HonorPolicy;
+use App\Policies\InternCategoryPolicy;
+use App\Policies\InternshipPolicy;
+use App\Policies\PublicationPolicy;
+use App\Policies\RankPolicy;
+use App\Policies\RebukePolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Passport\Passport;
@@ -16,7 +32,15 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        Commission::class => CommissionPolicy::class
+        Commission::class => CommissionPolicy::class,
+        Department::class => DepartmentPolicy::class,
+        InternCategory::class => InternCategoryPolicy::class,
+        Education::class => EducationPolicy::class,
+        Honor::class => HonorPolicy::class,
+        Internship::class => InternshipPolicy::class,
+        Publication::class => PublicationPolicy::class,
+        Rank::class => RankPolicy::class,
+        Rebuke::class => RebukePolicy::class
     ];
 
     /**

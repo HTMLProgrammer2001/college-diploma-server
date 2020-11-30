@@ -36,7 +36,7 @@ class CommissionPolicy
      */
     public function view(User $user, Commission $commission)
     {
-        return $user->can('moderator');
+        return $user->can('viewer');
     }
 
     /**

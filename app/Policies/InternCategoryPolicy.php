@@ -36,7 +36,7 @@ class InternCategoryPolicy
      */
     public function view(User $user, InternCategory $category)
     {
-        return $user->can('moderator');
+        return $user->can('viewer');
     }
 
     /**

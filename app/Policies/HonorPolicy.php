@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Department;
+use App\Models\Honor;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class DepartmentPolicy
+class HonorPolicy
 {
     use HandlesAuthorization;
 
@@ -31,10 +31,10 @@ class DepartmentPolicy
      * Determine whether the user can view the model.
      *
      * @param  User  $user
-     * @param  Department  $department
+     * @param  Honor  $honor
      * @return mixed
      */
-    public function view(User $user, Department $department)
+    public function view(User $user, Honor $honor)
     {
         return $user->can('viewer');
     }
@@ -53,10 +53,10 @@ class DepartmentPolicy
      * Determine whether the user can update the model.
      *
      * @param  User  $user
-     * @param  Department  $department
+     * @param  Honor  $honor
      * @return mixed
      */
-    public function update(User $user, Department $department)
+    public function update(User $user, Honor $honor)
     {
     }
 
@@ -64,10 +64,10 @@ class DepartmentPolicy
      * Determine whether the user can delete the model.
      *
      * @param  User  $user
-     * @param  Department  $department
+     * @param  Honor  $honor
      * @return mixed
      */
-    public function delete(User $user, Department $department)
+    public function delete(User $user, Honor $honor)
     {
     }
 
@@ -75,10 +75,10 @@ class DepartmentPolicy
      * Determine whether the user can restore the model.
      *
      * @param  User  $user
-     * @param  Department  $department
+     * @param  Honor  $honor
      * @return mixed
      */
-    public function restore(User $user, Department $department)
+    public function restore(User $user, Honor $honor)
     {
     }
 
@@ -86,10 +86,10 @@ class DepartmentPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  User  $user
-     * @param  Department  $department
+     * @param  Honor  $honor
      * @return mixed
      */
-    public function forceDelete(User $user, Department $department)
+    public function forceDelete(User $user, Honor $honor)
     {
     }
 }

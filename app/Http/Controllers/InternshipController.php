@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Internship;
 use App\Services\InternshipService;
 use Illuminate\Http\JsonResponse;
 use Maatwebsite\Excel\Facades\Excel;
@@ -28,13 +29,14 @@ class InternshipController extends Controller
     public function __construct(InternshipService $internshipService)
     {
         $this->internshipService = $internshipService;
+        $this->authorizeResource(Internship::class);
     }
 
     /**
      * @param AllInternshipsRequest $request
      * @return InternshipsGroupResource
      */
-    public function all(AllInternshipsRequest $request)
+    public function index(AllInternshipsRequest $request)
     {
         $inputData = $request->query();
 
@@ -46,13 +48,11 @@ class InternshipController extends Controller
     }
 
     /**
-     * @param int $id ID of internship to get info
+     * @param Internship $internship
      * @return InternshipResource|void
      */
-    public function single(int $id)
+    public function single(Internship $internship)
     {
-        $internship = $this->internshipService->getById($id);
-
         if(!$internship)
             return abort(404);
 
@@ -75,24 +75,24 @@ class InternshipController extends Controller
 
     /**
      * @param EditInternshipRequest $request
-     * @param int $id ID of internship to update
+     * @param Internship $internship
      * @return InternshipResource
      */
-    public function update(EditInternshipRequest $request, int $id)
+    public function update(EditInternshipRequest $request, Internship $internship)
     {
         $data = $request->all();
-        $internship = $this->internshipService->update($id, $data);
+        $internship = $this->internshipService->update($internship->id, $data);
 
         return new InternshipResource($internship);
     }
 
     /**
-     * @param int $id ID of internship to delete
+     * @param Internship $internship
      * @return JsonResponse|void
      */
-    public function destroy(int $id)
+    public function destroy(Internship $internship)
     {
-        if($this->internshipService->destroy($id))
+        if($this->internshipService->destroy($internship->id))
             return response()->json(['message' => 'ok']);
         else
             return abort(422);

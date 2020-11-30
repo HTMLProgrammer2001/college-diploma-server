@@ -10,6 +10,7 @@ use App\Http\Requests\Rebuke\EditRebukeRequest;
 use App\Http\Resources\Rebukes\RebukeResource;
 use App\Http\Resources\Rebukes\RebukesGroupResource;
 use App\Imports\RebukesImport;
+use App\Models\Rebuke;
 use App\Services\RebukeService;
 use Illuminate\Http\JsonResponse;
 use Maatwebsite\Excel\Facades\Excel;
@@ -19,15 +20,16 @@ class RebukeController extends Controller
     /**
      * @var RebukeService
      */
-    private $rebukeRep;
+    private $rebukeService;
 
     /**
      * RebukeController constructor.
-     * @param RebukeService $rebukeRep
+     * @param RebukeService $rebukeService
      */
-    public function __construct(RebukeService $rebukeRep)
+    public function __construct(RebukeService $rebukeService)
     {
-        $this->rebukeRep = $rebukeRep;
+        $this->rebukeService = $rebukeService;
+        $this->authorizeResource(Rebuke::class);
     }
 
     /**
@@ -38,21 +40,19 @@ class RebukeController extends Controller
     {
         $inputData = $request->query();
 
-        $rules = $this->rebukeRep->createRules($inputData);
+        $rules = $this->rebukeService->createRules($inputData);
         $pageSize = $request->query('pageSize', 5);
-        $rebukes = $this->rebukeRep->filterPaginate($rules, $pageSize);
+        $rebukes = $this->rebukeService->filterPaginate($rules, $pageSize);
 
         return new RebukesGroupResource($rebukes);
     }
 
     /**
-     * @param int $id
+     * @param Rebuke $rebuke
      * @return RebukeResource|void
      */
-    public function single(int $id)
+    public function single(Rebuke $rebuke)
     {
-        $rebuke = $this->rebukeRep->getById($id);
-
         if(!$rebuke)
             return abort(404);
 
@@ -67,7 +67,7 @@ class RebukeController extends Controller
     {
         $data = $request->except('datePresentation');
         $data['date_presentation'] = $request->input('datePresentation');
-        $this->rebukeRep->create($data);
+        $this->rebukeService->create($data);
 
         return response()->json([
             'message' => 'Created'
@@ -76,24 +76,24 @@ class RebukeController extends Controller
 
     /**
      * @param EditRebukeRequest $request
-     * @param int $id
+     * @param Rebuke $rebuke
      * @return RebukeResource
      */
-    public function update(EditRebukeRequest $request, int $id)
+    public function update(EditRebukeRequest $request, Rebuke $rebuke)
     {
         $data = $request->all();
-        $rebuke = $this->rebukeRep->update($id, $data);
+        $rebuke = $this->rebukeService->update($rebuke->id, $data);
 
         return new RebukeResource($rebuke);
     }
 
     /**
-     * @param int $id
+     * @param Rebuke $rebuke
      * @return JsonResponse|void
      */
-    public function destroy(int $id)
+    public function destroy(Rebuke $rebuke)
     {
-        if($this->rebukeRep->destroy($id))
+        if($this->rebukeService->destroy($rebuke->id))
             return response()->json(['message' => 'ok']);
         else
             return abort(422);

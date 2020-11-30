@@ -9,6 +9,7 @@ use App\Http\Requests\ImportRequest;
 use App\Http\Resources\Honor\HonorResource;
 use App\Http\Resources\Honor\HonorsGroupResource;
 use App\Imports\HonorsImport;
+use App\Models\Honor;
 use App\Services\HonorService;
 use Illuminate\Http\JsonResponse;
 use Maatwebsite\Excel\Facades\Excel;
@@ -27,13 +28,14 @@ class HonorController extends Controller
     public function __construct(HonorService $honorService)
     {
         $this->honorService = $honorService;
+        $this->authorizeResource(Honor::class);
     }
 
     /**
      * @param AllHonorRequest $request
      * @return HonorsGroupResource
      */
-    public function all(AllHonorRequest $request)
+    public function index(AllHonorRequest $request)
     {
         $inputData = $request->query();
 
@@ -45,13 +47,11 @@ class HonorController extends Controller
     }
 
     /**
-     * @param int $id ID of honor to get info
+     * @param Honor $honor
      * @return HonorResource|void
      */
-    public function single(int $id)
+    public function show(Honor $honor)
     {
-        $honor = $this->honorService->getById($id);
-
         if(!$honor)
             return abort(404);
 
@@ -75,24 +75,24 @@ class HonorController extends Controller
 
     /**
      * @param EditHonorRequest $request
-     * @param int $id ID of honor to update
+     * @param Honor $honor
      * @return HonorResource
      */
-    public function update(EditHonorRequest $request, int $id)
+    public function update(EditHonorRequest $request, Honor $honor)
     {
         $data = $request->all();
-        $honor = $this->honorService->update($id, $data);
+        $honor = $this->honorService->update($honor->id, $data);
 
         return new HonorResource($honor);
     }
 
     /**
-     * @param int $id ID of honor to delete
+     * @param Honor $honor
      * @return JsonResponse|void
      */
-    public function destroy(int $id)
+    public function destroy(Honor $honor)
     {
-        if($this->honorService->destroy($id))
+        if($this->honorService->destroy($honor->id))
             return response()->json(['message' => 'ok']);
         else
             return abort(422);

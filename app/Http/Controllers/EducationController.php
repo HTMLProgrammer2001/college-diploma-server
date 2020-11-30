@@ -8,6 +8,7 @@ use App\Http\Requests\Education\AllEducationRequest;
 use App\Http\Requests\Education\EditEducationRequest;
 use App\Http\Resources\Educations\EducationResource;
 use App\Http\Resources\Educations\EducationsGroupResource;
+use App\Models\Education;
 use App\Services\EducationService;
 use Illuminate\Http\JsonResponse;
 
@@ -25,13 +26,14 @@ class EducationController extends Controller
     public function __construct(EducationService $educationService)
     {
         $this->educationService = $educationService;
+        $this->authorizeResource(Education::class);
     }
 
     /**
      * @param AllEducationRequest $request
      * @return EducationsGroupResource
      */
-    public function all(AllEducationRequest $request)
+    public function index(AllEducationRequest $request)
     {
         $inputData = $request->query();
 
@@ -43,13 +45,11 @@ class EducationController extends Controller
     }
 
     /**
-     * @param int $id ID of education to get
+     * @param Education $education
      * @return EducationResource|void
      */
-    public function single(int $id)
+    public function single(Education $education)
     {
-        $education = $this->educationService->getById($id);
-
         if(!$education)
             return abort(404);
 
@@ -73,25 +73,25 @@ class EducationController extends Controller
 
     /**
      * @param EditEducationRequest $request
-     * @param int $id ID of education to update
+     * @param Education $education
      * @return EducationResource
      */
-    public function update(EditEducationRequest $request, int $id)
+    public function update(EditEducationRequest $request, Education $education)
     {
         $data = $request->all();
         $data['graduate_year'] = $request->input('graduateYear');
-        $education = $this->educationService->update($id, $data);
+        $education = $this->educationService->update($education->id, $data);
 
         return new EducationResource($education);
     }
 
     /**
-     * @param int $id ID of education to delete
+     * @param Education $education
      * @return JsonResponse|void
      */
-    public function destroy(int $id)
+    public function destroy(Education $education)
     {
-        if($this->educationService->destroy($id))
+        if($this->educationService->destroy($education->id))
             return response()->json(['message' => 'ok']);
         else
             return abort(422);

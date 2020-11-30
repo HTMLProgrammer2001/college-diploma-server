@@ -36,7 +36,7 @@ class RankPolicy
      */
     public function view(User $user, Rank $rank)
     {
-        return $user->can('moderator');
+        return $user->can('viewer');
     }
 
     /**

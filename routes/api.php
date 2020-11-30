@@ -119,38 +119,41 @@ Route::group(['prefix' => 'publications', 'middleware' => 'auth:api'], function 
 });
 
 Route::group(['prefix' => 'honors', 'middleware' => 'auth:api'], function () {
-    Route::get('/', [HonorController::class, 'all']);
-    Route::get('/{id}', [HonorController::class, 'single']);
+    Route::get('/', [HonorController::class, 'index']);
+    Route::get('/{honor}', [HonorController::class, 'show']);
     Route::post('/add', [HonorController::class, 'store']);
-    Route::put('/{id}', [HonorController::class, 'update']);
-    Route::delete('/{id}', [HonorController::class, 'destroy']);
-    Route::post('/import', [HonorController::class, 'import']);
+    Route::put('/{honor}', [HonorController::class, 'update']);
+    Route::delete('/{honor}', [HonorController::class, 'destroy']);
+    Route::post('/import', [HonorController::class, 'import'])
+        ->middleware('can:moderator');
 });
 
 Route::group(['prefix' => 'rebukes', 'middleware' => 'auth:api'], function () {
-    Route::get('/', [RebukeController::class, 'all']);
-    Route::get('/{id}', [RebukeController::class, 'single']);
+    Route::get('/', [RebukeController::class, 'index']);
+    Route::get('/{rebuke}', [RebukeController::class, 'show']);
     Route::post('/add', [RebukeController::class, 'store']);
-    Route::put('/{id}', [RebukeController::class, 'update']);
-    Route::delete('/{id}', [RebukeController::class, 'destroy']);
-    Route::post('/import', [RebukeController::class, 'import']);
+    Route::put('/{rebuke}', [RebukeController::class, 'update']);
+    Route::delete('/{rebuke}', [RebukeController::class, 'destroy']);
+    Route::post('/import', [RebukeController::class, 'import'])
+        ->middleware('can:moderator');
 });
 
 Route::group(['prefix' => 'educations', 'middleware' => 'auth:api'], function () {
-    Route::get('/', [EducationController::class, 'all']);
-    Route::get('/{id}', [EducationController::class, 'single']);
+    Route::get('/', [EducationController::class, 'index']);
+    Route::get('/{education}', [EducationController::class, 'show']);
     Route::post('/add', [EducationController::class, 'store']);
-    Route::put('/{id}', [EducationController::class, 'update']);
-    Route::delete('/{id}', [EducationController::class, 'destroy']);
+    Route::put('/{education}', [EducationController::class, 'update']);
+    Route::delete('/{education}', [EducationController::class, 'destroy']);
 });
 
 Route::group(['prefix' => 'internships', 'middleware' => 'auth:api'], function () {
-    Route::get('/', [InternshipController::class, 'all']);
-    Route::get('/{id}', [InternshipController::class, 'single']);
+    Route::get('/', [InternshipController::class, 'index']);
+    Route::get('/{internship}', [InternshipController::class, 'show']);
     Route::post('/add', [InternshipController::class, 'store']);
-    Route::put('/{id}', [InternshipController::class, 'update']);
-    Route::delete('/{id}', [InternshipController::class, 'destroy']);
-    Route::post('/import', [InternshipController::class, 'import']);
+    Route::put('/{internship}', [InternshipController::class, 'update']);
+    Route::delete('/{internship}', [InternshipController::class, 'destroy']);
+    Route::post('/import', [InternshipController::class, 'import'])
+        ->middleware('can:moderator');
 });
 
 Route::group(['prefix' => 'qualifications', 'middleware' => 'auth:api'], function () {
@@ -159,7 +162,8 @@ Route::group(['prefix' => 'qualifications', 'middleware' => 'auth:api'], functio
     Route::post('/add', [QualificationController::class, 'store']);
     Route::put('/{id}', [QualificationController::class, 'update']);
     Route::delete('/{id}', [QualificationController::class, 'destroy']);
-    Route::post('/import', [QualificationController::class, 'import']);
+    Route::post('/import', [QualificationController::class, 'import'])
+        ->middleware('can:moderator');
 });
 
 Route::group(['prefix' => 'users', 'middleware' => 'auth:api'], function () {
@@ -168,5 +172,6 @@ Route::group(['prefix' => 'users', 'middleware' => 'auth:api'], function () {
     Route::post('/add', [UserController::class, 'store']);
     Route::put('/{id}', [UserController::class, 'update']);
     Route::delete('/{id}', [UserController::class, 'destroy']);
-    Route::post('/import', [UserController::class, 'import']);
+    Route::post('/import', [UserController::class, 'import'])
+        ->middleware('can:moderator');
 });
