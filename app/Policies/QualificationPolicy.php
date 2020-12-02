@@ -35,7 +35,7 @@ class QualificationPolicy
      */
     public function view(User $user, Qualification $qualification)
     {
-        return $user->can('viewer');
+        return $user->can('viewer') || $qualification->user()->find($user->id);
     }
 
     /**

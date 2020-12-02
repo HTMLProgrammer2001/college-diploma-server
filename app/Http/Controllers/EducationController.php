@@ -48,7 +48,7 @@ class EducationController extends Controller
      * @param Education $education
      * @return EducationResource|void
      */
-    public function single(Education $education)
+    public function show(Education $education)
     {
         if(!$education)
             return abort(404);

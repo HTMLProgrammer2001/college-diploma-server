@@ -36,7 +36,7 @@ class EducationPolicy
      */
     public function view(User $user, Education $education)
     {
-        return $user->can('viewer');
+        return $user->can('viewer') || $education->user()->find($user->id);
     }
 
     /**

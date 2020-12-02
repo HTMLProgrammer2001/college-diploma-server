@@ -36,7 +36,7 @@ class RebukePolicy
      */
     public function view(User $user, Rebuke $rebuke)
     {
-        return $user->can('viewer');
+        return $user->can('viewer') || $rebuke->user()->find($user->id);
     }
 
     /**

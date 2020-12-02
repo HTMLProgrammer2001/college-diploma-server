@@ -51,7 +51,7 @@ class InternshipController extends Controller
      * @param Internship $internship
      * @return InternshipResource|void
      */
-    public function single(Internship $internship)
+    public function show(Internship $internship)
     {
         if(!$internship)
             return abort(404);

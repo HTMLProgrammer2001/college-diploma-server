@@ -36,7 +36,7 @@ class RebukeController extends Controller
      * @param AllRebukeRequest $request
      * @return RebukesGroupResource
      */
-    public function all(AllRebukeRequest $request)
+    public function index(AllRebukeRequest $request)
     {
         $inputData = $request->query();
 
@@ -51,7 +51,7 @@ class RebukeController extends Controller
      * @param Rebuke $rebuke
      * @return RebukeResource|void
      */
-    public function single(Rebuke $rebuke)
+    public function show(Rebuke $rebuke)
     {
         if(!$rebuke)
             return abort(404);

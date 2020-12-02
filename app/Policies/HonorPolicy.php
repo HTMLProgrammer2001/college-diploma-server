@@ -36,7 +36,7 @@ class HonorPolicy
      */
     public function view(User $user, Honor $honor)
     {
-        return $user->can('viewer');
+        return $user->can('viewer') || $honor->user()->find($user->id);
     }
 
     /**
