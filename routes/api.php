@@ -30,7 +30,7 @@ use App\Http\Controllers\ReportController;
 |
 */
 
-Route::get('/report', ReportController::class);
+Route::get('/report', ReportController::class)->middleware('can:viewer');
 
 Route::group([], function () {
     //User actions routes

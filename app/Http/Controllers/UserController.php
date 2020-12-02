@@ -54,7 +54,7 @@ class UserController extends Controller
      * @param User $user
      * @return UserResource|void
      */
-    public function single(User $user)
+    public function show(User $user)
     {
         if(!$user)
             return abort(404);

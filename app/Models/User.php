@@ -82,7 +82,7 @@ class User extends Authenticatable
     }
 
     public function getRoleString(): string {
-        return \Constants::$roles[$this->role];
+        return array_search($this->role, \Constants::$roles);
     }
 
     public function setTitle(int $title){
