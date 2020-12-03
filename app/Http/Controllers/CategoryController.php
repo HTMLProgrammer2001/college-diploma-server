@@ -28,7 +28,7 @@ class CategoryController extends Controller
      * @param AllCategoryRequest $request
      * @return CategoriesGroupResource
      */
-    public function all(AllCategoryRequest $request)
+    public function index(AllCategoryRequest $request)
     {
         $inputData = $request->query();
 
@@ -43,7 +43,7 @@ class CategoryController extends Controller
      * @param InternCategory $category
      * @return CategoryResource|null
      */
-    public function single(InternCategory $category)
+    public function show(InternCategory $category)
     {
         if(!$category)
             return abort(404);

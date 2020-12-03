@@ -102,10 +102,10 @@ Route::group(['prefix' => 'ranks', 'middleware' => 'auth:api'], function () {
 
 Route::group(['prefix' => 'categories', 'middleware' => 'auth:api'], function () {
     Route::get('/', [CategoryController::class, 'index']);
-    Route::get('/{interncategory}', [CategoryController::class, 'show']);
+    Route::get('/{internCategory}', [CategoryController::class, 'show']);
     Route::post('/add', [CategoryController::class, 'store']);
-    Route::put('/{interncategory}', [CategoryController::class, 'update']);
-    Route::delete('/{interncategory}', [CategoryController::class, 'destroy']);
+    Route::put('/{internCategory}', [CategoryController::class, 'update']);
+    Route::delete('/{internCategory}', [CategoryController::class, 'destroy']);
 });
 
 Route::group(['prefix' => 'publications', 'middleware' => 'auth:api'], function () {
