@@ -32,7 +32,7 @@ class InternshipFactory extends Factory
             'to' => $this->faker->date(),
             'hours' => $this->faker->randomNumber(2),
             'credits' => 0,
-            'code' => $this->faker->unique()->postcode
+            'code' => null
         ];
     }
 }

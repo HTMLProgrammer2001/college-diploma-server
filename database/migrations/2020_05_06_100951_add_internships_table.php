@@ -23,7 +23,7 @@ class AddInternshipsTable extends Migration
             $table->date('to');
             $table->integer('hours')->nullable();
             $table->integer('credits')->nullable();
-            $table->string('code')->unique()->nullable();
+            $table->string('code')->nullable();
             $table->timestamps();
 
             //relations
