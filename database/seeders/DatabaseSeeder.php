@@ -29,6 +29,8 @@ class DatabaseSeeder extends Seeder
         Rank::factory()->count(5)->create();
 
         User::factory()->count(10)->create();
+        User::query()->limit(3)->update(['role' => 1]);
+
         Publication::factory()->count(20)->create();
         Education::factory()->count(50)->create();
 

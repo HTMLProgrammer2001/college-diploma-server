@@ -22,9 +22,9 @@ jobs:
             - name: Setup database
               uses: mirromutth/mysql-action@v1.1
               with:
-                mysql database: 'test'
-                mysql user: 'root'
-                mysql password: '123456'
+                mysql database: test
+                mysql user: root
+                mysql password: 123456
 
             - name: Install and testing
               env:
@@ -32,7 +32,7 @@ jobs:
               run: |
                 composer require
                 php artisan migrate --seed --force
-                php artisan test --env=testing
+                vendor/bin/phpunit
 
             - name: Deploy to heroku
               uses: akhileshns/heroku-deploy@v3.6.8
