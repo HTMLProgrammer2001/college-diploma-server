@@ -21,8 +21,6 @@ class UserBuilder implements UserBuilderInterface
 
     //function to fill model instance by data
     protected function fillData(User $user, array $data, bool $update = false): Model{
-        $user->fill($data);
-
         if($data['birthday'] ?? false)
             $data['birthday'] = Carbon::parse($data['birthday'])->format('Y-m-d');
 
@@ -31,8 +29,11 @@ class UserBuilder implements UserBuilderInterface
             $user->generatePassword($data['password']);
 
         //relationships
-        $user->setDepartment($data['department']);
-        $user->setCommission($data['commission']);
+        if($data['department'] ?? false)
+            $user->setDepartment($data['department']);
+
+        if($data['commission'] ?? false)
+            $user->setCommission($data['commission']);
 
         if($data['rank'] ?? false)
             $user->setRank($data['rank']);
@@ -48,6 +49,8 @@ class UserBuilder implements UserBuilderInterface
 
         if($data['scientific_degree'] ?? false)
             $user->setScientificDegree($data['scientific_degree']);
+
+        $user->fill($data);
 
         if($update)
             $this->avatarService->deleteAvatar($user->avatar ?? false);

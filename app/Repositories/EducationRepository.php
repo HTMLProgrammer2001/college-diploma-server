@@ -40,8 +40,7 @@ class EducationRepository extends BaseRepository implements EducationRepositoryI
 
         if(($inputData['filterQualification'] ?? null) != null){
             if($inputData['filterQualification'] != -1){
-                $qualification = Education::QUALIFICATIONS[$inputData['filterQualification']];
-                $rules[] = new LikeRule('qualification', $qualification);
+                $rules[] = new EqualRule('qualification', $inputData['filterQualification']);
             }
         }
 

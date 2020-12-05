@@ -14,7 +14,8 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
 {
     private $model = InternCategory::class;
     private $sortFields = [
-        'name' => 'name'
+        'name' => 'name',
+        'ID' => 'id'
     ];
 
     public function createRules(array $inputData): array

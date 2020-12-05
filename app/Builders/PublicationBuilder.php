@@ -17,9 +17,10 @@ class PublicationBuilder implements PublicationBuilderInterface
             $data['date_of_publication'] = Carbon::parse($data['date_of_publication'])->format('Y-m-d');
 
         $publication->fill($data);
+        $publication->save();
+
         $publication->setAuthors($data['authors']);
 
-        $publication->save();
         return $publication;
     }
 

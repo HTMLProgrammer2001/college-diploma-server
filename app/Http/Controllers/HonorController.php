@@ -80,7 +80,8 @@ class HonorController extends Controller
      */
     public function update(EditHonorRequest $request, Honor $honor)
     {
-        $data = $request->all();
+        $data = $request->except('datePresentation');
+        $data['date_presentation'] = $request->input('datePresentation');
         $honor = $this->honorService->update($honor->id, $data);
 
         return new HonorResource($honor);

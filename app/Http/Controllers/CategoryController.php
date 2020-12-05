@@ -21,7 +21,7 @@ class CategoryController extends Controller
     public function __construct(CategoryService $categoryService)
     {
         $this->categoryService = $categoryService;
-        $this->authorizeResource(InternCategory::class);
+        //$this->authorizeResource(InternCategory::class);
     }
 
     /**
@@ -40,11 +40,13 @@ class CategoryController extends Controller
     }
 
     /**
-     * @param InternCategory $category
+     * @param int $category_id
      * @return CategoryResource|null
      */
-    public function show(InternCategory $category)
+    public function show(int $category_id)
     {
+        $category = $this->categoryService->getById($category_id);
+
         if(!$category)
             return abort(404);
 
@@ -68,13 +70,13 @@ class CategoryController extends Controller
 
     /**
      * @param EditCategoryRequest $request
-     * @param InternCategory $category
+     * @param int $category_id
      * @return CategoryResource
      */
-    public function update(EditCategoryRequest $request, InternCategory $category)
+    public function update(EditCategoryRequest $request, int $category_id)
     {
         $data = $request->all();
-        $category = $this->categoryService->update($category->id, $data);
+        $category = $this->categoryService->update($category_id, $data);
 
         return new CategoryResource($category);
     }

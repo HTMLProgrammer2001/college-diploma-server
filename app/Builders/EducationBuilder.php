@@ -15,7 +15,7 @@ class EducationBuilder implements EducationBuilderInterface
         $education->fill($data);
         $education->setUser($data['user']);
 
-        if($data['qualification'])
+        if($data['qualification'] != null)
             $education->setQualification($data['qualification']);
 
         $education->save();
