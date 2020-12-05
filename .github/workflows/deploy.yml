@@ -47,7 +47,7 @@ jobs:
               run: |
                   php artisan migrate --seed
                   php artisan passport:install
-#                  vendor/phpunit/phpunit/phpunit
+                  php artisan test
 
             - name: Deploy to heroku
               uses: akhileshns/heroku-deploy@v3.6.8
