@@ -156,7 +156,7 @@ class ProfileController extends Controller
         
         $response = new QualificationsGroupResource($qualifications);
         $response->additional([
-           'nextDate' => $this->qualificationService->getNextQualificationDateOf($request->user()->id)
+           'nextDate' => $this->qualificationService->getNextQualificationDateOf($id)
         ]);
         
         return $response;
