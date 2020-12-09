@@ -51,11 +51,12 @@ class UserBuilder implements UserBuilderInterface
             $user->setScientificDegree($data['scientific_degree']);
 
         $user->fill($data);
+        $avatar = $data['avatar'] ?? null;
 
-        if($update)
+        if($update && $avatar)
             $this->avatarService->deleteAvatar($user->avatar ?? false);
 
-        $user->avatar = $this->avatarService->uploadAvatar($data['avatar'] ?? null);
+        $user->avatar = $this->avatarService->uploadAvatar($avatar);
         $user->save();
 
         return $user;

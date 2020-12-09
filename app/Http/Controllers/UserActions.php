@@ -89,15 +89,14 @@ class UserActions extends Controller
      * @return JsonResponse
      */
     public function editMe(EditMeRequest $request){
-        $fields = ['birthday', 'email', 'address', 'phone'];
         $user = $request->user();
 
         //update profile
-        $this->userService->update($user->id, $request->only($fields));
+        $newUser = $this->userService->update($user->id, $request->all());
 
         //return new user in json format
         return response()->json([
-           'newUser' => new UserResource($user)
+           'newUser' => new UserResource($newUser)
         ]);
     }
 }
