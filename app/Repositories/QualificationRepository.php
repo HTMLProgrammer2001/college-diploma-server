@@ -61,13 +61,12 @@ class QualificationRepository extends BaseRepository implements QualificationRep
 
     public function getLastQualificationDateOf(int $user_id)
     {
-        $date = $this->getLastQualificationOf($user_id);
+        $last = $this->getLastQualificationOf($user_id);
 
-        if(!$date)
+        if(!$last)
             return;
 
-        $date = $date->pluck('date')->first();
-        return $date ?? null;
+        return $last->date ?? null;
     }
 
     public function getNextQualificationDateOf(int $user_id)

@@ -4,6 +4,7 @@ namespace App\Http\Resources\Users;
 
 use App\Http\Resources\Commissions\CommissionResource;
 use App\Http\Resources\Departments\DepartmentResource;
+use App\Services\QualificationService;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -16,6 +17,11 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
+        /**
+         * @var QualificationService $qualService
+         */
+        $qualService = app(QualificationService::class);
+
         return [
             'id' => $this->id,
             'fullName' => $this->fullName,
@@ -32,7 +38,8 @@ class UserResource extends JsonResource
             'experience' => $this->expirience,
             'rank' => $this->rank,
             'commission' => new CommissionResource($this->commission),
-            'department' => new DepartmentResource($this->department)
+            'department' => new DepartmentResource($this->department),
+            'category' => $qualService->getQualificationNameOf($this->id)
         ];
     }
 }
